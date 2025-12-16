@@ -1,0 +1,26 @@
+name: 💡 Moshpit Enhancement
+description: Template for reporting enhancement requests
+title: "Enhancement: "
+body:
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact
+      options:
+        - "High"
+        - "Medium"
+        - "Low"
+  - type: dropdown
+    id: suggested_priority
+    attributes:
+      label: Suggested Priority
+      description: To aid triage and review of the issue
+      options:
+        - High
+        - Medium
+        - Low
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Clearly explain the enhancement request

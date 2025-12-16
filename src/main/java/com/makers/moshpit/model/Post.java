@@ -3,7 +3,7 @@ package com.makers.moshpit.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.sql.Timestamp;
+import java.time.Instant;
 
 @Data
 @Entity
@@ -17,7 +17,7 @@ public class Post {
     private String content;
 
     @Column(insertable = false, updatable = false)
-    private Timestamp timestamp;
+    private Instant timestamp;
 
     public Post(String content) {
         this.content = content;

@@ -21,7 +21,19 @@ public class Post {
     @Column(insertable = false, updatable = false)
     private Instant timestamp;
 
+    @ManyToOne
+    @JoinColumn(name = "artist_id")
+    private Artist artist;
+
+    // If posting as a user, artist_id will default to null
     public Post(String content) {
         this.content = content;
+        this.artist = null;
+    }
+
+    // If posting as an artist, user_id will default to null
+    public Post(String content, Artist artist) {
+        this.content = content;
+        this.artist = artist;
     }
 }

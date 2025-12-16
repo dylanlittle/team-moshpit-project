@@ -31,7 +31,7 @@ public class Post {
         this.artist = null;
     }
 
-    // If posting as an artist, user_id will default to null
+    // If posting as an artist
     public Post(String content, Artist artist) {
         this.content = content;
         this.artist = artist;

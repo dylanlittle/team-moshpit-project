@@ -12,8 +12,14 @@ public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private String bio;
+
+    @Column(nullable = false)
     private String genre;
 
     public Artist(String name, String bio, String genre) {

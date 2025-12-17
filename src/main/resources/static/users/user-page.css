@@ -1,0 +1,56 @@
+/* Navbar overrides */
+.nav-bar {
+    margin-top: 0;                 /* 0 keeps it in line with the left aside  */
+    padding: 8px 0;
+    border-top: none;              /* explicitly overrides main.css */
+    border-bottom: 1px solid #ccc;
+
+    display: flex;
+    gap: 16px;
+}
+
+/* Tab labels styled as nav items */
+.nav-bar label {
+    font-weight: bold;
+    color: #666;
+    cursor: pointer;
+    padding: 4px 8px;
+}
+
+/* Hide the radio buttons */
+input[name="profile-tabs"] {
+    display: none;
+}
+
+/* Hide all tab panels by default */
+.tab-content {
+    display: none;
+}
+
+/* Show tab panel when its radio is checked */
+#tab-followed:checked ~ #content-followed,
+#tab-history:checked ~ #content-history,
+#tab-posts:checked ~ #content-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#tab-followed:checked ~ .nav-bar label {
+    color: #666;
+}
+
+#tab-history:checked ~ .nav-bar label {
+    color: #666;
+}
+
+#tab-posts:checked ~ .nav-bar label {
+    color: #666;
+}
+
+#tab-followed:checked ~ .nav-bar label[for="tab-followed"],
+#tab-history:checked ~ .nav-bar label[for="tab-history"],
+#tab-posts:checked ~ .nav-bar label[for="tab-posts"] {
+    color: black;
+    border-bottom: 2px solid black;
+}

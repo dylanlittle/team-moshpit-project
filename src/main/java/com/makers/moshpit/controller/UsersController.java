@@ -1,24 +1,32 @@
 package com.makers.moshpit.controller;
 
+import com.makers.moshpit.model.User;
+import com.makers.moshpit.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
 @Controller
 public class UsersController {
+    @Autowired
+    UserRepository userRepository;
+
     @GetMapping("/users/after-login")
-    public String afterLogin(@AuthenticationPrincipal OAuth2User oauth2User) {
-        if (oauth2User == null) {
+    public String afterLogin(@AuthenticationPrincipal OidcUser oidcUser) {
+        if (oidcUser == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No authenticated user");
         }
-        String email = (String) oauth2User.getAttributes().get("email");
+        String email = oidcUser.getEmail();
         if (email == null || email.isBlank()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No email on authenticated user");
         }
@@ -38,7 +46,6 @@ public class UsersController {
 
     @GetMapping("/users/create")
     public String getCreateProfileForm(Model model) {
-
         return "/users/create_profile";
     }
 

@@ -110,13 +110,8 @@
         </div>
 
         <div class="box">
-            <h3>Upcoming Dates</h3>
-            <ul>
-                <li>Jan 20 – London</li>
-                <li>Jan 30 – Manchester</li>
-                <li>June 22 – Liverpool</li>
-            </ul>
-            <button>View all dates</button>
+            <h3>Bio</h3>
+            <p th:text="${artist.bio}"></p>
         </div>
 
     </aside>
@@ -137,7 +132,9 @@
         </div>
 
         <div class="box">
-            <p>No updates yet.</p>
+            <ul th:each="post:${posts}">
+                <li th:text="${post.content} + ' - Posted at ' + ${post.timestamp}"></li>
+            </ul>
         </div>
 
     </main>

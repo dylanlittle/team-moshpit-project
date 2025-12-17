@@ -17,13 +17,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String username;
     private String email;
     private String bio;
     private Long active_artist_id;
 
-    public User(String email, String name) {
-        this.name = name;
+    public User(String email) {
+        this.name = "null";
         this.email = email;
+        this.username = "null";
         this.bio = "Enter Bio Here...";
         this.active_artist_id = null;
     }

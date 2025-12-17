@@ -10,12 +10,6 @@ The application uses:
 - `auth0` and `spring-security` for authentication and user management
 - `lombok` to generate getters and setters for us
 
-Instructions to Run the Moshpit Application:
-
-1. Add application.yml, found in the Slack channel, to src/main/resources .
-2. Run 'createdb moshpit_dev'
-3. Run 'createdb moshpit_test'
-
 ## QuickStart Instructions
 
 - Fork and clone this repository to your machine

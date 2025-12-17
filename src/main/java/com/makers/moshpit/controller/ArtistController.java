@@ -27,7 +27,11 @@ public class ArtistController {
 
         model.addAttribute("posts", posts);
         model.addAttribute("artist", artist);
-        model.addAttribute("post", new Post());
+
+        // Only add new Post if not already in model from RedirectView
+        if (!model.containsAttribute("post")) {
+            model.addAttribute("post", new Post());
+        }
         return "artist_page";
     }
 

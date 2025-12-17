@@ -23,7 +23,7 @@ public class ArtistController {
     public String getArtist(@PathVariable Long id, Model model) {
         Artist artist =  artistRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Artist not found"));
-        Iterable<Post> posts = postRepository.findAll();
+        Iterable<Post> posts = postRepository.findAllByArtistIdOrderByTimestampDesc(id);
 
         model.addAttribute("posts", posts);
         model.addAttribute("artist", artist);

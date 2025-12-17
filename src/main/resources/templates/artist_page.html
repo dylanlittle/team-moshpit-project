@@ -110,13 +110,8 @@
         </div>
 
         <div class="box">
-            <h3>Upcoming Dates</h3>
-            <ul>
-                <li>Jan 20 – London</li>
-                <li>Jan 30 – Manchester</li>
-                <li>June 22 – Liverpool</li>
-            </ul>
-            <button>View all dates</button>
+            <h3>Bio</h3>
+            <p th:text="${artist.bio}"></p>
         </div>
 
     </aside>
@@ -137,7 +132,9 @@
         </div>
 
         <div class="box">
-            <p>No updates yet.</p>
+            <ul th:each="post:${posts}">
+                <li th:text="${post.content} + ' - Posted at ' + ${post.timestamp}"></li>
+            </ul>
         </div>
 
     </main>
@@ -146,9 +143,14 @@
      fan wall could be carousel of images/videos of fans, maybe they tag artist and they show up here.-->
     <aside class="right-column">
 
-        <div class="box" style="height: 420px;">
-            <h3>Fan Wall</h3>
-            <p>No fan photos or videos yet.</p>
+        <div class="box">
+            <h3>Upcoming Dates</h3>
+            <ul>
+                <li>Jan 20 – London</li>
+                <li>Jan 30 – Manchester</li>
+                <li>June 22 – Liverpool</li>
+            </ul>
+            <button>View all dates</button>
         </div>
 
     </aside>

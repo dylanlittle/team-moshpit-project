@@ -3,77 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${artist.name}">Artist Profile</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 24px;
-        }
-
-        /* Header */
-        .artist-header h1 {
-            margin: 0;
-        }
-
-        .artist-genre {
-            margin-top: 4px;
-            color: #555;
-        }
-
-        /* Navbar */
-        .nav-bar {
-            margin-top: 16px;
-            padding: 8px 0;
-            border-top: 1px solid #ccc;
-            border-bottom: 1px solid #ccc;
-        }
-
-        .nav-bar a {
-            margin-right: 16px;
-            text-decoration: none;
-            font-weight: bold;
-            color: black;
-        }
-
-        /* Layout */
-        .page-layout {
-            display: grid;
-            grid-template-columns: 280px 1fr 320px;
-            gap: 24px;
-            margin-top: 24px;
-        }
-
-        .left-column,
-        .middle-column,
-        .right-column {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        /* Boxes */
-        .box {
-            border: 1px solid #ccc;
-            padding: 12px;
-        }
-
-        .profile-picture {
-            height: 180px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f5f5f5;
-        }
-
-        textarea {
-            width: 100%;
-            height: 80px;
-        }
-
-        button {
-            margin-top: 8px;
-        }
-    </style>
+    <link rel="stylesheet" href="/main.css" />
+    <th:block th:replace="~{fragments/timezone-script :: timezone-detector}"></th:block>
 </head>
 
 <body>
@@ -127,13 +58,14 @@
                         rows="3"
                         th:field="*{content}"
                         th:placeholder="'Share an update with your fans...'"></textarea>
+                <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
                 <button id="post-submit" type="submit">Post</button>
             </form>
         </div>
 
         <div class="box">
             <ul th:each="post:${posts}">
-                <li th:text="${post.content} + ' - Posted at ' + ${post.timestamp}"></li>
+                <li th:text="${post.content} + ' - Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></li>
             </ul>
         </div>
 

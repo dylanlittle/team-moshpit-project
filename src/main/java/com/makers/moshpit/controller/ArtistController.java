@@ -24,10 +24,13 @@ public class ArtistController {
         Artist artist =  artistRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Artist not found"));
         Iterable<Post> posts = postRepository.findAllByArtistIdOrderByTimestampDesc(id);
-
         model.addAttribute("posts", posts);
         model.addAttribute("artist", artist);
-        model.addAttribute("post", new Post());
+
+        // Only add new Post if not already in model from RedirectView
+        if (!model.containsAttribute("post")) {
+            model.addAttribute("post", new Post());
+        }
         return "artist_page";
     }
 

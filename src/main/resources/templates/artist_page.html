@@ -1,5 +1,5 @@
-=<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title th:text="${artist.name}">Artist Profile</title>
@@ -121,7 +121,7 @@
 
         <div class="box">
             <form id="new-post-form" th:action="@{/artists/{id}/posts(id=${artist.id})}" th:object="${post}" method="post">
-                <label class="label" for="post-content" aria-hidden="false">Content</label>
+                <label class="label" for="post-content">Content</label>
                 <textarea
                         id="post-content"
                         rows="3"

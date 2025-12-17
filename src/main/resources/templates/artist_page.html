@@ -74,6 +74,12 @@
             margin-top: 8px;
         }
     </style>
+    <script>
+        if (!document.cookie.includes('userTz=')) {
+          document.cookie = 'userTz=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '; path=/; max-age=31536000';
+          location.reload();
+        }
+    </script>
 </head>
 
 <body>
@@ -133,7 +139,7 @@
 
         <div class="box">
             <ul th:each="post:${posts}">
-                <li th:text="${post.content} + ' - Posted at ' + ${post.timestamp}"></li>
+                <li th:text="${post.content} + ' - Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', T(java.time.ZoneId).of(userTimeZone))}"></li>
             </ul>
         </div>
 

@@ -1,6 +1,0 @@
-<script th:fragment="timezone-detector" xmlns:th="http://www.w3.org/1999/xhtml">
-    if (!document.cookie.includes('userTz=')) {
-      document.cookie = 'userTz=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '; path=/; max-age=3600';
-      location.reload();
-    }
-</script>

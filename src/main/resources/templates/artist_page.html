@@ -58,6 +58,7 @@
                         rows="3"
                         th:field="*{content}"
                         th:placeholder="'Share an update with your fans...'"></textarea>
+                <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
                 <button id="post-submit" type="submit">Post</button>
             </form>
         </div>

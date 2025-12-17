@@ -74,6 +74,7 @@
             margin-top: 8px;
         }
     </style>
+    <th:block th:replace="~{fragments/timezone-script :: timezone-detector}"></th:block>
 </head>
 
 <body>
@@ -133,7 +134,7 @@
 
         <div class="box">
             <ul th:each="post:${posts}">
-                <li th:text="${post.content} + ' - Posted at ' + ${post.timestamp}"></li>
+                <li th:text="${post.content} + ' - Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></li>
             </ul>
         </div>
 

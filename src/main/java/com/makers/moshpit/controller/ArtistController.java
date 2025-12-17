@@ -27,6 +27,7 @@ public class ArtistController {
 
         model.addAttribute("posts", posts);
         model.addAttribute("artist", artist);
+        model.addAttribute("post", new Post());
         return "artist_page";
     }
 

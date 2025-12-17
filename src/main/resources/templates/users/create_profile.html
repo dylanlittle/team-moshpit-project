@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Profile</title>
+</head>
+<body>
+<h1>Profile Details</h1>
+<h5>Please fill in your details to finish completing your account!</h5>
+<div>
+    <form method="post" id="new-user-form" th:action="@{/users/create}">
+
+        <input id="submit" type="submit" value="Submit">
+    </form>
+</div>
+</body>
+</html>

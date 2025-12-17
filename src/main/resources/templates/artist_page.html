@@ -134,7 +134,7 @@
 
         <div class="box">
             <ul th:each="post:${posts}">
-                <li th:text="${post.content} + ' - Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', T(java.time.ZoneId).of(userTimeZone))}"></li>
+                <li th:text="${post.content} + ' - Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></li>
             </ul>
         </div>
 

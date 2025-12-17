@@ -1,0 +1,152 @@
+=<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${artist.name}">Artist Profile</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 24px;
+        }
+
+        /* Header */
+        .artist-header h1 {
+            margin: 0;
+        }
+
+        .artist-genre {
+            margin-top: 4px;
+            color: #555;
+        }
+
+        /* Navbar */
+        .nav-bar {
+            margin-top: 16px;
+            padding: 8px 0;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .nav-bar a {
+            margin-right: 16px;
+            text-decoration: none;
+            font-weight: bold;
+            color: black;
+        }
+
+        /* Layout */
+        .page-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .left-column,
+        .middle-column,
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Boxes */
+        .box {
+            border: 1px solid #ccc;
+            padding: 12px;
+        }
+
+        .profile-picture {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f5;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+        }
+
+        button {
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Header -->
+<div class="artist-header">
+    <h1 th:text="${artist.name}">Cameron Winter</h1>
+    <div class="artist-genre" th:text="${artist.genre}">Folk / Alternative</div>
+</div>
+
+<!-- Temp nav bar
+ fan feed could be live stream of thoughts from fans, helps with bringing the community together idea?-->
+<div class="nav-bar">
+    <a href="#bio">Bio</a>
+    <a href="#tours">Tours</a>
+    <a href="#merch">Merch</a>
+    <a href="#media">Media</a>
+    <a href="#fan-feed">Fan feed</a>
+</div>
+
+<!-- Main -->
+<div class="page-layout">
+
+    <!-- Left colum -->
+    <aside class="left-column">
+
+        <div class="box profile-picture">
+            Artist profile picture
+        </div>
+
+        <div class="box">
+            <h3>Spotify</h3>
+            <p>Spotify embed will go here.</p>
+        </div>
+
+        <div class="box">
+            <h3>Upcoming Dates</h3>
+            <ul>
+                <li>Jan 20 – London</li>
+                <li>Jan 30 – Manchester</li>
+                <li>June 22 – Liverpool</li>
+            </ul>
+            <button>View all dates</button>
+        </div>
+
+    </aside>
+
+    <!-- middle column-->
+    <main class="middle-column" id="fan-feed">
+
+        <div class="box">
+            <textarea placeholder="Share an update with your fans..."></textarea>
+            <button>Post</button>
+        </div>
+
+        <div class="box">
+            <p>No updates yet.</p>
+        </div>
+
+    </main>
+
+    <!-- right column
+     fan wall could be carousel of images/videos of fans, maybe they tag artist and they show up here.-->
+    <aside class="right-column">
+
+        <div class="box" style="height: 420px;">
+            <h3>Fan Wall</h3>
+            <p>No fan photos or videos yet.</p>
+        </div>
+
+    </aside>
+
+</div>
+
+</body>
+</html>

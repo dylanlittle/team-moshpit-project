@@ -74,12 +74,7 @@
             margin-top: 8px;
         }
     </style>
-    <script>
-        if (!document.cookie.includes('userTz=')) {
-          document.cookie = 'userTz=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '; path=/; max-age=31536000';
-          location.reload();
-        }
-    </script>
+    <th:block th:replace="~{fragments/timezone-script :: timezone-detector}"></th:block>
 </head>
 
 <body>

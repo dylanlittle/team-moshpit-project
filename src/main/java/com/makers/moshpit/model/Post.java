@@ -1,6 +1,7 @@
 package com.makers.moshpit.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.Instant;
@@ -16,6 +17,7 @@ public class Post {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "Post content cannot be blank") // Spring Boot Validator validation annotation - ensures field is not blank
     private String content;
 
     @Column(insertable = false, updatable = false)

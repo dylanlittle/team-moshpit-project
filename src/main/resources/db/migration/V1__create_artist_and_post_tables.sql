@@ -8,5 +8,10 @@ CREATE TABLE artists (
 CREATE TABLE posts(
                         id bigserial PRIMARY KEY,
                         content TEXT NOT NULL,
-                        timestamp TIMESTAMP DEFAULT NOW()
+                        timestamp TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        artist_id BIGINT,
+                        CONSTRAINT fk_artist
+                            FOREIGN KEY (artist_id)
+                                REFERENCES artists (id)
+                                ON DELETE CASCADE
 );

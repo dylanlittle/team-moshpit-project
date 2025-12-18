@@ -66,3 +66,7 @@ textarea {
 button {
     margin-top: 8px;
 }
+
+.d-none {
+    display: none !important;
+}

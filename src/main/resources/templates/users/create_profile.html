@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Profile</title>
+    <link rel="stylesheet" href="/main.css" />
 </head>
 <body>
 <h1>Create Your Profile</h1>
 <h5>Please fill in your details to finish completing your account!</h5>
 <div>
-    <form method="post" id="new-user-form" th:action="@{/users/create}">
+    <form method="post" id="new-user-form" th:action="@{/users/create}" enctype="multipart/form-data">
         <label for="username">Username:</label><br>
         <input required type="text" id="username" name="username" th:value="${currentUser.username}"><br><br>
 
@@ -18,10 +19,42 @@
         <label for="bio">Bio:</label><br>
         <input required type="text" id="bio" name="bio" th:value="${currentUser.bio}"><br><br>
 
-        <!-- Add profile picture section -->
+        <div class="mb-3">
+            <label for="avatar">Profile Picture:</label><br>
+            <input type="file"
+                   class="form-control mb-3"
+                   id="image"
+                   name="image"
+                   accept="image/*">
+            <button type="button"
+                    id="clearMediaBtn"
+                    class="btn btn-outline-secondary btn-sm mt-2 d-none">
+                Remove selected file
+            </button>
+        </div>
 
         <input id="submit" type="submit" value="Submit">
     </form>
 </div>
+<script>
+    const mediaInput = document.getElementById("image");
+    const clearBtn = document.getElementById("clearMediaBtn");
+
+    clearBtn.classList.add("d-none");
+
+    mediaInput.addEventListener("change", function () {
+        if (mediaInput.files && mediaInput.files.length > 0) {
+            clearBtn.classList.remove("d-none");
+        } else {
+            clearBtn.classList.add("d-none");
+        }
+    });
+
+    clearBtn.addEventListener("click", function () {
+        mediaInput.value = "";
+        clearBtn.classList.add("d-none");
+    });
+
+</script>
 </body>
 </html>

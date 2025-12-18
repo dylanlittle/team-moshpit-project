@@ -27,6 +27,8 @@ public class Post {
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
+    private String mediaType;
+    private String mediaUrl;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

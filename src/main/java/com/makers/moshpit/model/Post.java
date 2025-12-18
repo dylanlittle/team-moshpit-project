@@ -27,6 +27,9 @@ public class Post {
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
+    private String mediaType;
+    private String mediaUrl;
+
     // If posting as a user, artist_id will default to null
     public Post(String content) {
         this.content = content;

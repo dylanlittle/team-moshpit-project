@@ -9,9 +9,10 @@ public class ArtistTest {
 
     @Test
     public void artistConstructedCorrectly() {
-        Artist artist = new Artist("Kendrick Lamar", "Kendrick's bio... ", "Hip Hop");
+        Artist artist = new Artist("Kendrick Lamar", "Kendrick's bio... ", "Hip Hop", 1L);
         assertThat(artist.getName(), containsString("Kendrick Lamar"));
         assertThat(artist.getBio(), containsString("Kendrick's bio... "));
         assertThat(artist.getGenre(), containsString("Hip Hop"));
+
     }
 }

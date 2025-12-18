@@ -38,4 +38,5 @@ public class Post {
         this.content = content;
         this.artist = artist;
     }
+
 }

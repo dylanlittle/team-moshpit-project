@@ -2,6 +2,8 @@ package com.makers.moshpit.controller;
 
 import com.makers.moshpit.model.Post;
 import com.makers.moshpit.model.User;
+import com.makers.moshpit.repository.ArtistAdminRepository;
+import com.makers.moshpit.repository.ArtistRepository;
 import com.makers.moshpit.repository.PostRepository;
 import com.makers.moshpit.repository.UserRepository;
 import com.makers.moshpit.service.AuthService;

@@ -51,23 +51,70 @@
     <main class="middle-column" id="fan-feed">
 
         <div class="box">
-            <form id="new-post-form" th:action="@{/artists/{id}/posts(id=${artist.id})}" th:object="${post}" method="post">
+            <form id="new-post-form" th:action="@{/artists/{id}/posts(id=${artist.id})}" th:object="${post}" method="post" enctype="multipart/form-data">
                 <label class="label" for="post-content" aria-hidden="false">Content</label>
                 <textarea
                         id="post-content"
                         rows="3"
                         th:field="*{content}"
                         th:placeholder="'Share an update with your fans...'"></textarea>
+
+                <input type="hidden" th:field="*{mediaUrl}" id="mediaUrl">
+                <input type="hidden" th:field="*{mediaType}" id="mediaType">
+
+                <div class="mb-3">
+                    <input type="file"
+                           class="form-control mb-3"
+                           id="media_file"
+                           name="media_file"
+                           accept="image/*, video/*, audio/*">
+                    <button type="button"
+                            id="clearMediaBtn"
+                            class="btn btn-outline-secondary btn-sm mt-2 d-none">
+                        Remove selected file
+                    </button>
+                    <div id="uploadWrapper" class="mt-3 d-none">
+                        <div class="progress">
+                            <div id="uploadProgressBar"
+                                 class="progress-bar"
+                                 role="progressbar"
+                                 style="width: 0%;">0%</div>
+                        </div>
+                        <small id="uploadStatus" class="text-muted d-block mt-2">Uploading…</small>
+                    </div>
+                </div>
                 <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
-                <button id="post-submit" type="submit">Post</button>
+                <button id="post-submit" type="submit" onclick="console.log('SUBMIT CLICKED')">Post</button>
             </form>
         </div>
 
         <div class="box">
-            <ul th:each="post:${posts}">
-                <li th:text="${post.content} + ' - Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></li>
+            <ul>
+                <li th:each="post : ${posts}" class="mb-3">
+                    <p th:text="${post.content} + ' – Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></p>
+                    <div th:if="${post.mediaUrl != null}">
+
+                        <img th:if="${post.mediaType == 'image'}"
+                             th:src="${post.mediaUrl}"
+                             alt="Post image"
+                             style="width: 50%; height: auto; object-fit: cover;">
+
+                        <video th:if="${post.mediaType == 'video'}"
+                               th:src="${post.mediaUrl}"
+                               controls
+                               style="width: 100%; height: auto; object-fit: cover;">
+                        </video>
+
+                        <audio th:if="${post.mediaType == 'audio'}"
+                               th:src="${post.mediaUrl}"
+                               controls>
+                        </audio>
+
+                    </div>
+                </li>
             </ul>
         </div>
+
 
     </main>
 
@@ -77,15 +124,158 @@
 
         <div class="box">
             <h3>Upcoming Dates</h3>
-            <ul>
-                <li>Jan 20 – London</li>
-                <li>Jan 30 – Manchester</li>
-                <li>June 22 – Liverpool</li>
+            <ul th:each="concert:${concerts}">
+                <li th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></li>
             </ul>
             <button>View all dates</button>
         </div>
 
     </aside>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const mediaInput = document.querySelector('input[name="media_file"]');
+            const clearBtn = document.getElementById("clearMediaBtn");
+            if (!mediaInput || !clearBtn) {
+                return;
+            }
+
+            mediaInput.addEventListener("change", function () {
+                if (mediaInput.files && mediaInput.files.length > 0) {
+                    clearBtn.classList.remove("d-none");
+                } else {
+                    clearBtn.classList.add("d-none");
+                }
+            });
+            clearBtn.addEventListener("click", function () {
+                mediaInput.value = "";
+                clearBtn.classList.add("d-none");
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("new-post-form");
+            const mediaInput = document.getElementById("media_file");
+            const clearBtn = document.getElementById("clearMediaBtn");
+
+            const uploadWrapper = document.getElementById("uploadWrapper");
+            const bar = document.getElementById("uploadProgressBar");
+            const status = document.getElementById("uploadStatus");
+
+            const mediaUrlHidden = document.getElementById("mediaUrl");
+            const mediaTypeHidden = document.getElementById("mediaType");
+            const submitBtn = document.getElementById("post-submit");
+
+            function showProgress() {
+                uploadWrapper.classList.remove("d-none");
+                bar.style.width = "0%";
+                bar.textContent = "0%";
+                status.textContent = "Uploading…";
+            }
+
+            function hideProgress() {
+                uploadWrapper.classList.add("d-none");
+                bar.style.width = "0%";
+                bar.textContent = "";
+                status.textContent = "";
+            }
+
+            hideProgress();
+
+            if (clearBtn && mediaInput) {
+                clearBtn.addEventListener("click", function () {
+                    mediaInput.value = "";
+                    clearBtn.classList.add("d-none");
+                    hideProgress();
+                });
+            }
+
+            if (mediaInput) {
+                mediaInput.addEventListener("change", function () {
+                    if (mediaInput.files && mediaInput.files.length > 0) {
+                        clearBtn.classList.remove("d-none");
+                    } else {
+                        clearBtn.classList.add("d-none");
+                        hideProgress();
+                    }
+                });
+            }
+
+            form.addEventListener("submit", async function (e) {
+                const file = mediaInput.files && mediaInput.files[0];
+
+                if (!file) {
+                    hideProgress();
+                    return;
+                }
+
+                e.preventDefault();
+                submitBtn.disabled = true;
+                showProgress();
+
+                const fileType = (file.type || "").toLowerCase();
+                let inferredMediaType = "image";
+                if (fileType.startsWith("audio/")) inferredMediaType = "audio";
+                else if (fileType.startsWith("video/")) inferredMediaType = "video";
+
+                try {
+                    const sigRes = await fetch("/cloudinary/signature");
+                    const sig = await sigRes.json();
+
+                    const fd = new FormData();
+                    fd.append("file", file);
+                    fd.append("api_key", sig.apiKey);
+                    fd.append("timestamp", sig.timestamp);
+                    fd.append("signature", sig.signature);
+                    fd.append("folder", sig.folder);
+
+                    const uploadUrl =
+                        `https://api.cloudinary.com/v1_1/${sig.cloudName}/auto/upload`;
+
+                    const uploaded = await new Promise((resolve, reject) => {
+                        const xhr = new XMLHttpRequest();
+                        xhr.open("POST", uploadUrl);
+
+                        xhr.upload.onprogress = function (evt) {
+                            if (evt.lengthComputable) {
+                                const pct = Math.round((evt.loaded / evt.total) * 100);
+                                bar.style.width = pct + "%";
+                                bar.textContent = pct + "%";
+                            }
+                        };
+
+                        xhr.onload = function () {
+                            if (xhr.status >= 200 && xhr.status < 300) {
+                                resolve(JSON.parse(xhr.responseText));
+                            } else {
+                                reject(new Error("Upload failed"));
+                            }
+                        };
+
+                        xhr.onerror = () => reject(new Error("Network error"));
+                        xhr.send(fd);
+                    });
+
+                    mediaUrlHidden.value = uploaded.secure_url;
+                    mediaTypeHidden.value = inferredMediaType;
+
+                    mediaInput.disabled = true;
+
+                    hideProgress();
+
+                    form.submit();
+
+                } catch (err) {
+                    console.error(err);
+                    status.textContent = "Upload failed. Please try again.";
+                    submitBtn.disabled = false;
+                }
+            });
+        });
+    </script>
+
+
 
 </div>
 

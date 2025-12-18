@@ -77,10 +77,8 @@
 
         <div class="box">
             <h3>Upcoming Dates</h3>
-            <ul>
-                <li>Jan 20 – London</li>
-                <li>Jan 30 – Manchester</li>
-                <li>June 22 – Liverpool</li>
+            <ul th:each="concert:${concerts}">
+                <li th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></li>
             </ul>
             <button>View all dates</button>
         </div>

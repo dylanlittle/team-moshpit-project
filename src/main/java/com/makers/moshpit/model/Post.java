@@ -29,16 +29,21 @@ public class Post {
 
     private String mediaType;
     private String mediaUrl;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     // If posting as a user, artist_id will default to null
-    public Post(String content) {
+    public Post(String content, User user) {
         this.content = content;
         this.artist = null;
+        this.user = user;
     }
 
     // If posting as an artist
     public Post(String content, Artist artist) {
         this.content = content;
         this.artist = artist;
+        this.user = null;
     }
 }

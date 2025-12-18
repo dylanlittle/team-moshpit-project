@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${user.name}">User Profile</title>
+
+    <link rel="stylesheet" href="/main.css" />
+    <link rel="stylesheet" href="/user-page.css" />
+</head>
+
+<body>
+
+<!-- Header -->
+<div class="user-header">
+    <h1 th:text="${user.name}"></h1>
+    <h3 th:text="'@' + ${user.username}"></h3>
+    <h4>Fan account</h4>
+</div>
+
+<!-- Main -->
+<div class="page-layout">
+
+    <!-- Left column -->
+    <aside class="left-column">
+
+        <div class="box profile-picture">
+            User profile picture
+        </div>
+
+        <div class="box">
+            <h3>Bio</h3>
+            <h5>Location: </h5>
+            <p th:text="${user.bio}"></p>
+        </div>
+
+        <div class="box">
+            <h3>Spotify</h3>
+            <p>Spotify embed will go here.</p>
+        </div>
+
+        <div class="box">
+            <h3>Top Artists</h3>
+            <ul>
+                <li>HAIM</li>
+                <li>Phoebe Bridgers</li>
+                <li>Holly Humberstone</li>
+                <li>The Wonder Years</li>
+                <li>The Smith Street Band</li>
+            </ul>
+        </div>
+
+        <div class="box">
+            <h3>Currently Listening</h3>
+            <ol>
+                <li>
+                    <p>Spacey Jane - Through My Teeth</p>
+                </li>
+            </ol>
+        </div>
+
+    </aside>
+
+    <!-- middle column-->
+    <main class="right-column" id="fan-feed">
+
+        <input type="radio" name="profile-tabs" id="tab-followed" checked>
+        <input type="radio" name="profile-tabs" id="tab-history">
+        <input type="radio" name="profile-tabs" id="tab-posts">
+
+        <nav class="nav-bar">
+            <label for="tab-followed">Followed Artists</label>
+            <label for="tab-history">History</label>
+            <label for="tab-posts">Posts</label>
+        </nav>
+
+        <section class="tab-content" id="content-followed">
+            <div class="box">
+                <h3>Followed Artists</h3>
+                <p>You aren't following anyone yet.</p>
+            </div>
+        </section>
+
+        <section class="tab-content" id="content-history">
+            <div class="box">
+                <h3>Recent History</h3>
+                <p>No recent activity found.</p>
+            </div>
+        </section>
+
+        <section class="tab-content" id="content-posts">
+            <div class="box">
+                <h3>Posts</h3>
+                <ul th:if="${posts != null and !#lists.isEmpty(posts)}" th:each="post:${posts}">
+                    <li th:text="${post.content}"></li>
+                </ul>
+                <p th:if="${posts == null or #lists.isEmpty(posts)}">No posts found.</p>
+            </div>
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

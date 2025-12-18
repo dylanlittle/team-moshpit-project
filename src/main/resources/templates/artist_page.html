@@ -51,23 +51,57 @@
     <main class="middle-column" id="fan-feed">
 
         <div class="box">
-            <form id="new-post-form" th:action="@{/artists/{id}/posts(id=${artist.id})}" th:object="${post}" method="post">
+            <form id="new-post-form" th:action="@{/artists/{id}/posts(id=${artist.id})}" th:object="${post}" method="post" enctype="multipart/form-data">
                 <label class="label" for="post-content" aria-hidden="false">Content</label>
                 <textarea
                         id="post-content"
                         rows="3"
                         th:field="*{content}"
                         th:placeholder="'Share an update with your fans...'"></textarea>
+                <div class="mb-3">
+                    <input type="file"
+                           class="form-control mb-3"
+                           id="media_file"
+                           name="media_file"
+                           accept="image/*, video/*, audio/*">
+                    <button type="button"
+                            id="clearMediaBtn"
+                            class="btn btn-outline-secondary btn-sm mt-2 d-none">
+                        Remove selected file
+                    </button>
+                </div>
                 <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
-                <button id="post-submit" type="submit">Post</button>
+                <button id="post-submit" type="submit" onclick="console.log('SUBMIT CLICKED')">Post</button>
             </form>
         </div>
 
         <div class="box">
-            <ul th:each="post:${posts}">
-                <li th:text="${post.content} + ' - Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></li>
+            <ul>
+                <li th:each="post : ${posts}" class="mb-3">
+                    <p th:text="${post.content} + ' – Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></p>
+                    <div th:if="${post.mediaUrl != null}">
+
+                        <img th:if="${post.mediaType == 'image'}"
+                             th:src="${post.mediaUrl}"
+                             alt="Post image"
+                             style="width: 50%; height: auto; object-fit: cover;">
+
+                        <video th:if="${post.mediaType == 'video'}"
+                               th:src="${post.mediaUrl}"
+                               controls
+                               style="width: 100%; height: auto; object-fit: cover;">
+                        </video>
+
+                        <audio th:if="${post.mediaType == 'audio'}"
+                               th:src="${post.mediaUrl}"
+                               controls>
+                        </audio>
+
+                    </div>
+                </li>
             </ul>
         </div>
+
 
     </main>
 
@@ -86,6 +120,28 @@
         </div>
 
     </aside>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const mediaInput = document.querySelector('input[name="media_file"]');
+            const clearBtn = document.getElementById("clearMediaBtn");
+            if (!mediaInput || !clearBtn) {
+                return;
+            }
+
+            mediaInput.addEventListener("change", function () {
+                if (mediaInput.files && mediaInput.files.length > 0) {
+                    clearBtn.classList.remove("d-none");
+                } else {
+                    clearBtn.classList.add("d-none");
+                }
+            });
+            clearBtn.addEventListener("click", function () {
+                mediaInput.value = "";
+                clearBtn.classList.add("d-none");
+            });
+        });
+    </script>
 
 </div>
 

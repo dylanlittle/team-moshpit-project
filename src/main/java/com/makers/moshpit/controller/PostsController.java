@@ -42,33 +42,36 @@ public class PostsController {
             return new RedirectView("/artists/" + artistId); // Return back to the form with error messages
         }
 
-        if (mediaFile != null && !mediaFile.isEmpty()) {
-            String contentType = mediaFile.getContentType();
-            if (contentType != null && contentType.startsWith("audio")) {
-                post.setMediaType("audio");
-                if (mediaFile.getSize() > (256 * 1024 * 1024)) {
-                    throw new RuntimeException("File too large — maximum allowed size is 256MB.");
+        boolean hasDirectUpload = post.getMediaUrl() != null && !post.getMediaUrl().isBlank();
+
+        if (!hasDirectUpload) {
+            if (mediaFile != null && !mediaFile.isEmpty()) {
+                String contentType = mediaFile.getContentType();
+                if (contentType != null && contentType.startsWith("audio")) {
+                    post.setMediaType("audio");
+                    if (mediaFile.getSize() > (256 * 1024 * 1024)) {
+                        throw new RuntimeException("File too large — maximum allowed size is 256MB.");
+                    }
+                    String mediaUrl = mediaService.uploadVideoOrAudio(mediaFile);
+                    post.setMediaUrl(mediaUrl);
+                } else if (contentType != null && contentType.startsWith("video")) {
+                    post.setMediaType("video");
+                    if (mediaFile.getSize() > (256 * 1024 * 1024)) {
+                        throw new RuntimeException("File too large — maximum allowed size is 256MB.");
+                    }
+                    String mediaUrl = mediaService.uploadVideoOrAudio(mediaFile);
+                    post.setMediaUrl(mediaUrl);
+                } else {
+                    post.setMediaType("image");
+                    if (mediaFile.getSize() > (10 * 1024 * 1024)) {
+                        throw new RuntimeException("File too large — maximum allowed size is 10MB.");
+                    }
+                    String mediaUrl = mediaService.uploadImage(mediaFile);
+                    post.setMediaUrl(mediaUrl);
                 }
-                String mediaUrl = mediaService.uploadVideoOrAudio(mediaFile);
-                post.setMediaUrl(mediaUrl);
-            } else if (contentType != null && contentType.startsWith("video")) {
-                post.setMediaType("video");
-                if (mediaFile.getSize() > (256 * 1024 * 1024)) {
-                    throw new RuntimeException("File too large — maximum allowed size is 256MB.");
-                }
-                String mediaUrl = mediaService.uploadVideoOrAudio(mediaFile);
-                post.setMediaUrl(mediaUrl);
-            } else {
-                post.setMediaType("image");
-                if (mediaFile.getSize() > (10 * 1024 * 1024)) {
-                    throw new RuntimeException("File too large — maximum allowed size is 10MB.");
-                }
-                String mediaUrl = mediaService.uploadImage(mediaFile);
-                post.setMediaUrl(mediaUrl);
             }
         }
 
-        // if no errors, proceed with creating new post
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new RuntimeException("Artist not found"));
         post.setArtist(artist);

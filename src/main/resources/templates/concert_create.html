@@ -5,26 +5,20 @@
     <title>Add New Concert Date</title>
 </head>
 <body>
+
+<p th:text="'Artist: ' + ${artist.name}"></p>
     <form th:action="@{/artists/{id}/concerts(id=${artist.id})}" method="post">
-
         <div>
-            <label>Artist Name</label><br>
-            <input type="text" name="name" required>
+            <label for="date">Date:</label><br>
+            <input type="date" name="date" id="date" required/>
         </div>
 
         <div>
-            <label>Genre</label><br>
-            <input type="text" name="genre" required>
+            <label for="venue">Venue:</label><br>
+            <input type="text" name="venue" id="venue"/>
         </div>
 
-        <div>
-            <label>Bio</label><br>
-            <textarea name="bio" rows="5"></textarea>
-        </div>
-
-
-        <button type="submit">Create Artist Page</button>
-
+        <button type="submit" id="new-concert-submit">Add New Concert</button>
     </form>
 </body>
 </html>

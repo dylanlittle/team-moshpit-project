@@ -2,55 +2,55 @@ package com.makers.moshpit.controller;
 
 import com.makers.moshpit.model.User;
 import com.makers.moshpit.repository.UserRepository;
+import com.makers.moshpit.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Optional;
 
 @Controller
 public class UsersController {
+
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private AuthService authService;
 
     @GetMapping("/users/after-login")
-    public String afterLogin(@AuthenticationPrincipal OidcUser oidcUser) {
-        if (oidcUser == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No authenticated user");
-        }
-        String email = oidcUser.getEmail();
-        if (email == null || email.isBlank()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No email on authenticated user");
-        }
-        Optional<User> optionalUser = userRepository.findUserByEmail(email);
-        User user;
-        if (optionalUser.isPresent()) {
-            user = optionalUser.get();
-        } else {
-            user = new User(email);
-            userRepository.save(user);
-        }
-        if (user.getUsername() == null || user.getUsername().equals("null")) {
+    public String afterLogin() {
+        String email = authService.getAuthenticatedUserEmail();
+
+        User user = userRepository.findUserByEmail(email)
+                .orElseGet(() -> userRepository.save(new User(email)));
+
+        if (user.getUsername() == null || user.getUsername().isEmpty()) {
             return "redirect:/users/create";
         }
-        return "redirect:/artists/1";
+        return "redirect:/user";
     }
 
     @GetMapping("/users/create")
     public String getCreateProfileForm(Model model) {
+        model.addAttribute("currentUser", authService.getCurrentUser());
         return "/users/create_profile";
     }
 
     @PostMapping("/users/create")
     public String submitCreateProfileForm(@ModelAttribute User newUser) {
+        User currentUser = authService.getCurrentUser();
+        currentUser.setUsername(newUser.getUsername());
+        currentUser.setName(newUser.getName());
+        currentUser.setBio(newUser.getBio());
+        userRepository.save(currentUser);
+        return "redirect:/user";
+    }
 
+    @GetMapping("/user")
+    public String userAccount(Model model) {
+        model.addAttribute("user", authService.getCurrentUser());
+        return "/users/user_page";
     }
 }

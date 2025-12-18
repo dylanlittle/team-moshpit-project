@@ -5,13 +5,12 @@ import com.makers.moshpit.model.User;
 import com.makers.moshpit.repository.PostRepository;
 import com.makers.moshpit.repository.UserRepository;
 import com.makers.moshpit.service.AuthService;
+import com.makers.moshpit.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class UsersController {
@@ -24,6 +23,9 @@ public class UsersController {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private MediaService mediaService;
 
     @GetMapping("/users/after-login")
     public String afterLogin() {
@@ -45,11 +47,24 @@ public class UsersController {
     }
 
     @PostMapping("/users/create")
-    public String submitCreateProfileForm(@ModelAttribute User newUser) {
+    public String submitCreateProfileForm(@ModelAttribute User newUser,
+                                          @RequestParam("image")MultipartFile imageFile) {
         User currentUser = authService.getCurrentUser();
         currentUser.setUsername(newUser.getUsername());
         currentUser.setName(newUser.getName());
         currentUser.setBio(newUser.getBio());
+        if (!imageFile.isEmpty()) {
+            if (imageFile.getSize() > (10 * 1024 * 1024)) {
+                throw new RuntimeException("File too large — maximum allowed size is 10MB.");
+            }
+
+            try {
+                String imageUrl = mediaService.uploadImage(imageFile);
+                currentUser.setAvatar(imageUrl);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         userRepository.save(currentUser);
         return "redirect:/user";
     }

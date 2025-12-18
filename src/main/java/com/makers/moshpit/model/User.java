@@ -21,6 +21,7 @@ public class User {
     private String email;
     private String bio;
     private Long active_artist_id;
+    private String avatar;
 
     public User(String email) {
         this.name = "";

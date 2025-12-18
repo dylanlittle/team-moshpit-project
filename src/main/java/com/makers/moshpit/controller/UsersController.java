@@ -6,7 +6,6 @@ import com.makers.moshpit.repository.PostRepository;
 import com.makers.moshpit.repository.UserRepository;
 import com.makers.moshpit.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

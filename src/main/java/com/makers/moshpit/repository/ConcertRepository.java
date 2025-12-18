@@ -11,4 +11,5 @@ import java.util.List;
 public interface ConcertRepository extends JpaRepository<Concert, Long> {
     // find all concerts for an artist where the date is in the future, order by date (soonest first)
     List<Concert> findAllByArtistIdAndConcertDateAfterOrderByConcertDateAsc(Long artistId, LocalDate dateToday);
+    List<Concert> findByConcertDateAfterOrderByConcertDateAsc(LocalDate dateToday);
 }

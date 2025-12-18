@@ -12,8 +12,8 @@
 
 <!-- Header -->
 <div class="user-header">
-<!--    <h1 th:text="${user.name}">Super Fan</h1>-->
-    <h1>Ollie Jeffcote</h1>
+    <h1 th:text="${user.name}"></h1>
+    <h3 th:text="'@' + ${user.username}"></h3>
     <h4>Fan account</h4>
 </div>
 
@@ -29,9 +29,8 @@
 
         <div class="box">
             <h3>Bio</h3>
-            <h5>Location: Portsmouth, UK</h5>
-            <!--            <p th:text="${user.bio}"></p>-->
-            <p>I love music.</p>
+            <h5 th:text="${user.location}">Location: Portsmouth, UK</h5>
+            <p th:text="${user.bio}"></p>
         </div>
 
         <div class="box">
@@ -102,7 +101,13 @@
 
         <section class="tab-content" id="content-posts">
 
-            <div class="box">
+            <div th:if="${posts == null}">
+                <h3>Posts</h3>
+                <p>No posts found.</p>
+            </div>
+
+            <div class="box" th:if="${posts }">
+                <h3>Posts</h3>
                 <ul th:each="post:${posts}">
                     <li th:text="${post.content}"></li>
                 </ul>

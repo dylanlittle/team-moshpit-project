@@ -8,7 +8,10 @@ public class PostTest {
 
     @Test
     public void postConstructedCorrectly() {
-        Post post = new Post("This is the post content");
+
+        User user = new User("email@email.com");
+        user.setId(1L);
+        Post post = new Post("This is the post content", user);
 
         assertThat(post.getContent(), containsString("This is the post content"));
     }

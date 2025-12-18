@@ -1,1 +1,2 @@
+ALTER TABLE users ADD COLUMN avatar TEXT;
 ALTER TABLE users ADD COLUMN location VARCHAR(255);

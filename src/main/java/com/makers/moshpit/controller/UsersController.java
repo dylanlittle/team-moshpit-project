@@ -5,10 +5,15 @@ import com.makers.moshpit.model.User;
 import com.makers.moshpit.repository.PostRepository;
 import com.makers.moshpit.repository.UserRepository;
 import com.makers.moshpit.service.AuthService;
+import com.makers.moshpit.service.MediaService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,6 +33,9 @@ public class UsersController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private MediaService mediaService;
+
     @GetMapping("/users/after-login")
     public String afterLogin() {
         String email = authService.getAuthenticatedUserEmail();
@@ -41,27 +49,58 @@ public class UsersController {
         return "redirect:/user";
     }
 
+    @Data
+    public static class CompleteProfileRequest {
+        @NotBlank(message = "Please provide a valid username")
+        private String username;
+        @NotBlank(message = "Please provide a valid name")
+        private String name;
+        private String bio;
+        private String avatar;
+        @NotBlank(message = "Please provide a valid location i.e. London, UK")
+        private String location;
+    }
+
     @GetMapping("/users/create")
     public String getCreateProfileForm(Model model) {
-        if (!model.containsAttribute("newUser")) {
-            model.addAttribute("newUser", authService.getCurrentUser());
-        }
+        User currentUser = authService.getCurrentUser();
+        CompleteProfileRequest form = new CompleteProfileRequest();
+        form.setUsername(currentUser.getUsername());
+        form.setName(currentUser.getName());
+        form.setBio(currentUser.getBio());
+        form.setLocation(currentUser.getLocation());
+        form.setAvatar(currentUser.getLocation());
+        model.addAttribute("newUser", form);
+        model.addAttribute("currentUser", currentUser);
         return "/users/create_profile";
     }
 
     @PostMapping("/users/create")
-    public String submitCreateProfileForm(@Valid @ModelAttribute User newUser, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String submitCreateProfileForm(@Valid @ModelAttribute("newUser") CompleteProfileRequest newUser,
+                                          BindingResult result,
+                                          RedirectAttributes redirectAttributes,
+                                          @RequestParam("image")MultipartFile imageFile) {
 
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.newUser", result);
-            redirectAttributes.addFlashAttribute("newUser", newUser);
-            return "redirect:/users/create";
+            return "/users/create_profile";
         }
         User currentUser = authService.getCurrentUser();
         currentUser.setUsername(newUser.getUsername());
         currentUser.setName(newUser.getName());
         currentUser.setBio(newUser.getBio());
         currentUser.setLocation(newUser.getLocation());
+        if (!imageFile.isEmpty()) {
+            if (imageFile.getSize() > (10 * 1024 * 1024)) {
+                throw new RuntimeException("File too large — maximum allowed size is 10MB.");
+            }
+
+            try {
+                String imageUrl = mediaService.uploadImage(imageFile);
+                currentUser.setAvatar(imageUrl);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         userRepository.save(currentUser);
         return "redirect:/user";
     }

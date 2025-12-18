@@ -26,4 +26,9 @@ public class Concert {
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
+    public Concert(LocalDate concertDate, Venue venue, Artist artist) {
+        this.concertDate = concertDate;
+        this.venue = venue;
+        this.artist = artist;
+    }
 }

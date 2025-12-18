@@ -23,10 +23,10 @@ public class User {
     private Long active_artist_id;
 
     public User(String email) {
-        this.name = "null";
+        this.name = "";
         this.email = email;
-        this.username = "null";
-        this.bio = "Enter Bio Here...";
+        this.username = "";
+        this.bio = "";
         this.active_artist_id = null;
     }
 }

@@ -8,15 +8,22 @@
 <h1>Create Your Profile</h1>
 <h5>Please fill in your details to finish completing your account!</h5>
 <div>
-    <form method="post" id="new-user-form" th:action="@{/users/create}">
-        <label for="username">Username:</label><br>
-        <input required type="text" id="username" name="username" th:value="${currentUser.username}"><br><br>
+    <form method="post" id="new-user-form" th:action="@{/users/create}" th:object="${newUser}">
+        <label for="username" class="required-label">Username:</label>
+        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red;"></div><br>
+        <input required type="text" id="username" th:field="*{username}"><br><br>
 
-        <label for="name" >Name:</label><br>
-        <input required type="text" id="name" name="name" th:value="${currentUser.name}"><br><br>
+        <label for="name" class="required-label">Name:</label>
+        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></div><br>
+        <input required type="text" id="name" th:field="*{name}"><br><br>
 
-        <label for="bio">Bio:</label><br>
-        <input required type="text" id="bio" name="bio" th:value="${currentUser.bio}"><br><br>
+        <label for="bio">Bio:</label>
+        <div th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}" style="color: red;"></div><br>
+        <input type="text" id="bio" th:field="*{bio}"><br><br>
+
+        <label for="location" class="required-label">Location:</label>
+        <div th:if="${#fields.hasErrors('location')}" th:errors="*{location}" style="color: red;"></div><br>
+        <input required type="text" id="location" th:field="*{location}"><br><br>
 
         <!-- Add profile picture section -->
 

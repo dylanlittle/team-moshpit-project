@@ -66,3 +66,10 @@ textarea {
 button {
     margin-top: 8px;
 }
+
+/* Mandatory input fields */
+.required-label::after {
+    content: " *";
+    color: red;
+    font-weight: bold;
+}

@@ -20,4 +20,9 @@ VALUES
     (2026-03-22, 'Leeds', 'UK', 'O2 Academy Leeds', 1),
     (2026-03-24, 'Manchester', 'UK', 'O2 Victoria Warehouse', 1),
     (2026-03-25, 'London', 'UK', 'Eventim Apollo', 1),
-    (2026-06-20, 'Brussles', 'Belgium', 'Ancienne Belgique', 3);
+    (2026-01-15, 'Solidaridad', 'Mexico', 'Hard Rock Hotel Riviera Maya', 2),
+    (2026-02-04, 'Auckland', 'New Zealand', 'Holy Trinity Cathedral', 2),
+    (2026-02-09, 'Melbourne', 'Australia', 'Forum Melbourne', 2),
+    (2026-06-20, 'Brussels', 'Belgium', 'Ancienne Belgique', 3),
+    (2026-02-02, 'Birmingham', 'UK', 'O2 Academy Birmingham', 5),
+    (2026-02-03, 'Cardiff', 'UK', 'DEPOT', 5);

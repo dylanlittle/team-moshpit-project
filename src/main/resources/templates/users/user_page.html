@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title th:text="${user.name}">User Profile</title>
 
     <link rel="stylesheet" href="/main.css" />
-    <link rel="stylesheet" href="/users/user-page.css" />
+    <link rel="stylesheet" href="/user-page.css" />
 </head>
 
 <body>
@@ -30,7 +29,7 @@
 
         <div class="box">
             <h3>Bio</h3>
-            <h5 th:text="${user.location}">Location: Portsmouth, UK</h5>
+            <h5>Location: </h5>
             <p th:text="${user.bio}"></p>
         </div>
 
@@ -55,18 +54,6 @@
             <ol>
                 <li>
                     <p>Spacey Jane - Through My Teeth</p>
-                </li>
-                <li>
-                    <p>The Smith Street Band - Constellation</p>
-                </li>
-                <li>
-                    <p>HAIM - Relationships</p>
-                </li>
-                <li>
-                    <p>Placebo - Pure Morning</p>
-                </li>
-                <li>
-                    <p>Phoebe Bridgers - Motion Sickness</p>
                 </li>
             </ol>
         </div>
@@ -101,17 +88,12 @@
         </section>
 
         <section class="tab-content" id="content-posts">
-
-            <div th:if="${posts == null}">
+            <div class="box">
                 <h3>Posts</h3>
-                <p>No posts found.</p>
-            </div>
-
-            <div class="box" th:if="${posts }">
-                <h3>Posts</h3>
-                <ul th:each="post:${posts}">
+                <ul th:if="${posts != null and !#lists.isEmpty(posts)}" th:each="post:${posts}">
                     <li th:text="${post.content}"></li>
                 </ul>
+                <p th:if="${posts == null or #lists.isEmpty(posts)}">No posts found.</p>
             </div>
         </section>
 
@@ -119,14 +101,5 @@
 
 </div>
 
-=======
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>User Page</title>
-</head>
-<body>
-
->>>>>>> ac48d4d1a949e2810a0ea1cde525cd3888e63d88
 </body>
 </html>

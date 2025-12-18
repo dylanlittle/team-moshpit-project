@@ -1,10 +1,9 @@
 /* Navbar overrides */
 .nav-bar {
-    margin-top: 0;                 /* 0 keeps it in line with the left aside  */
+    margin-top: 0;
     padding: 8px 0;
-    border-top: none;              /* explicitly overrides main.css */
+    border-top: none;
     border-bottom: 1px solid #ccc;
-
     display: flex;
     gap: 16px;
 }
@@ -27,27 +26,16 @@ input[name="profile-tabs"] {
     display: none;
 }
 
-/* Show tab panel when its radio is checked */
-#tab-followed:checked ~ #content-followed,
-#tab-history:checked ~ #content-history,
-#tab-posts:checked ~ #content-posts {
+/* Show tab panel when its radio is checked - using + combinator */
+#tab-followed:checked ~ .nav-bar ~ #content-followed,
+#tab-history:checked ~ .nav-bar ~ #content-history,
+#tab-posts:checked ~ .nav-bar ~ #content-posts {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
-#tab-followed:checked ~ .nav-bar label {
-    color: #666;
-}
-
-#tab-history:checked ~ .nav-bar label {
-    color: #666;
-}
-
-#tab-posts:checked ~ .nav-bar label {
-    color: #666;
-}
-
+/* Style active tab label */
 #tab-followed:checked ~ .nav-bar label[for="tab-followed"],
 #tab-history:checked ~ .nav-bar label[for="tab-history"],
 #tab-posts:checked ~ .nav-bar label[for="tab-posts"] {

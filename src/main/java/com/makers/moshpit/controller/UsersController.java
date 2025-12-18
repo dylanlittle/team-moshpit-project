@@ -57,8 +57,12 @@ public class UsersController {
 
     @GetMapping("/user")
     public String userAccount(Model model) {
-        model.addAttribute("user", authService.getCurrentUser());
-        return "/users/user_page";
+        User currentUser = authService.getCurrentUser();
+        Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(currentUser.getId());
+
+        model.addAttribute("user", currentUser);
+        model.addAttribute("posts", posts);
+        return "users/user_page";
     }
 
     @GetMapping("/users/{id}")
@@ -71,6 +75,6 @@ public class UsersController {
         model.addAttribute("user", user);
         model.addAttribute("posts", posts);
 
-        return "user_page";
+        return "users/user_page";
     }
 }

@@ -26,13 +26,18 @@
         <div class="box profile-picture">
             <img th:src="${user.avatar} ?: 'uploads/default_profile.png'"
                  class="rounded-circle border border-3 border-white shadow-sm"
-                 style="width: 160px; height: 160px; object-fit: cover;">
+                 style="width: 160px; height: 160px; object-fit: cover;"
+                 alt="User profile picture">
         </div>
 
         <div class="box">
-            <h3>Bio</h3>
-            <h5>Location: </h5>
-            <p th:text="${user.bio}"></p>
+            <h3>About Me</h3>
+            <div id="user-bio" th:if="${user.bio}">
+                <p th:text="${user.bio}"></p>
+            </div>
+            <div id="user-location" th:if="${user.location}">
+                <p th:text="'📍 ' + ${user.location}"></p>
+            </div>
         </div>
 
         <div class="box">

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -27,4 +28,12 @@ public class Venue {
 
     @Column(nullable = false)
     private String address;
+
+    public Venue(String venueName, String city, String country, String address) {
+        this.venueName = venueName;
+        this.city = city;
+        this.country = country;
+        this.address = address;
+    }
+
 }

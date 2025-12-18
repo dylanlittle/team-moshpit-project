@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.time.LocalDate;
+
 @Controller
 public class HomeController {
 
@@ -28,7 +30,9 @@ public class HomeController {
 
         User user = authService.getCurrentUser();
         Iterable<Post> posts = postRepository.findAll();
-        Iterable<Concert> concerts = concertRepository.findAll();
+
+        LocalDate dateToday = LocalDate.now();
+        Iterable<Concert> concerts = concertRepository.findByConcertDateAfterOrderByConcertDateAsc(dateToday);
 
         model.addAttribute("user", user);
         model.addAttribute("posts", posts);

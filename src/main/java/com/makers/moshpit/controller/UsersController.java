@@ -74,7 +74,6 @@ public class UsersController {
         User currentUser = authService.getCurrentUser();
         Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(currentUser.getId());
 
-
         model.addAttribute("user", currentUser);
         model.addAttribute("posts", posts);
         return "users/user_page";

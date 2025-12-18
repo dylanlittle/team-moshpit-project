@@ -22,9 +22,17 @@ public class Artist {
     @Column(nullable = false)
     private String genre;
 
-    public Artist(String name, String bio, String genre) {
+    @Column(nullable = false)
+    private boolean verified = false;
+
+    @Column(name = "created_by", nullable = false)
+    private Long createdBy;
+
+    public Artist(String name, String bio, String genre, Long createdBy ) {
         this.name = name;
         this.bio = bio;
         this.genre = genre;
+        this.createdBy = createdBy;
+        this.verified = false;
     }
 }

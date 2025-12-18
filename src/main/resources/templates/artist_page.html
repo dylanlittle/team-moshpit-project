@@ -134,27 +134,6 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const mediaInput = document.querySelector('input[name="media_file"]');
-            const clearBtn = document.getElementById("clearMediaBtn");
-            if (!mediaInput || !clearBtn) {
-                return;
-            }
-
-            mediaInput.addEventListener("change", function () {
-                if (mediaInput.files && mediaInput.files.length > 0) {
-                    clearBtn.classList.remove("d-none");
-                } else {
-                    clearBtn.classList.add("d-none");
-                }
-            });
-            clearBtn.addEventListener("click", function () {
-                mediaInput.value = "";
-                clearBtn.classList.add("d-none");
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
             const form = document.getElementById("new-post-form");
             const mediaInput = document.getElementById("media_file");
             const clearBtn = document.getElementById("clearMediaBtn");
@@ -166,6 +145,21 @@
             const mediaUrlHidden = document.getElementById("mediaUrl");
             const mediaTypeHidden = document.getElementById("mediaType");
             const submitBtn = document.getElementById("post-submit");
+
+            clearBtn.classList.add("d-none");
+
+            mediaInput.addEventListener("change", function () {
+                if (mediaInput.files && mediaInput.files.length > 0) {
+                    clearBtn.classList.remove("d-none");
+                } else {
+                    clearBtn.classList.add("d-none");
+                }
+            });
+
+            clearBtn.addEventListener("click", function () {
+                mediaInput.value = "";
+                clearBtn.classList.add("d-none");
+            });
 
             function showProgress() {
                 uploadWrapper.classList.remove("d-none");

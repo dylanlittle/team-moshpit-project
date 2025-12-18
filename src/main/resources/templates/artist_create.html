@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Artist Page</title>
+</head>
+<body>
+
+<h1>Create an Artist Page</h1>
+
+<form th:action="@{/artists}" method="post">
+
+    <div>
+        <label>Artist Name</label><br>
+        <input type="text" name="name" required>
+    </div>
+
+    <div>
+        <label>Genre</label><br>
+        <input type="text" name="genre" required>
+    </div>
+
+    <div>
+        <label>Bio</label><br>
+        <textarea name="bio" rows="5"></textarea>
+    </div>
+
+
+    <button type="submit">Create Artist Page</button>
+
+</form>
+
+</body>
+</html>
+

@@ -1,6 +1,6 @@
 name: 💡 Moshpit Enhancement
 description: Template for reporting enhancement requests
-title: "Enhancement: "
+title: "enhancement: "
 body:
   - type: dropdown
     id: impact

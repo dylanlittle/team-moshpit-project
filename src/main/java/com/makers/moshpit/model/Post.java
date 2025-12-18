@@ -46,4 +46,5 @@ public class Post {
         this.artist = artist;
         this.user = null;
     }
+
 }

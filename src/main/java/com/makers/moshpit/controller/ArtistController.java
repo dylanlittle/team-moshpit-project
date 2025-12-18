@@ -3,14 +3,21 @@ package com.makers.moshpit.controller;
 import com.makers.moshpit.model.Artist;
 import com.makers.moshpit.model.Concert;
 import com.makers.moshpit.model.Post;
+import com.makers.moshpit.model.User;
 import com.makers.moshpit.repository.ArtistRepository;
 import com.makers.moshpit.repository.ConcertRepository;
 import com.makers.moshpit.repository.PostRepository;
+import com.makers.moshpit.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDate;
 
@@ -22,6 +29,9 @@ public class ArtistController {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private ConcertRepository concertRepository;
@@ -49,6 +59,33 @@ public class ArtistController {
         }
         return "artist_page";
     }
+    @GetMapping("/artists/new")
+    public String showArtistCreateForm() {
+        return "artist_create";
+    }
 
+
+    @PostMapping("/artists")
+    public RedirectView createArtist(
+            @ModelAttribute Artist artist,
+            @AuthenticationPrincipal OAuth2User principal
+    ) {
+
+        String email = principal.getAttribute("email");
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        artist.setVerified(false);
+        artist.setCreatedBy(user.getId());
+
+        Artist savedArtist = artistRepository.save(artist);
+
+        // Redirect to artist profile
+        return new RedirectView("/artists/" + savedArtist.getId());
+    }
 
 }
+
+
+
+

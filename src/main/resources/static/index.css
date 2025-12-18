@@ -1,0 +1,94 @@
+/* Page header */
+.page-header {
+    padding: 16px 0;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.page-header h1 {
+    margin: 0;
+}
+
+.page-header nav a {
+    margin-left: 16px;
+    text-decoration: none;
+    color: black;
+}
+
+/* Home page layout: 2:1 ratio */
+.home-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+}
+
+/* Feed column */
+.feed-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.feed-column h2 {
+    margin: 0 0 8px 0;
+}
+
+/* Feed posts */
+.feed-post {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.feed-post:last-child {
+    margin-bottom: 0;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.post-time {
+    font-size: 12px;
+    color: #999;
+}
+
+/* Concerts column */
+.concerts-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.concerts-column h2 {
+    margin: 0 0 8px 0;
+}
+
+/* Concert items */
+.concert-item {
+    margin-bottom: 12px;
+}
+
+.concert-item:last-child {
+    margin-bottom: 0;
+}
+
+.concert-item h4 {
+    margin: 0 0 4px 0;
+}
+
+.concert-item p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+.concert-date {
+    color: #666;
+    font-size: 12px;
+}

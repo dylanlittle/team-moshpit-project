@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit profile</title>
+</head>
+<body>
+<form th:action="@{/users/edit}" method="post">
+    <p th:if="${error}" th:text="${error}" class="error"></p>
+    <label>Username</label>
+    <input name="username" th:value="${user.username}" required/>
+    <label>Bio</label>
+    <textarea name="bio" th:text="${user.bio}"></textarea>
+    <button type="submit">Save Changes</button>
+</form>
+
+
+</body>
+</html>

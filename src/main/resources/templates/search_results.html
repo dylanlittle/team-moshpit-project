@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="|Search results for '${query}' - moshpit|">
+        moshpit - search
+    </title>
+    <link rel="stylesheet" href="/main.css">
+</head>
+
+<body>
+    <header>
+        <h1>Search</h1>
+    </header>
+    <main>
+        <form th:action="@{/search}" method="get"
+            style="display: flex; gap: 16px; border-bottom: solid; margin-bottom: 24px; padding-bottom: 8px;">
+            <div>
+                <label for="query">Search term:</label>
+                <input type="text" id="query" name="query" placeholder="Enter name or username" th:value="${query}"
+                    required />
+            </div>
+            <div>
+                <label for="type">Search type:</label>
+                <select id="type" name="type">
+                    <option value="all" th:selected="${type == 'all'}">All</option>
+                    <option value="artists" th:selected="${type == 'artists'}">Artists</option>
+                    <option value="users" th:selected="${type == 'users'}">Users</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit" style="margin: 0 0 0 8px;">Search</button>
+            </div>
+        </form>
+
+        <!--    All results-->
+        <section th:if="${type == 'all'}">
+            <div th:if="${#lists.isEmpty(userResults) and #lists.isEmpty(artistResults)}">
+                No results found.
+            </div>
+
+            <ol style="display: flex;">
+                <li th:each="artist : ${artistResults}">
+                    <div
+                        th:replace="~{fragments/display-card :: displayCard(${artist.name}, 'artists/' + ${artist.id}, 'https://placehold.co/128', 'Picture of artist')}">
+                    </div>
+                </li>
+                <li th:each="user: ${userResults}">
+                    <div
+                        th:replace="~{fragments/display-card :: displayCard(${user.username}, 'users/' + ${user.id}, 'https://placehold.co/128', 'Picture of user')}">
+                    </div>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Artist results -->
+        <section th:if="${type == 'artists'}">
+            <h2>Artist results for "&nbsp;-->
+                <span th:text="${query}"></span>&nbsp;"
+            </h2>
+            <div th:if="${#lists.isEmpty(artistResults)}">
+                No artists found.
+            </div>
+
+            <ol style="display: flex;">
+                <li th:each="artist : ${artistResults}">
+                    <div
+                        th:replace="~{fragments/display-card :: displayCard(${artist.name}, 'artists/' + ${artist.id}, 'https://placehold.co/128', 'Picture of artist')}">
+                    </div>
+                </li>
+            </ol>
+        </section>
+
+        <!--    Users results -->
+        <section th:if="${type == 'users'}">
+            <h2>User results for "&nbsp;-->
+                <span th:text="${query}"></span>&nbsp;"
+            </h2>
+            <div th:if="${#lists.isEmpty(userResults)}">
+                No users found.
+            </div>
+
+            <ol style="display: flex;">
+                <li th:each="user: ${userResults}">
+                    <div
+                        th:replace="~{fragments/display-card :: displayCard(${user.username}, 'users/' + ${user.id}, 'https://placehold.co/128', 'Picture of user')}">
+                    </div>
+                </li>
+            </ol>
+        </section>
+
+        <p
+            th:if="${artistResults != null and !artistResults.isEmpty()} or ${userResults != null and !userResults.isEmpty()}">
+            Found
+            <span
+                th:text="${(artistResults != null ? artistResults.size() : 0) + (userResults != null ? userResults.size() : 0)}">0</span>
+            result(s)
+        </p>
+    </main>
+</body>
+
+</html>

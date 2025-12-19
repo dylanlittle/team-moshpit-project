@@ -1,5 +1,6 @@
 package com.makers.moshpit.controller;
 
+import com.makers.moshpit.dto.ConcertForm;
 import com.makers.moshpit.model.Artist;
 import com.makers.moshpit.model.Concert;
 import com.makers.moshpit.model.Venue;
@@ -8,6 +9,7 @@ import com.makers.moshpit.repository.ConcertRepository;
 import com.makers.moshpit.repository.VenueRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -40,11 +42,9 @@ public class ConcertController {
         model.addAttribute("countries", countries);
 
         // Only add new Concert if not already in model from RedirectView
-        if (!model.containsAttribute("concert")) {
-            model.addAttribute("concert", new Concert());
+        if (!model.containsAttribute("concertForm")) {
+            model.addAttribute("concertForm", new ConcertForm());
         }
-
-
 
         return "/concerts/create";
     }
@@ -58,6 +58,33 @@ public class ConcertController {
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
+    }
+
+    // AJAX endpoint to get venues for a city and country
+    @GetMapping("/venues/by-location")
+    @ResponseBody
+    public List<String> getVenuesByLocation(@RequestParam String country,
+                                              @RequestParam String city) {
+        return venueRepository.findByCityIgnoreCaseAndCountryIgnoreCase(city, country)
+                .stream()
+                .map(Venue::getVenueName)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    // AJAX endpoint to get address for a venue
+    @GetMapping("/venue-address/by-location")
+    @ResponseBody
+    public ResponseEntity<String> getVenueAddressByLocation(@RequestParam String country,
+                                            @RequestParam String city, @RequestParam String venueName) {
+        Venue venue = venueRepository.findByVenueNameIgnoreCaseAndCityIgnoreCaseAndCountryIgnoreCase(venueName, city, country);
+
+        if (venue == null) {
+            return ResponseEntity.notFound().build(); // 404 → venue not in DB
+        }
+
+        return ResponseEntity.ok(venue.getAddress()); // 200 → autofill
     }
 
     @PostMapping("/artists/{artistId}/concerts")

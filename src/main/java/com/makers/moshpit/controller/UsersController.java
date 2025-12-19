@@ -45,7 +45,13 @@ public class UsersController {
         User user = userRepository.findUserByEmail(email)
                 .orElseGet(() -> userRepository.save(new User(email)));
 
-        if (user.getUsername() == null || user.getUsername().equals("null") || user.getUsername().isEmpty()) {
+        if (user.getUsername() == null
+                || user.getUsername().equals("null")
+                || user.getUsername().isEmpty()
+                || user.getName() == null
+                || user.getName().equals("null")
+                || user.getName().isEmpty()) {
+
             return "redirect:/users/create";
         }
         return "redirect:/";

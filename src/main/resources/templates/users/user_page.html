@@ -12,6 +12,7 @@
 
 <!-- Header -->
 <div class="user-header">
+    <p th:if="${error}" th:text="${error}" class="error"></p>
     <div th:if="${!editing}">
         <h1 th:text="${user.name}"></h1>
         <h3 th:text="'@' + ${user.username}"></h3>

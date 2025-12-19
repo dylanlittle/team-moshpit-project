@@ -4,6 +4,7 @@ import com.makers.moshpit.dto.ConcertForm;
 import com.makers.moshpit.model.Artist;
 import com.makers.moshpit.model.Concert;
 import com.makers.moshpit.model.Venue;
+import com.makers.moshpit.dto.ConcertForm;
 import com.makers.moshpit.repository.ArtistRepository;
 import com.makers.moshpit.repository.ConcertRepository;
 import com.makers.moshpit.repository.VenueRepository;
@@ -88,11 +89,35 @@ public class ConcertController {
     }
 
     @PostMapping("/artists/{artistId}/concerts")
-    public RedirectView create(@PathVariable Long artistId, @Valid @ModelAttribute Concert concert){
+    public RedirectView create(@PathVariable Long artistId, @ModelAttribute ConcertForm concertForm){
 
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new RuntimeException("Artist not found"));
-        concert.setArtist(artist);
+
+        // 1. Find or create venue
+        Venue venue = venueRepository
+                .findByVenueNameAndCityAndCountry(
+                        concertForm.getVenueName(),
+                        concertForm.getCity(),
+                        concertForm.getCountry()
+                )
+                .orElseGet(() -> {
+                    Venue v = new Venue(
+                            concertForm.getVenueName(),
+                            concertForm.getCity(),
+                            concertForm.getCountry(),
+                            concertForm.getAddress()
+                    );
+                    return venueRepository.save(v);
+                });
+
+        // 2. Create concert
+        Concert concert = new Concert(
+                concertForm.getConcertDate(),
+                venue,
+                artist
+        );
+
         concertRepository.save(concert);
 
         return new RedirectView("/artists/" + artistId);

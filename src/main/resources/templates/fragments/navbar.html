@@ -1,0 +1,51 @@
+<head th:fragment="headerStyles">
+    <link rel="stylesheet" th:href="@{/navbar.css}">
+</head>
+
+<div th:fragment="headerNav">
+    <nav class="navbar">
+
+        <!-- Left: Logo + Navigation -->
+        <div class="nav-left">
+            <a href="/" class="nav-logo">Home</a>
+
+            <ul class="nav-links">
+                <li><a href="#">Discover Artists</a></li>
+                <li><a href="#">Concerts</a></li>
+            </ul>
+        </div>
+
+        <!-- Center: Search -->
+        <div class="nav-search">
+            <input
+                    type="search"
+                    name="q"
+                    placeholder="Search for Artists or Users"
+                    aria-label="Search for Artists or Users"
+            />
+        </div>
+
+        <!-- Right: Profile -->
+        <div class="nav-right">
+            <div class="profile-dropdown">
+                <a href="/user" class="profile-link">
+                    <img th:src="@{/uploads/profile_placeholder.png}"
+                         alt="Profile"
+                         class="profile-avatar" />
+                </a>
+
+                <ul class="dropdown-content">
+                    <li><a href="/user">View Profile</a></li>
+                    <li><a href="/users/create">Edit Profile</a></li>
+                    <li>
+                        <hr>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="logout-btn">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </nav>
+</div>

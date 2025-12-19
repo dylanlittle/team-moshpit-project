@@ -118,8 +118,14 @@ public class UsersController {
         User currentUser = authService.getCurrentUser();
         Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(currentUser.getId());
 
+        boolean isOwner =
+                currentUser != null &&
+                        currentUser.getId().equals(currentUser.getId());
+
         model.addAttribute("user", currentUser);
         model.addAttribute("posts", posts);
+        model.addAttribute("editing", false);
+        model.addAttribute("isOwner", isOwner);
         return "users/user_page";
     }
 

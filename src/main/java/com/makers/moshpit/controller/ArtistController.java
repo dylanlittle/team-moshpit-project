@@ -35,6 +35,9 @@ public class ArtistController {
     private ArtistAdminRepository artistAdminRepository;
 
     @Autowired
+    private FollowRepository followRepository;
+
+    @Autowired
     private AuthService authService;
 
 
@@ -50,6 +53,8 @@ public class ArtistController {
         Artist artist =  artistRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Artist not found"));
 
+        boolean isFollowing = followRepository.findByUserAndArtist(currentUser, artist).isPresent();
+
         Iterable<Post> posts = postRepository.findAllByArtistIdOrderByTimestampDesc(id);
 
         LocalDate dateToday = LocalDate.now();
@@ -58,6 +63,7 @@ public class ArtistController {
         model.addAttribute("posts", posts);
         model.addAttribute("artist", artist);
         model.addAttribute("concerts", concerts);
+        model.addAttribute("isFollowing", isFollowing);
 
         if (!model.containsAttribute("post")) {
             model.addAttribute("post", new Post());

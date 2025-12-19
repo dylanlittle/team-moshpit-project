@@ -13,7 +13,7 @@
 <!-- Header -->
 <div class="concert-header">
     <h1>Concert Name</h1>
-    <h3>Concert Venue</h3>
+    <h3 th:text="${venue.venueName}"></h3>
 </div>
 
 <!-- Main -->
@@ -29,7 +29,13 @@
         </div>
 
         <div class="box">
-            <h3>Concert Info</h3>
+            <h3>Key Information</h3>
+            <h4>Start time: </h4>
+            <p>8pm</p>
+            <h4>Address:</h4>
+            <p th:text="${venue.address}"></p>
+            <p th:text="${venue.city}"></p>
+            <p th:text="${venue.country}"></p>
         </div>
 
         <div class="box">
@@ -55,14 +61,41 @@
         <section class="tab-content" id="content-concert-posts">
             <div class="box">
                 <h3>Feed</h3>
-                <p>No posts yet.</p>
+                <ul>
+                    <li th:each="post : ${posts}" class="mb-3">
+                        <p th:text="${post.content} + ' – Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></p>
+                        <div th:if="${post.mediaUrl != null}">
+
+                            <img th:if="${post.mediaType == 'image'}"
+                                 th:src="${post.mediaUrl}"
+                                 alt="Post image"
+                                 style="width: 50%; height: auto; object-fit: cover;">
+
+                            <video th:if="${post.mediaType == 'video'}"
+                                   th:src="${post.mediaUrl}"
+                                   controls
+                                   style="width: 100%; height: auto; object-fit: cover;">
+                            </video>
+
+                            <audio th:if="${post.mediaType == 'audio'}"
+                                   th:src="${post.mediaUrl}"
+                                   controls>
+                            </audio>
+
+                        </div>
+                    </li>
+                </ul>
             </div>
         </section>
 
         <section class="tab-content" id="content-concert-crowd">
             <div class="box">
                 <h3>Crowd</h3>
-                <p>No one is going.</p>
+                <ul>
+                    <li th:each="user: ${crowd}">
+                        <p th:text="'Insert user card component for ' + ${user.name}"></p>
+                    </li>
+                </ul>
             </div>
         </section>
 

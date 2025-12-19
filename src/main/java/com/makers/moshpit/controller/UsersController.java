@@ -148,6 +148,10 @@ public class UsersController {
         User currentUser = currentUserService.getOrCreateFromPrincipal(principal);
         Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(currentUser.getId());
 
+        boolean isOwner =
+                currentUser != null &&
+                        currentUser.getId().equals(currentUser.getId());
+
         if (!timeRange.equals("short_term") && !timeRange.equals("medium_term") && !timeRange.equals("long_term")) {
             timeRange = "short_term";
         }
@@ -167,9 +171,10 @@ public class UsersController {
         model.addAttribute("timeRange", timeRange);
         model.addAttribute("user", currentUser);
         model.addAttribute("posts", posts);
+        model.addAttribute("editing", false);
+        model.addAttribute("isOwner", isOwner);
         return "users/user_page";
     }
-
 
     @GetMapping("/users/{id}")
     public String getUser(@PathVariable Long id, Model model) {

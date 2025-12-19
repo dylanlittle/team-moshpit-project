@@ -46,7 +46,7 @@ public class UsersController {
         if (user.getUsername() == null || user.getUsername().equals("null") || user.getUsername().isEmpty()) {
             return "redirect:/users/create";
         }
-        return "redirect:/user";
+        return "redirect:/";
     }
 
     @Data

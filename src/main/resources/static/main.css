@@ -61,6 +61,12 @@ ol { list-style-type: none; margin: 0; padding: 0; }
     background: #f5f5f5;
 }
 
+.profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 textarea {
     width: 100%;
     height: 80px;
@@ -68,4 +74,16 @@ textarea {
 
 button {
     margin-top: 8px;
+}
+
+.d-none {
+    display: none !important;
+}
+
+
+/* Mandatory input fields */
+.required-label::after {
+    content: " *";
+    color: red;
+    font-weight: bold;
 }

@@ -1,13 +1,8 @@
 package com.makers.moshpit.controller;
 
-import com.makers.moshpit.model.Artist;
-import com.makers.moshpit.model.Concert;
-import com.makers.moshpit.model.Post;
-import com.makers.moshpit.model.User;
-import com.makers.moshpit.repository.ArtistRepository;
-import com.makers.moshpit.repository.ConcertRepository;
-import com.makers.moshpit.repository.PostRepository;
-import com.makers.moshpit.repository.UserRepository;
+import com.makers.moshpit.model.*;
+import com.makers.moshpit.repository.*;
+import com.makers.moshpit.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -36,16 +31,27 @@ public class ArtistController {
     @Autowired
     private ConcertRepository concertRepository;
 
+    @Autowired
+    private ArtistAdminRepository artistAdminRepository;
+
+    @Autowired
+    private AuthService authService;
+
+
     @GetMapping("/artists/{id}")
     public String getArtist(@PathVariable Long id, Model model) {
-        // get artist
+        User currentUser = authService.getCurrentUser();
+
+        boolean canEdit = currentUser != null &&
+                artistAdminRepository.existsByArtistIdAndUserId(id, currentUser.getId());
+
+        model.addAttribute("canEdit", canEdit);
+
         Artist artist =  artistRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Artist not found"));
 
-        // get all posts for artist
         Iterable<Post> posts = postRepository.findAllByArtistIdOrderByTimestampDesc(id);
 
-        // get all concerts for artist that are in the future
         LocalDate dateToday = LocalDate.now();
         Iterable<Concert> concerts = concertRepository.findAllByArtistIdAndConcertDateAfterOrderByConcertDateAsc(id, dateToday);
 
@@ -53,7 +59,6 @@ public class ArtistController {
         model.addAttribute("artist", artist);
         model.addAttribute("concerts", concerts);
 
-        // Only add new Post if not already in model from RedirectView
         if (!model.containsAttribute("post")) {
             model.addAttribute("post", new Post());
         }
@@ -79,7 +84,12 @@ public class ArtistController {
 
         Artist savedArtist = artistRepository.save(artist);
 
-        // Redirect to artist profile
+        ArtistAdmin adminLink = new ArtistAdmin();
+        adminLink.setArtist(savedArtist);
+        adminLink.setUser(user);
+        adminLink.setRole(ArtistAdmin.Role.OWNER);
+        artistAdminRepository.save(adminLink);
+
         return new RedirectView("/artists/" + savedArtist.getId());
     }
 

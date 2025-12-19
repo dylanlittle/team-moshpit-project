@@ -22,12 +22,14 @@ public class User {
     private String bio;
     private Long active_artist_id;
     private String avatar;
+    private String location;
 
     public User(String email) {
         this.name = "";
         this.email = email;
         this.username = "";
         this.bio = "";
+        this.location = "";
         this.active_artist_id = null;
     }
 }

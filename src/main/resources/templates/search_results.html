@@ -39,13 +39,16 @@
             <div th:if="${#lists.isEmpty(userResults) and #lists.isEmpty(artistResults)}">
                 No results found.
             </div>
-
+            <h3>Artists</h3>
             <ol style="display: flex;">
                 <li th:each="artist : ${artistResults}">
                     <div
                         th:replace="~{fragments/display-card :: displayCard(${artist.name}, 'artists/' + ${artist.id}, 'https://placehold.co/128', 'Picture of artist')}">
                     </div>
                 </li>
+                </ol>
+                <h3>Users</h3>
+            <ol>
                 <li th:each="user: ${userResults}">
                     <div
                         th:replace="~{fragments/display-card :: displayCard(${user.username}, 'users/' + ${user.id}, 'https://placehold.co/128', 'Picture of user')}">

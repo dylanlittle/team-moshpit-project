@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Concert Date</title>
+</head>
+<body>
+
+<p th:text="'Artist: ' + ${artist.name}" th:object="${concert}" method="post"></p>
+    <form th:action="@{/artists/{id}/concerts(id=${artist.id})}" method="post">
+        <div>
+            <label for="date">Date:</label>
+            <input type="date" name="date" id="date" required/>
+        </div>
+
+        <div>
+            <label for="country">Country:</label>
+            <input type="text" name="country" id="country" list="countries-list" placeholder="Start typing country name..." autocomplete="off" required/>
+            <datalist id="countries-list">
+                <option th:each="country : ${countries}" th:value="${country}"></option>
+            </datalist>
+        </div>
+
+        <div>
+            <label for="city">City:</label>
+            <input type="text" name="city" id="city" list="cities-list" placeholder="Start typing country name..." autocomplete="off" required/>
+            <datalist id="cities-list">
+                <!-- Dynamically populated based on country (using JS) -->
+            </datalist>
+        </div>
+
+        <div>
+            <label for="venue">Venue:</label>
+            <input type="text" name="venue" id="venue"/>
+        </div>
+
+        <button type="submit" id="new-concert-submit">Add New Concert</button>
+    </form>
+
+<script>
+    const countryInput = document.getElementById('country');
+    const cityInput = document.getElementById('city');
+    const citiesList = document.getElementById('cities-list');
+
+    let venueTimeout;
+
+    // When country changes or is typed, fetch cities
+    countryInput.addEventListener('input', function() {
+        clearTimeout(venueTimeout);
+        venueTimeout = setTimeout(async () => {
+            const country = this.value.trim();
+
+            // Clear city and venue fields
+            citiesList.innerHTML = '';
+            <!--existingVenueSelect.innerHTML = '<option value="">&#45;&#45; Select a venue &#45;&#45;</option>';-->
+
+            if (country.length >= 2) {
+                try {
+                    const response = await fetch(`/venues/cities?country=${encodeURIComponent(country)}`);
+                    const cities = await response.json();
+
+                    // Populate cities datalist
+                    cities.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        citiesList.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error fetching cities:', error);
+                }
+            }
+        }, 300); // Wait 300ms after user stops typing
+    });
+</script>
+</body>
+</html>

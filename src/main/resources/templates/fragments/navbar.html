@@ -17,12 +17,17 @@
 
         <!-- Center: Search -->
         <div class="nav-search">
-            <input
-                    type="search"
-                    name="q"
-                    placeholder="Search for Artists or Users"
-                    aria-label="Search for Artists or Users"
-            />
+            <form th:action="@{/search}" method="get">
+                <input
+                        type="search"
+                        name="query"
+                        th:value="${query}"
+                        placeholder="Search for Artists or Users"
+                        aria-label="Search for Artists or Users"
+                />
+                <input type="hidden" name="type" value="all" />
+
+            </form>
         </div>
 
         <!-- Right: Profile -->

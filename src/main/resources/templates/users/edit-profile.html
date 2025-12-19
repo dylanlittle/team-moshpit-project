@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"xmlns:th="http://www.thymeleaf.org">>
+<head>
+    <meta charset="UTF-8">
+    <title>Edit profile</title>
+</head>
+<body>
+
+<h1 th:text="${user.name}"></h1>
+<p th:text="${user.bio}"></p>
+
+<a href="/user_page/edit">
+    <button>Edit</button>
+</a>
+
+
+</body>
+</html>

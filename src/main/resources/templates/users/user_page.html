@@ -12,10 +12,29 @@
 
 <!-- Header -->
 <div class="user-header">
-    <h1 th:text="${user.name}"></h1>
-    <h3 th:text="'@' + ${user.username}"></h3>
-    <h4>Fan account</h4>
+    <div th:if="${!editing}">
+        <h1 th:text="${user.name}"></h1>
+        <h3 th:text="'@' + ${user.username}"></h3>
+        <h4>Fan account</h4>
+        <a th:href="@{/users/{id}/edit(id=${user.id})}">
+            <button type="button">Edit Profile</button>
+        </a>
+
+    </div>
+    <div th:if="${editing}">
+        <form th:action="@{/users/{id}(id=${user.id})}" method="post">
+            <h1 th:text="${user.name}"></h1>
+            <h5>Username:</h5>
+            <input type="text" name="username" th:value="${user.username}" required/>
+            <input type="hidden" name="bio" th:value="${user.bio}"/>
+            <button type="submit">Save Username</button>
+            <a th:href="@{/users/{id}(id=${user.id})}">
+                <button type="button">Cancel</button>
+            </a>
+        </form>
+    </div>
 </div>
+
 
 <!-- Main -->
 <div class="page-layout">
@@ -25,13 +44,31 @@
 
         <div class="box profile-picture">
             User profile picture
+            <div th:if="${!editing}">
+            </div>
         </div>
 
         <div class="box">
             <h3>Bio</h3>
-            <h5>Location: </h5>
-            <p th:text="${user.bio}"></p>
+            <div th:if="${!editing}">
+                <h5>Location:</h5>
+                <p th:text="${user.bio}"></p>
+            </div>
+
+            <div th:if="${editing}">
+                <form th:action="@{/users/{id}(id=${user.id})}" method="post">
+                    <input type="hidden" name="username" th:value="${user.username}"/>
+                    <h5>Location:</h5>
+                    <textarea name="bio" rows="4" th:text="${user.bio}"></textarea>
+                    <button type="submit">Save Bio</button>
+                    <a th:href="@{/users/{id}(id=${user.id})}">
+                        <button type="button">Cancel</button>
+                    </a>
+                </form>
+            </div>
         </div>
+
+
 
         <div class="box">
             <h3>Spotify</h3>

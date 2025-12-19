@@ -9,11 +9,26 @@
 </head>
 
 <body>
-
 <!-- Header -->
 <div class="user-header">
     <h1 th:text="${user.name}"></h1>
     <h3 th:text="'@' + ${user.username}"></h3>
+<!--    <a class="btn btn-primary btn-link-like" th:href="@{/artists/new}" style="position: absolute; right: 0; top: 0;">Create new artist</a>-->
+    <details  style="position: absolute; right: 0; top: 0;">
+        <summary>☰ My Artists</summary>
+        <nav>
+            <ul>
+                <li>    <a class="btn btn-primary btn-link-like" th:href="@{/artists/new}">Create new artist</a>
+                </li>
+
+                <li th:each="artist : ${myArtists}">
+                    <div>
+                        <a th:href="@{'/artists/' + ${artist.id}}" th:text="${artist.name}">
+                        </a>
+                    </div>
+            </ul>
+        </nav>
+    </details>
     <h4>Fan account</h4>
 </div>
 

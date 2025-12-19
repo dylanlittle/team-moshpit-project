@@ -1,7 +1,11 @@
 package com.makers.moshpit.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.makers.moshpit.model.Artist;
 import com.makers.moshpit.model.Post;
 import com.makers.moshpit.model.User;
+import com.makers.moshpit.repository.ArtistRepository;
 import com.makers.moshpit.repository.PostRepository;
 import com.makers.moshpit.repository.UserRepository;
 import com.makers.moshpit.service.AuthService;
@@ -21,9 +25,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 public class UsersController {
-
+    @Autowired
+    private ArtistRepository artistRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -35,6 +42,8 @@ public class UsersController {
 
     @Autowired
     private MediaService mediaService;
+
+    private static final Logger logger = LoggerFactory.getLogger(UsersController.class);
 
     @GetMapping("/users/after-login")
     public String afterLogin() {
@@ -109,9 +118,12 @@ public class UsersController {
     public String userAccount(Model model) {
         User currentUser = authService.getCurrentUser();
         Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(currentUser.getId());
-
+        List<Artist> myArtists =  artistRepository.findArtistsByUserId(currentUser.getId());
+        String toLog=String.format("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@A String %s", myArtists.toString());
+        logger.info(toLog);
         model.addAttribute("user", currentUser);
         model.addAttribute("posts", posts);
+        model.addAttribute("myArtists", myArtists);
         return "users/user_page";
     }
 

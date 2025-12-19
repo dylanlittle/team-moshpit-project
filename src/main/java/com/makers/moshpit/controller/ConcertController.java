@@ -50,7 +50,7 @@ public class ConcertController {
         return "/concerts/create";
     }
 
-    // AJAX endpoint to get cities for a country
+    // get cities for a country
     @GetMapping("/venues/cities")
     @ResponseBody
     public List<String> getCitiesByCountry(@RequestParam String country) {
@@ -61,7 +61,7 @@ public class ConcertController {
                 .collect(Collectors.toList());
     }
 
-    // AJAX endpoint to get venues for a city and country
+    // get venues for a city and country
     @GetMapping("/venues/by-location")
     @ResponseBody
     public List<String> getVenuesByLocation(@RequestParam String country,
@@ -74,7 +74,7 @@ public class ConcertController {
                 .collect(Collectors.toList());
     }
 
-    // AJAX endpoint to get address for a venue
+    // get address for a venue
     @GetMapping("/venue-address/by-location")
     @ResponseBody
     public ResponseEntity<String> getVenueAddressByLocation(@RequestParam String country,

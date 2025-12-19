@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByArtistIdOrderByTimestampDesc(Long artistId);
-
     Iterable<Post> findAllByUserIdOrderByTimestampDesc(Long userId);
+    List<Post> findAllByConcertIdOrderByTimestampDesc(Long concertId);
 }

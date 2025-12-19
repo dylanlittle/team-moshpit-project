@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Concert</title>
+
+    <link rel="stylesheet" href="/main.css" />
+    <link rel="stylesheet" href="/two-column-pages.css" />
+</head>
+
+<body>
+
+<!-- Header -->
+<div class="concert-header">
+    <h1>Concert Name</h1>
+    <h3>Concert Venue</h3>
+</div>
+
+<!-- Main -->
+<div class="page-layout">
+
+    <!-- Left column -->
+    <aside class="left-column">
+
+        <div class="box profile-picture">
+            <img
+                 class="rounded-circle border border-3 border-white shadow-sm"
+                 style="width: 160px; height: 160px; object-fit: cover;">
+        </div>
+
+        <div class="box">
+            <h3>Concert Info</h3>
+        </div>
+
+        <div class="box">
+            <h3>Lineup</h3>
+            <p>Artists go here</p>
+        </div>
+
+    </aside>
+
+    <!-- middle column-->
+    <main class="right-column" id="concert_tabs">
+
+        <input type="radio" name="profile-tabs" id="tab-concert-posts" checked>
+        <input type="radio" name="profile-tabs" id="tab-concert-crowd">
+        <input type="radio" name="profile-tabs" id="tab-concert-gallery">
+
+        <nav class="nav-bar">
+            <label for="tab-concert-posts">Feed</label>
+            <label for="tab-concert-crowd">Crowd</label>
+            <label for="tab-concert-gallery">Gallery</label>
+        </nav>
+
+        <section class="tab-content" id="content-concert-posts">
+            <div class="box">
+                <h3>Feed</h3>
+                <p>No posts yet.</p>
+            </div>
+        </section>
+
+        <section class="tab-content" id="content-concert-crowd">
+            <div class="box">
+                <h3>Crowd</h3>
+                <p>No one is going.</p>
+            </div>
+        </section>
+
+        <section class="tab-content" id="content-concert-gallery">
+            <div class="box">
+                <h3>Gallery</h3>
+                <p>No media yet.</p>
+            </div>
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

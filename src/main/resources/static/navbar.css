@@ -1,0 +1,126 @@
+/* Reset and Base Navbar Styles */
+.navbar {
+    display: flex;
+    align-items: center; /* Vertically centers everything in the bar */
+    justify-content: space-between;
+    height: 60px;
+    background-color: #f8f9fa;
+    padding: 0 20px;
+    border-bottom: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+/* Left Section */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 15px;
+}
+
+.nav-links a, .nav-logo {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Center Section: Search */
+.nav-search {
+    flex-grow: 1;
+    max-width: 500px;
+    margin: 0 20px;
+}
+
+.nav-search input {
+    width: 100%;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+}
+
+/* Right Section: Profile & Dropdown */
+.nav-right {
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 100%; /* Important for the hover bridge */
+}
+
+.profile-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    cursor: pointer;
+}
+
+.profile-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ccc;
+}
+
+/* The Dropdown Menu */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%; /* Aligns exactly to the bottom of the navbar */
+    right: 0;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    padding: 8px 0;
+    list-style: none;
+    z-index: 1000;
+    margin: 0;
+    /* This invisible border bridges the gap so the menu stays open */
+    border-top: 10px solid transparent;
+    margin-top: -5px;
+}
+
+/* Show on Hover */
+.profile-dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Dropdown Items */
+.dropdown-content li {
+    width: 100%;
+}
+
+.dropdown-content li a,
+.dropdown-content li button {
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box; /* Keeps hover background inside the box */
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    text-align: left;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.dropdown-content li a:hover,
+.dropdown-content li button:hover {
+    background-color: #f1f1f1;
+}
+
+/* Small divider for logout */
+.dropdown-divider {
+    height: 1px;
+    background-color: #eee;
+    margin: 4px 0;
+}

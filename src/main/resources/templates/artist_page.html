@@ -23,6 +23,7 @@
     <a href="#merch">Merch</a>
     <a href="#media">Media</a>
     <a href="#fan-feed">Fan feed</a>
+    <button th:if="${isAdmin}" onclick="document.getElementById('adminPanel').showModal()">Admins</button>
 </div>
 
 <!-- Main -->
@@ -117,6 +118,22 @@
 
 
     </main>
+
+    <div th:replace="~{fragments/action-dialogue :: dialog(
+      title='Admins',
+      id='adminPanel',
+      cta_link='/artists/new',
+      cta='Add new admin',
+      content=(~{::adminList})
+    )}">
+        <div th:fragment="adminList">
+            <ul style="display: flex; margin: 12px 0;">
+                <li th:each="admin : ${admins}">
+                    <div th:replace="~{fragments/display-card :: displayCard(${admin.user.name}, '/users/' + ${admin.user.id}, 'https://placehold.co/128', 'Picture of admin')}"></div>
+                </li>
+            </ul>
+        </div>
+    </div>
 
     <!-- right column
      fan wall could be carousel of images/videos of fans, maybe they tag artist and they show up here.-->
@@ -264,7 +281,7 @@
                     console.error(err);
                     status.textContent = "Upload failed. Please try again.";
                     submitBtn.disabled = false;
-                }
+                }   
             });
         });
     </script>

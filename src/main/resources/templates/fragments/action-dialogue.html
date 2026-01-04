@@ -1,0 +1,10 @@
+<dialog th:fragment="dialog(title, id, cta, cta_link, content)" th:id="${id}" style="min-width: 50%;">
+    <div style="display: flex; justify-content: space-between; margin: 12px 0;">
+        <h3 style="margin: 0;" th:text="${title}">TITLE</h3>
+        <button style="margin: 0; border-radius: 9999px;"
+            th:onclick="'this.closest(&quot;dialog&quot;).close()'">X</button>
+    </div>
+        <div th:replace="${content}">
+    </div>
+    <a style="float: right;" th:href="${cta_link}" th:text="${cta}">CTA</a>
+</dialog>

@@ -13,21 +13,7 @@
 <div class="user-header">
     <h1 th:text="${user.name}"></h1>
     <h3 th:text="'@' + ${user.username}"></h3>
-    <details  style="position: absolute; right: 0; top: 0;">
-        <summary>☰ My Artists</summary>
-        <nav>
-            <ul>
-                <li>    <a class="btn btn-primary btn-link-like" th:href="@{/artists/new}">Create new artist</a>
-                </li>
-
-                <li th:each="artist : ${myArtists}">
-                    <div>
-                        <a th:href="@{'/artists/' + ${artist.id}}" th:text="${artist.name}">
-                        </a>
-                    </div>
-            </ul>
-        </nav>
-    </details>
+    <button onclick="document.getElementById('myArtists').showModal()">My artists</button>
     <h4>Fan account</h4>
 </div>
 
@@ -117,6 +103,24 @@
                 <p th:if="${posts == null or #lists.isEmpty(posts)}">No posts found.</p>
             </div>
         </section>
+
+        <div th:replace="~{fragments/action-dialogue :: dialog(
+        title='My Artists',
+        id='myArtists',
+        cta_link='/artists/new',
+        cta='Add new artist',
+        content=(~{::artistList})
+        )}">
+            <div th:fragment="artistList">
+                <ul style="display: flex; margin: 12px 0;">
+                    <li th:each="artist : ${myArtists}">
+                        <div
+                                th:replace="~{fragments/display-card :: displayCard(${artist.name}, 'artists/' + ${artist.id}, 'https://placehold.co/128', 'Picture of artist')}">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
     </main>
 

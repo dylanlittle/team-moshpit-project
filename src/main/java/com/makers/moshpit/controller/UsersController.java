@@ -115,9 +115,36 @@ public class UsersController {
         User currentUser = authService.getCurrentUser();
         Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(currentUser.getId());
         List<Artist> myArtists =  artistRepository.findArtistsByUserId(currentUser.getId());
+        model.addAttribute("myArtists", myArtists);
+
+        boolean isOwner =
+                currentUser != null &&
+                        currentUser.getId().equals(currentUser.getId());
+
+        if (!timeRange.equals("short_term") && !timeRange.equals("medium_term") && !timeRange.equals("long_term")) {
+            timeRange = "short_term";
+        }
+
+        if (currentUser.getSpotifyRefreshToken() != null && !currentUser.getSpotifyRefreshToken().isBlank()) {
+            List<SpotifyArtist> topArtists = spotifyApiService.getTopArtists(currentUser, timeRange, 10);
+            model.addAttribute("spotifyTopArtists", topArtists);
+
+            Map<String, Artist> suggestions = new LinkedHashMap<>();
+            for (SpotifyArtist a : topArtists) {
+                artistRepository.findFirstByNameIgnoreCase(a.name())
+                        .ifPresent(match -> suggestions.put(a.id(), match));
+            }
+            model.addAttribute("spotifySuggestions", suggestions);
+        }
+
+        Iterable<Artist> artists = artistRepository.findAllArtistsFollowedByUser(currentUser);
+
+        model.addAttribute("timeRange", timeRange);
         model.addAttribute("user", currentUser);
         model.addAttribute("posts", posts);
-        model.addAttribute("myArtists", myArtists);
+        model.addAttribute("followedArtists", artists);
+        model.addAttribute("editing", false);
+        model.addAttribute("isOwner", isOwner);
         return "users/user_page";
     }
 
@@ -128,8 +155,13 @@ public class UsersController {
 
         Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(id);
 
+        Iterable<Artist> artists = artistRepository.findAllArtistsFollowedByUser(user);
+
         model.addAttribute("user", user);
         model.addAttribute("posts", posts);
+        model.addAttribute("followedArtists", artists);
+        model.addAttribute("editing", false);
+        model.addAttribute("isOwner", isOwner);
 
         return "users/user_page";
     }

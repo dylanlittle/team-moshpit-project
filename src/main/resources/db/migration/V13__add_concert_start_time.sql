@@ -1,0 +1,1 @@
+ALTER TABLE concerts ADD COLUMN start_time TIME;

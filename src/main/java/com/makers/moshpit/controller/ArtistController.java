@@ -73,7 +73,6 @@ public class ArtistController {
         return "artist_create";
     }
 
-
     @PostMapping("/artists")
     public RedirectView createArtist(
             @ModelAttribute Artist artist,

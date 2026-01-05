@@ -15,6 +15,41 @@
     <h3 th:text="'@' + ${user.username}"></h3>
     <button onclick="document.getElementById('myArtists').showModal()">My artists</button>
     <h4>Fan account</h4>
+    <div th:if="${user.spotifyRefreshToken == null}">
+        <a th:href="@{/spotify/connect}" class="btn btn-success">Connect Spotify</a>
+    </div>
+    <div th:unless="${user.spotifyRefreshToken == null}">
+        <form th:action="@{/spotify/disconnect}" method="post">
+            <button class="btn btn-outline-danger" type="submit">Disconnect Spotify</button>
+        </form>
+        <p></p>
+    </div>
+
+    <div th:if="${!editing}">
+        <a th:if="${isOwner}"
+           th:href="@{/users/{id}/edit(id=${user.id})}">
+            <button>Edit Profile</button>
+        </a>
+    </div>
+
+    <form th:if="${editing}"
+          th:action="@{/users/{id}(id=${user.id})}"
+          method="post"
+          enctype="multipart/form-data">
+
+        <label>Username</label>
+        <input type="text"
+               name="username"
+               th:value="${user.username}"
+               required/>
+
+        <div class="actions">
+            <button type="submit">Save Changes</button>
+            <a th:href="@{/users/{id}(id=${user.id})}">
+                <button type="button">Cancel</button>
+            </a>
+        </div>
+    </form>
 </div>
 
 <!-- Main -->
@@ -83,7 +118,14 @@
         <section class="tab-content" id="content-followed">
             <div class="box">
                 <h3>Followed Artists</h3>
-                <p>You aren't following anyone yet.</p>
+
+                <ul th:if="${not #lists.isEmpty(followedArtists)}">
+                    <li th:each="artist : ${followedArtists}">
+                        <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}"></a>
+                    </li>
+                </ul>
+
+                <p th:if="${#lists.isEmpty(followedArtists)}">No followed artists yet!</p>
             </div>
         </section>
 

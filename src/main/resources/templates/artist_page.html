@@ -134,9 +134,11 @@
         <div class="box">
             <h3>Upcoming Dates</h3>
             <ul th:each="concert:${concerts}">
-                <li th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></li>
+                <a th:href="@{/concerts/{id}(id=${concert.id})}">
+                    <li th:href="@{/artists/{id}(id=${artist.id})}" th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></li>
+                </a>
             </ul>
-            <button>View all dates</button>
+            <a th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>
         </div>
 
     </aside>

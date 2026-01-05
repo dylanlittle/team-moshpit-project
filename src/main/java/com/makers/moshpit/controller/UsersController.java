@@ -61,9 +61,6 @@ public class UsersController {
     SpotifyApiService spotifyApiService;
 
     @Autowired
-    private ArtistRepository artistRepository;
-
-    @Autowired
     private ConcertGoerRepository concertGoerRepository;
 
     public void SpotifyTopArtistsController(SpotifyApiService spotifyApi,

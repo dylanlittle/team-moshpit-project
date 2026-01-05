@@ -29,9 +29,6 @@
     </div>
 
     <div th:if="${!editing}">
-        <h3 th:text="'@' + ${user.username}"></h3>
-        <h4>Fan account</h4>
-
         <a th:if="${isOwner}"
            th:href="@{/users/{id}/edit(id=${user.id})}">
             <button>Edit Profile</button>
@@ -182,7 +179,14 @@
         <section class="tab-content" id="content-followed">
             <div class="box">
                 <h3>Followed Artists</h3>
-                <p>You aren't following anyone yet.</p>
+
+                <ul th:if="${not #lists.isEmpty(followedArtists)}">
+                    <li th:each="artist : ${followedArtists}">
+                        <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}"></a>
+                    </li>
+                </ul>
+
+                <p th:if="${#lists.isEmpty(followedArtists)}">No followed artists yet!</p>
             </div>
         </section>
 

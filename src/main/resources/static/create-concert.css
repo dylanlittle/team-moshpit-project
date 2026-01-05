@@ -1,0 +1,89 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 24px;
+}
+
+ul { list-style-type: none; margin: 0; padding: 0; }
+ol { list-style-type: none; margin: 0; padding: 0; }
+
+/* Header */
+.artist-header h1 {
+    margin: 0;
+}
+
+.artist-genre {
+    margin-top: 4px;
+    color: #555;
+}
+
+/* Navbar */
+.nav-bar {
+    margin-top: 16px;
+    padding: 8px 0;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.nav-bar a {
+    margin-right: 16px;
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+}
+
+/* Layout */
+.page-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr 320px;
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.left-column,
+.middle-column,
+.right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Boxes */
+.box {
+    border: 1px solid #ccc;
+    padding: 12px;
+}
+
+.profile-picture {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+}
+
+.profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+textarea {
+    width: 100%;
+    height: 80px;
+}
+
+button {
+    margin-top: 8px;
+}
+
+.d-none {
+    display: none !important;
+}
+
+
+/* Mandatory input fields */
+.required-label::after {
+    content: " *";
+    color: red;
+    font-weight: bold;
+}

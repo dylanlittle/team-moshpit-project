@@ -168,9 +168,12 @@ public class UsersController {
             model.addAttribute("spotifySuggestions", suggestions);
         }
 
+        Iterable<Artist> artists = artistRepository.findAllArtistsFollowedByUser(currentUser);
+
         model.addAttribute("timeRange", timeRange);
         model.addAttribute("user", currentUser);
         model.addAttribute("posts", posts);
+        model.addAttribute("followedArtists", artists);
         model.addAttribute("editing", false);
         model.addAttribute("isOwner", isOwner);
         return "users/user_page";
@@ -188,8 +191,11 @@ public class UsersController {
 
         Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(id);
 
+        Iterable<Artist> artists = artistRepository.findAllArtistsFollowedByUser(user);
+
         model.addAttribute("user", user);
         model.addAttribute("posts", posts);
+        model.addAttribute("followedArtists", artists);
         model.addAttribute("editing", false);
         model.addAttribute("isOwner", isOwner);
 

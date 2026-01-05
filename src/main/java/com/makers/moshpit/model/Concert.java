@@ -3,7 +3,9 @@ package com.makers.moshpit.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 @Entity
@@ -17,6 +19,8 @@ public class Concert {
     @Column(name = "concert_date", nullable = false)
     private LocalDate concertDate;
 
+    @Column(name = "start_time", nullable = false)
+    private LocalTime startTime;
 
     @ManyToOne
     @JoinColumn(name = "venue_id")
@@ -26,9 +30,14 @@ public class Concert {
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
-    public Concert(LocalDate concertDate, Venue venue, Artist artist) {
+    @Column(name = "image")
+    private String image;
+
+    public Concert(LocalDate concertDate, LocalTime startTime, Venue venue, Artist artist, String image) {
         this.concertDate = concertDate;
+        this.startTime = startTime;
         this.venue = venue;
         this.artist = artist;
+        this.image = image;
     }
 }

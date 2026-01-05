@@ -6,6 +6,9 @@
 
     <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="/two-column-pages.css" />
+    <link rel="stylesheet" href="/concerts.css" />
+    <meta name="_csrf" th:content="${_csrf?.token}"/>
+    <script src="/js/rsvp.js" defer></script>
 </head>
 
 <body>
@@ -14,6 +17,16 @@
 <div class="concert-header">
     <h1>Concert Name</h1>
     <h3 th:text="${venue.venueName}"></h3>
+    <button th:id="rsvp-btn"
+            th:data-concert-id="${concert.id}"
+            th:class="${isGoing} ? 'active' : ''">
+        <span class="custom-checkbox">
+            <span class="tick-mark"></span>
+        </span>
+        <span th:id="rsvp-btn-text"
+              th:text="RSVP">
+        </span>
+    </button>
 </div>
 
 <!-- Main -->

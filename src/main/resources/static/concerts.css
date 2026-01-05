@@ -1,0 +1,67 @@
+#rsvp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #E4E6EB; /* Facebook Gray */
+    color: #050505;
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#rsvp-btn:hover {
+    background-color: #D8DADF;
+}
+
+#rsvp-btn:active {
+    transform: scale(0.96);
+}
+
+.custom-checkbox {
+    width: 16px;
+    height: 16px;
+    background-color: #ffffff; /* White center when empty */
+    border: 2px solid #ced0d4; /* Light gray border */
+    border-radius: 3px;
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: all 0.15s ease-in-out;
+}
+
+.tick-mark {
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0; /* Creates the 'L' shape of a tick */
+    transform: rotate(45deg) scale(0); /* Rotated and shrunk to 0 */
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-bottom: 2px;
+}
+
+/* The Active State (Ticked) */
+#rsvp-btn.active .custom-checkbox {
+    background-color: #0866FF; /* Fills with blue */
+    border-color: #0866FF;     /* Border matches blue */
+}
+
+#rsvp-btn.active .tick-mark {
+    transform: rotate(45deg) scale(1); /* Pops into view */
+}
+
+#rsvp-btn.active {
+    background-color: #0866FF; /* Full button turns blue */
+    color: white;
+}
+
+/* Darken the blue when hovering over the "Going" state */
+#rsvp-btn.active:hover {
+    background-color: #075CE4;
+    border-color: #075CE4;
+}

@@ -100,7 +100,7 @@
         <div class="box">
             <ul>
                 <li th:each="post : ${posts}" class="mb-3">
-                    <p th:text="${post.content} + ' – Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></p>
+                    <p style="white-space: pre-wrap;" th:text="${post.content} + ' – Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></p>
                     <div th:if="${post.mediaUrl != null}">
 
                         <img th:if="${post.mediaType == 'image'}"

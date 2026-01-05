@@ -1,0 +1,69 @@
+:root{
+  --wall:#0B0A08;
+  --panel:#181715;
+  --ink:#F3EFE8;
+  --muted:#A8A39A;
+  --border:rgba(243,239,232,.16);
+  --soft:rgba(243,239,232,.08);
+  --red:#C43A2F;
+  --yellow:#F4C430;
+  --glow:0 10px 28px rgba(0,0,0,.45);
+}
+
+/* Whole site look */
+body{
+  background:
+    radial-gradient(1200px 700px at 20% -10%, rgba(196,58,47,.14), transparent 55%),
+    radial-gradient(900px 600px at 90% 0%, rgba(30,127,122,.10), transparent 55%),
+    var(--wall);
+  color:var(--ink);
+  font-family: system-ui, sans-serif;
+}
+
+/* Universal flyer panels */
+.box, .panel, .card{
+  background: linear-gradient(180deg, rgba(24,23,21,.96), rgba(24,23,21,.90));
+  border:1px solid var(--border);
+  border-radius:16px;
+  box-shadow:var(--glow);
+}
+
+/* Headings */
+h1,h2,h3,h4{
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  text-shadow:0 2px 0 rgba(0,0,0,.75);
+}
+
+/* Inputs */
+input, textarea, select{
+  background: rgba(15,14,12,.55);
+  border:1px solid var(--border);
+  border-radius:12px;
+  color:var(--ink);
+  padding:10px 12px;
+}
+
+/* Buttons */
+button,.btn{
+  background: rgba(15,14,12,.55);
+  border:1px solid var(--border);
+  color:var(--ink);
+  border-radius:12px;
+  padding:10px 14px;
+  font-weight:900;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+
+button:hover,.btn:hover{
+  border-color:rgba(244,196,48,.5);
+  box-shadow:0 0 0 3px rgba(244,196,48,.12);
+}
+
+/* Tabs */
+.nav-bar, .tabs{
+  background: rgba(15,14,12,.55);
+  border:1px solid var(--border);
+  border-radius:14px;
+}

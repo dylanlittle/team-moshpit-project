@@ -1,94 +1,340 @@
-/* Page header */
-.page-header {
-    padding: 16px 0;
-    border-bottom: 1px solid #ccc;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
+/* ==========================================
+   index.css — Home page (Underground Show Flyer)
+   Works with your existing HTML
+   ========================================== */
+
+/* --- Page background / base text --- */
+body{
+  background:
+    radial-gradient(1200px 700px at 20% -10%, rgba(196,58,47,.18), transparent 55%),
+    radial-gradient(900px 600px at 90% 0%, rgba(30,127,122,.14), transparent 55%),
+    #0F0E0C;
+  color: #F3EFE8;
 }
 
-.page-header h1 {
-    margin: 0;
+/* --- Header area (Welcome...) --- */
+.home-header{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 18px 18px 6px;
 }
 
-.page-header nav a {
-    margin-left: 16px;
-    text-decoration: none;
-    color: black;
+.home-header h1{
+  margin: 10px 0 0;
+  font-weight: 900;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 0 rgba(0,0,0,.75);
 }
 
-/* Home page layout: 2:1 ratio */
-.home-layout {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 24px;
+/* --- Main layout (2 columns) --- */
+.home-layout{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 18px 40px;
+
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 18px;
+  align-items: start;
 }
 
-/* Feed column */
-.feed-column {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+/* Keep your columns, but no extra styling needed */
+.feed-column{ min-width: 0; }
+.concerts-column{ min-width: 0; }
+
+/* --- "box" becomes the poster panel --- */
+.box{
+  background: linear-gradient(180deg, rgba(24,23,21,.96), rgba(24,23,21,.90));
+  border: 1px solid rgba(243,239,232,.16);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.40);
 }
 
-.feed-column h2 {
-    margin: 0 0 8px 0;
+/* Headings inside panels -> flyer strip style */
+.box > h2{
+  margin: 0;
+  padding: 12px 14px;
+
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+
+  border-bottom: 2px solid rgba(243,239,232,.10);
+  background:
+    linear-gradient(90deg, rgba(196,58,47,.22), transparent 60%),
+    rgba(15,14,12,.45);
+
+  text-shadow: 0 1px 0 rgba(0,0,0,.75);
 }
 
-/* Feed posts */
-.feed-post {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 12px;
+/* --- Feed posts: your existing .feed-post.box combination --- */
+.feed-post.box{
+  margin: 14px;
+  border-radius: 14px;
+
+  background: rgba(15,14,12,.35);
+  border: 1px solid rgba(243,239,232,.14);
+  box-shadow: none;
 }
 
-.feed-post:last-child {
-    margin-bottom: 0;
+/* Artist update post header */
+.post-header{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px 6px;
 }
 
-.post-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* Artist name / user name */
+.post-header h3{
+  margin: 0;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .10em;
+  text-transform: uppercase;
 }
 
-.post-time {
-    font-size: 12px;
-    color: #999;
+/* Timestamp */
+.post-time{
+  font-size: 12px;
+  color: rgba(243,239,232,.65);
+  white-space: nowrap;
 }
 
-/* Concerts column */
-.concerts-column {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+/* Post content */
+.feed-post.box p{
+  margin: 0;
+  padding: 0 12px 12px;
+  color: rgba(243,239,232,.92);
+  line-height: 1.45;
 }
 
-.concerts-column h2 {
-    margin: 0 0 8px 0;
+/* --- Upcoming concerts sidebar styling --- */
+
+/* Concert artist name inside the card */
+.concerts-column .feed-post.box h2{
+  margin: 0;
+  padding: 10px 12px;
+
+  /* make it the red strip like a flyer header */
+  background: linear-gradient(90deg, rgba(196,58,47,.88), rgba(196,58,47,.55));
+  color: #14120E;
+
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+
+  border-radius: 12px 12px 0 0;
 }
 
-/* Concert items */
-.concert-item {
-    margin-bottom: 12px;
+/* Venue name */
+.concerts-column .feed-post.box h3{
+  margin: 0;
+  padding: 10px 12px 6px;
+
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .02em;
+  text-transform: none;
 }
 
-.concert-item:last-child {
-    margin-bottom: 0;
+/* Date/location line */
+.concerts-column .feed-post.box p{
+  padding: 0 12px 12px;
+  color: rgba(243,239,232,.72);
+  font-size: 13px;
 }
 
-.concert-item h4 {
-    margin: 0 0 4px 0;
+/* Make the concert cards tighter in the sidebar */
+.concerts-column .feed-post.box{
+  margin: 14px;
+  overflow: hidden;
 }
 
-.concert-item p {
-    margin: 4px 0;
-    font-size: 14px;
+/* --- Button: “View all dates” --- */
+.concerts-column button{
+  margin: 0 14px 14px;
+  width: calc(100% - 28px);
+  padding: 11px 12px;
+
+  border-radius: 12px;
+  border: 1px solid rgba(244,196,48,.60);
+  background: rgba(244,196,48,.92);
+  color: #14120E;
+
+  font-weight: 900;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  font-size: 12px;
+
+  cursor: pointer;
 }
 
-.concert-date {
-    color: #666;
-    font-size: 12px;
+.concerts-column button:hover{
+  background: rgba(244,196,48, 1);
+  box-shadow: 0 0 0 3px rgba(244,196,48,.18);
 }
+
+/* --- Empty state box inside your loop (keep it readable) --- */
+.feed-column .box .box p{
+  padding: 12px 14px;
+  margin: 14px;
+  border: 1px dashed rgba(243,239,232,.18);
+  border-radius: 14px;
+  background: rgba(15,14,12,.25);
+  color: rgba(243,239,232,.75);
+}
+
+/* --- Responsive: stack columns --- */
+@media (max-width: 900px){
+  .home-layout{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================
+   PINNED FLYERS ON BRICK WALL (Upcoming Concerts)
+   Targets your existing HTML:
+   .concerts-column
+   .concerts-column .feed-post.box
+   ========================================== */
+
+/* 1) Make the right column feel like a wall space */
+.concerts-column{
+  position: relative;
+  padding: 0;
+}
+
+/* Brick wall effect (CSS-only; no image needed) */
+.concerts-column::before{
+  content:"";
+  position:absolute;
+  inset: -18px -18px -18px -18px; /* extends behind the panel spacing */
+  border-radius: 18px;
+
+  /* Brick-ish pattern made with gradients */
+  background:
+    /* dark vignette */
+    radial-gradient(900px 500px at 50% 20%, rgba(0,0,0,.15), rgba(0,0,0,.55)),
+    /* mortar horizontal */
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.06) 0px,
+      rgba(255,255,255,.06) 3px,
+      rgba(0,0,0,0) 3px,
+      rgba(0,0,0,0) 44px
+    ),
+    /* brick rows */
+    repeating-linear-gradient(
+      90deg,
+      rgba(0,0,0,0) 0px,
+      rgba(0,0,0,0) 90px,
+      rgba(255,255,255,.05) 90px,
+      rgba(255,255,255,.05) 93px
+    ),
+    /* base brick color */
+    linear-gradient(180deg, #3a2a22, #2a1d18);
+
+  opacity: 0.95;
+  z-index: 0;
+  box-shadow: 0 14px 40px rgba(0,0,0,.35);
+}
+
+/* Make sure the actual content sits above the “wall” */
+.concerts-column > *{
+  position: relative;
+  z-index: 1;
+}
+
+/* 2) Remove the “panel” look from the concerts container box,
+      so it feels like flyers pinned to a wall */
+.concerts-column > .box{
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* Keep the Upcoming Concerts header visible like a sign */
+.concerts-column > .box > h2{
+  margin: 0 0 10px 0;
+  border-radius: 14px;
+  border: 1px solid rgba(243,239,232,.18);
+  background: rgba(15,14,12,.65);
+  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+}
+
+/* 3) Each concert card becomes a “flyer” */
+.concerts-column .feed-post.box{
+  position: relative;
+  margin: 14px 10px;
+  overflow: visible;
+
+  /* paper */
+  background: rgba(15,14,12,.55);
+  border: 1px solid rgba(243,239,232,.16);
+  border-radius: 16px;
+
+  /* poster lift */
+  box-shadow:
+    0 18px 30px rgba(0,0,0,.55),
+    0 0 0 1px rgba(0,0,0,.25) inset;
+
+  /* slight “imperfect” flyer tilt */
+  transform: rotate(-0.6deg);
+}
+
+/* Alternate tilt to feel hand-pinned */
+.concerts-column .feed-post.box:nth-child(2n){
+  transform: rotate(0.7deg);
+}
+.concerts-column .feed-post.box:nth-child(3n){
+  transform: rotate(-1.1deg);
+}
+
+/* 4) Pushpin! (top-left) */
+.concerts-column .feed-post.box::before{
+  content:"";
+  position:absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  top: -7px;
+  left: 18px;
+
+  background: radial-gradient(circle at 35% 35%, #6fe7e0, #1b8f88);
+  box-shadow:
+    0 6px 0 rgba(0,0,0,.20),  /* pin shadow on paper */
+    0 10px 18px rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+/* 5) Pin shadow dent (little ring) */
+.concerts-column .feed-post.box::after{
+  content:"";
+  position:absolute;
+  width: 22px;
+  height: 10px;
+  top: -2px;
+  left: 14px;
+  border-radius: 50%;
+  background: rgba(0,0,0,.25);
+  filter: blur(1px);
+  opacity: 0.45;
+}
+
+/* 6) Make the “View all dates” button feel like a ticket */
+.concerts-column button{
+  margin: 10px 10px 16px;
+  width: calc(100% - 20px);
+  border-radius: 14px;
+  border: 1px solid rgba(244,196,48,.70);
+  background: rgba(244,196,48,.95);
+  color: #14120E;
+  box-shadow: 0 16px 30px rgba(0,0,0,.45);
+}
+

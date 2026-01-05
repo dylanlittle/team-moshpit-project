@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="/two-column-pages.css" />
     <link rel="stylesheet" href="/navbar.css"/>
+    <link rel="stylesheet" href="/user-profile.css" />
+
 </head>
 <header class="page-header">
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
@@ -35,28 +37,59 @@
             </a>
         </div>
     </div>
-    <form th:if="${editing}"
-          th:action="@{/users/{id}(id=${user.id})}"
-          method="post"
-          enctype="multipart/form-data">
 
-        <label>Username</label>
-        <input type="text"
-               name="username"
-               th:value="${user.username}"
-               required/>
+    <div th:if="${editing}" class="page-layout">
 
-        <div class="actions">
-            <button type="submit">Save Changes</button>
-            <a th:href="@{/users/{id}(id=${user.id})}">
-                <button type="button">Cancel</button>
-            </a>
-        </div>
-    </form>
+        <form th:action="@{/users/{id}(id=${user.id})}"
+              method="post"
+              enctype="multipart/form-data"
+              class="profile-edit-form">
+
+            <!-- LEFT COLUMN -->
+            <aside class="left-column">
+
+                <div class="box profile-picture">
+                    <label>Change profile image</label>
+                    <input type="file" name="image" accept="image/*"/>
+                </div>
+
+                <div class="box">
+                    <h3>About Me</h3>
+                    <textarea name="bio"
+                              rows="4"
+                              th:text="${user.bio}"
+                              placeholder="Tell people about you..."></textarea>
+                </div>
+
+            </aside>
+
+            <!-- RIGHT COLUMN -->
+            <main class="right-column">
+
+                <div class="box">
+                    <label>Username</label>
+                    <input type="text"
+                           name="username"
+                           th:value="${user.username}"
+                           required/>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                    <a th:href="@{/users/{id}(id=${user.id})}">Cancel</a>
+                </div>
+
+            </main>
+
+        </form>
+    </div>
+
+
 </div>
 
 
-<div class="page-layout">
+<div class="page-layout" th:if="${!editing}">
+
 
     <aside class="left-column">
 

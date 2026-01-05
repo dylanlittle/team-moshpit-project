@@ -171,12 +171,12 @@
     <main class="right-column" id="fan-feed">
 
         <input type="radio" name="profile-tabs" id="tab-followed" checked>
-        <input type="radio" name="profile-tabs" id="tab-history">
+        <input type="radio" name="profile-tabs" id="tab-shows">
         <input type="radio" name="profile-tabs" id="tab-posts">
 
         <nav class="nav-bar">
             <label for="tab-followed">Followed Artists</label>
-            <label for="tab-history">History</label>
+            <label for="tab-shows">My Shows</label>
             <label for="tab-posts">Posts</label>
         </nav>
 
@@ -194,10 +194,17 @@
             </div>
         </section>
 
-        <section class="tab-content" id="content-history">
+        <section class="tab-content" id="content-shows">
             <div class="box">
-                <h3>Recent History</h3>
-                <p>No recent activity found.</p>
+                <h3>My Shows</h3>
+                <ul>
+                    <li th:each="concert : ${concerts}">
+                        <a th:href="@{/concerts/{id}(id=${concert.id})}">
+                            <p th:text="${concert.artist.name} + ' at ' + ${concert.venue.venueName}"></p>
+                        </a>
+                    </li>
+                </ul>
+                <p th:if="${#lists.isEmpty(concerts)}">No shows yet!</p>
             </div>
         </section>
 

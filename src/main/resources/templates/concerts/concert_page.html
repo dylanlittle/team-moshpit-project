@@ -6,6 +6,9 @@
 
     <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="/two-column-pages.css" />
+    <link rel="stylesheet" href="/concerts.css" />
+    <meta name="_csrf" th:content="${_csrf?.token}"/>
+    <script src="/js/rsvp.js" defer></script>
 </head>
 
 <body>
@@ -14,6 +17,16 @@
 <div class="concert-header">
     <h1>Concert Name</h1>
     <h3 th:text="${venue.venueName}"></h3>
+    <button th:id="rsvp-btn"
+            th:data-concert-id="${concert.id}"
+            th:class="${isGoing} ? 'active' : ''">
+        <span class="custom-checkbox">
+            <span class="tick-mark"></span>
+        </span>
+        <span th:id="rsvp-btn-text"
+              th:text="RSVP">
+        </span>
+    </button>
 </div>
 
 <!-- Main -->
@@ -91,9 +104,27 @@
         <section class="tab-content" id="content-concert-crowd">
             <div class="box">
                 <h3>Crowd</h3>
-                <ul>
-                    <li th:each="user: ${crowd}">
-                        <p th:text="'Insert user card component for ' + ${user.name}"></p>
+                <ul style="display: flex;" th:class="user-list">
+                    <li th:id="attendee-current-user"
+                        th:class="${isGoing} ? 'active' : 'hidden'">
+                        <div th:replace="~{fragments/display-card :: displayCard(
+                            ${currentUser.username},
+                            '/users/' + ${currentUser.id},
+                            ${currentUser.avatar != null ? currentUser.avatar : 'https://placehold.co/128'},
+                            'Picture of ' + ${currentUser.username}
+                            )}">
+                        </div>
+                    </li>
+                    <li th:each="user: ${crowd}"
+                        th:id="'attendee-' + ${user.id}"
+                        th:unless="${user.id == currentUser.id}">
+                        <div th:replace="~{fragments/display-card :: displayCard(
+                            ${user.username},
+                            '/users/' + ${user.id},
+                            ${user.avatar != null ? user.avatar : 'https://placehold.co/128'},
+                            'Picture of ' + ${user.username}
+                            )}">
+                        </div>
                     </li>
                 </ul>
             </div>

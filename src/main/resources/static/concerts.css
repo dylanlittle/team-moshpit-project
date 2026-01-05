@@ -65,3 +65,11 @@
     background-color: #075CE4;
     border-color: #075CE4;
 }
+
+.user-list li.hidden {
+    display: none;
+}
+
+.user-list li.active {
+    display: flex;
+}

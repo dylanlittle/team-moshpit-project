@@ -37,14 +37,16 @@ public class ConcertsController {
         Concert concert = concertRepository.findById(concertId)
                 .orElseThrow(() -> new EntityNotFoundException("Concert not found"));
         Venue venue = concert.getVenue();
+        User currentUser = authService.getCurrentUser();
         List<Post> posts = postRepository.findAllByConcertIdOrderByTimestampDesc(concertId);
         List<User> crowd = concertGoerRepository.findUsersByConcertId(concertId);
-        boolean isGoing = concertGoerRepository.existsByUserAndConcert(authService.getCurrentUser(), concert);
+        boolean isGoing = concertGoerRepository.existsByUserAndConcert(currentUser, concert);
         model.addAttribute("crowd", crowd);
         model.addAttribute("posts", posts);
         model.addAttribute("concert", concert);
         model.addAttribute("venue", venue);
         model.addAttribute("isGoing", isGoing);
+        model.addAttribute("currentUser", currentUser);
         return "concerts/concert_page";
     }
 

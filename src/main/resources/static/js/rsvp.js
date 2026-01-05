@@ -10,6 +10,7 @@ function handleRsvpClick(e) {
     const token = document.querySelector('meta[name="_csrf"]').content;
     const url = `/concerts/${concertId}/rsvp`;
     const isGoing = btn.classList.contains('active');
+    const currentUserCard = document.getElementById("attendee-current-user");
 
      fetch(url, {
                 method: 'POST',
@@ -23,8 +24,10 @@ function handleRsvpClick(e) {
                         // Logic to toggle the text based on what it currently is
                         if (isGoing) {
                             btn.classList.remove('active');
+                            currentUserCard.classList.remove('active');
                         } else {
                             btn.classList.add('active');
+                            currentUserCard.classList.add('active');
                         }
                     } else {
                         alert("Something went wrong. Please try again.");

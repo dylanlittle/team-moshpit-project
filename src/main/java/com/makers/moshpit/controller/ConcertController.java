@@ -114,6 +114,7 @@ public class ConcertController {
         // 2. Create concert
         Concert concert = new Concert(
                 concertForm.getConcertDate(),
+                concertForm.getStartTime(),
                 venue,
                 artist
         );

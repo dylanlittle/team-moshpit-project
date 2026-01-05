@@ -8,12 +8,14 @@ import com.makers.moshpit.dto.ConcertForm;
 import com.makers.moshpit.repository.ArtistRepository;
 import com.makers.moshpit.repository.ConcertRepository;
 import com.makers.moshpit.repository.VenueRepository;
+import com.makers.moshpit.service.MediaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
@@ -30,6 +32,9 @@ public class ConcertController {
 
     @Autowired
     VenueRepository venueRepository;
+
+    @Autowired
+    private MediaService mediaService;
 
     // Render add new concert page
     @GetMapping("/artists/{artistId}/concerts/new")
@@ -89,7 +94,7 @@ public class ConcertController {
     }
 
     @PostMapping("/artists/{artistId}/concerts")
-    public RedirectView create(@PathVariable Long artistId, @ModelAttribute ConcertForm concertForm){
+    public RedirectView create(@PathVariable Long artistId, @ModelAttribute ConcertForm concertForm, @RequestParam(value = "image", required = false) MultipartFile imageFile){
 
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new RuntimeException("Artist not found"));
@@ -111,12 +116,30 @@ public class ConcertController {
                     return venueRepository.save(v);
                 });
 
-        // 2. Create concert
+
+        String concertImage = null;
+
+        // 2. If an image has been uploaded, upload to cloud and extract URL
+        if (imageFile != null && !imageFile.isEmpty()) {
+            if (imageFile.getSize() > (10 * 1024 * 1024)) {
+                throw new RuntimeException("File too large — maximum allowed size is 10MB.");
+            }
+
+            try {
+                String imageUrl = mediaService.uploadImage(imageFile);
+                concertImage = imageUrl;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 3. Create concert
         Concert concert = new Concert(
                 concertForm.getConcertDate(),
                 concertForm.getStartTime(),
                 venue,
-                artist
+                artist,
+                concertImage
         );
 
         concertRepository.save(concert);

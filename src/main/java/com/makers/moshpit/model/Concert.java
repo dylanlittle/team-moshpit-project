@@ -30,10 +30,14 @@ public class Concert {
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
-    public Concert(LocalDate concertDate, LocalTime startTime, Venue venue, Artist artist) {
+    @Column(name = "image")
+    private String image;
+
+    public Concert(LocalDate concertDate, LocalTime startTime, Venue venue, Artist artist, String image) {
         this.concertDate = concertDate;
         this.startTime = startTime;
         this.venue = venue;
         this.artist = artist;
+        this.image = image;
     }
 }

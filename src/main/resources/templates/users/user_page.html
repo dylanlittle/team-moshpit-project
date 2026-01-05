@@ -179,7 +179,14 @@
         <section class="tab-content" id="content-followed">
             <div class="box">
                 <h3>Followed Artists</h3>
-                <p>You aren't following anyone yet.</p>
+
+                <ul th:if="${not #lists.isEmpty(followedArtists)}">
+                    <li th:each="artist : ${followedArtists}">
+                        <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}"></a>
+                    </li>
+                </ul>
+
+                <p th:if="${#lists.isEmpty(followedArtists)}">No followed artists yet!</p>
             </div>
         </section>
 

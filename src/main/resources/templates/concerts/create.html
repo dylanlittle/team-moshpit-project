@@ -69,12 +69,37 @@
 
     let venueTimeout;
 
-    // When country changes or is typed, fetch cities
+    // Helper functions for cascaded input clearing
+    function clearCityAndBelow() {
+        cityInput.value = '';
+        citiesList.innerHTML = '';
+
+        clearVenueAndBelow();
+    }
+
+    function clearVenueAndBelow() {
+        venueNameInput.value = '';
+        venuesList.innerHTML = '';
+
+        clearAddress();
+    }
+
+    function clearAddress() {
+        venueAddressInput.value = '';
+        venueAddressInput.readOnly = false;
+    }
+
+    // When country changes or is typed, fetch cities. If country changes to empty, clear city and below
     countryInput.addEventListener('input', function() {
+        const country = this.value.trim();
+
+        if (country === '') {
+            clearCityAndBelow();
+            return;
+        }
+
         clearTimeout(venueTimeout);
         venueTimeout = setTimeout(async () => {
-            const country = this.value.trim();
-
             if (country.length >= 2) {
                 try {
                     const response = await fetch(`/venues/cities?country=${encodeURIComponent(country)}`);
@@ -96,11 +121,17 @@
         }, 300); // Wait 300ms after user stops typing
     });
 
-    // When city changes, fetch venues
+    // When city changes, fetch venues. If city changes to empty, clear venue and below
     cityInput.addEventListener('input', function() {
+        const city = this.value.trim();
+
+        if (city === '') {
+            clearVenueAndBelow();
+            return;
+        }
+
         clearTimeout(venueTimeout);
         venueTimeout = setTimeout(async () => {
-            const city = this.value.trim();
             const country = countryInput.value.trim();
 
             if (city.length >= 2 && country.length >= 2) {
@@ -125,18 +156,21 @@
         }, 300);
     });
 
-    // When venue name changes, fetch address
+    // When venue name changes, fetch address. If venue name changes to empty, clear venue address.
     venueNameInput.addEventListener('input', function() {
-        clearTimeout(venueTimeout);
+        const venueName = this.value.trim();
 
+        if (venueName === '') {
+            clearAddress();
+            return;
+        }
+
+        clearTimeout(venueTimeout);
         venueTimeout = setTimeout(async () => {
-            const venueName = venueNameInput.value.trim();
             const city = cityInput.value.trim();
             const country = countryInput.value.trim();
 
-            // clear
-            venueAddressInput.value = '';
-            venueAddressInput.readOnly = false;
+            clearAddress();
 
             if (city.length >= 2 && country.length >= 2 && venueName.length >= 2) {
                 try {

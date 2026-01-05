@@ -4,15 +4,24 @@
     <meta charset="UTF-8">
     <title th:text="${artist.name}">Artist Profile</title>
     <link rel="stylesheet" href="/main.css" />
+    <link rel="stylesheet" href="/navbar.css"/>
     <th:block th:replace="~{fragments/timezone-script :: timezone-detector}"></th:block>
 </head>
 
 <body>
-
+<header class="page-header">
+    <div th:insert="~{fragments/navbar :: headerNav}"></div>
+</header>
 <!-- Header -->
 <div class="artist-header">
     <h1 th:text="${artist.name}">Cameron Winter</h1>
     <div class="artist-genre" th:text="${artist.genre}">Folk / Alternative</div>
+    <form th:action="${isFollowing} ? @{/artists/{id}/unfollow(id=${artist.id})} : @{/artists/{id}/follow(id=${artist.id})}" method="post">
+        <button type="submit"
+                th:text="${isFollowing} ? 'Unfollow' : 'Follow'"
+                th:class="${isFollowing} ? 'btn-secondary' : 'btn-primary'">
+        </button>
+    </form>
 </div>
 
 <!-- Temp nav bar
@@ -92,7 +101,7 @@
         <div class="box">
             <ul>
                 <li th:each="post : ${posts}" class="mb-3">
-                    <p th:text="${post.content} + ' – Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></p>
+                    <p style="white-space: pre-wrap;" th:text="${post.content} + ' – Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></p>
                     <div th:if="${post.mediaUrl != null}">
 
                         <img th:if="${post.mediaType == 'image'}"
@@ -142,9 +151,11 @@
         <div class="box">
             <h3>Upcoming Dates</h3>
             <ul th:each="concert:${concerts}">
-                <li th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></li>
+                <a th:href="@{/concerts/{id}(id=${concert.id})}">
+                    <li th:href="@{/artists/{id}(id=${artist.id})}" th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></li>
+                </a>
             </ul>
-            <button>View all dates</button>
+            <a th:if="${canEdit}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>
         </div>
 
     </aside>

@@ -17,6 +17,9 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
             "WHERE aa.user_id = :userId",
             nativeQuery = true)
     List<Artist> findArtistsByUserId(@Param("userId") Long userId);
+
+    Optional<Artist> findFirstByNameIgnoreCase(String name);
+
+    @Query("SELECT f.artist FROM Follow f WHERE f.user = :user")
+    List<Artist> findAllArtistsFollowedByUser(@Param("user") User user);
 }
-
-

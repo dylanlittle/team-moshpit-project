@@ -3,9 +3,7 @@ package com.makers.moshpit.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -23,6 +21,21 @@ public class User {
     private Long active_artist_id;
     private String avatar;
     private String location;
+
+    @Column(name = "auth0_sub", unique = true)
+    private String auth0Sub;
+
+    @Column(name = "spotify_user_id")
+    private String spotifyUserId;
+
+    @Column(name = "spotify_access_token", columnDefinition = "TEXT")
+    private String spotifyAccessToken;
+
+    @Column(name = "spotify_refresh_token", columnDefinition = "TEXT")
+    private String spotifyRefreshToken;
+
+    @Column(name = "spotify_token_expires_at")
+    private LocalDateTime spotifyTokenExpiresAt;
 
     public User(String email) {
         this.name = "";

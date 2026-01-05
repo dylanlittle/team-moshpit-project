@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <title>Complete Profile</title>
     <link rel="stylesheet" href="/main.css" />
+    <link rel="stylesheet" href="/navbar.css"/>
 </head>
+<header class="page-header">
+    <div th:insert="~{fragments/navbar :: headerNav}"></div>
+</header>
 <body>
 <h1>Complete Your Profile</h1>
 <h5>Please fill in your details to finish completing your account!</h5>
@@ -30,8 +34,8 @@
             <label for="avatar">Profile Picture:</label><br>
             <input type="file"
                    class="form-control mb-3"
-                   id="image"
-                   name="image"
+                   id="avatar"
+                   name="avatar"
                    accept="image/*">
             <button type="button"
                     id="clearMediaBtn"

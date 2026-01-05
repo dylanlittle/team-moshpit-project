@@ -7,17 +7,6 @@ ul { list-style-type: none; margin: 0; padding: 0; }
 ol { list-style-type: none; margin: 0; padding: 0; }
 
 /* Header */
-.page-header {
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    padding: 0;
-}
-
-.page-header > div {
-    width: 100%;
-}
-
 .artist-header h1 {
     margin: 0;
 }
@@ -27,7 +16,7 @@ ol { list-style-type: none; margin: 0; padding: 0; }
     color: #555;
 }
 
-/* Artist Navbar */
+/* Navbar */
 .nav-bar {
     margin-top: 16px;
     padding: 8px 0;
@@ -56,11 +45,6 @@ ol { list-style-type: none; margin: 0; padding: 0; }
     display: flex;
     flex-direction: column;
     gap: 16px;
-}
-
-.page-content {
-    max-width: 1200px;
-    margin: 0 auto;
 }
 
 /* Boxes */

@@ -34,9 +34,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.util.List;
+
 @Controller
 public class UsersController {
-
+    @Autowired
+    private ArtistRepository artistRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -147,6 +150,10 @@ public class UsersController {
                               @RequestParam(defaultValue = "short_term") String timeRange) {
         User currentUser = currentUserService.getOrCreateFromPrincipal(principal);
         Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(currentUser.getId());
+        List<Artist> myArtists =  artistRepository.findArtistsByUserId(currentUser.getId());
+        model.addAttribute("user", currentUser);
+        model.addAttribute("posts", posts);
+        model.addAttribute("myArtists", myArtists);
 
         boolean isOwner =
                 currentUser != null &&

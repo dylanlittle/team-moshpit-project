@@ -7,14 +7,12 @@
         moshpit - search
     </title>
     <link rel="stylesheet" href="/main.css">
-    <link rel="stylesheet" href="/navbar.css"/>
 </head>
 
 <body>
-<header class="page-header">
-    <div th:insert="~{fragments/navbar :: headerNav}"></div>
-    <h1>Search</h1>
-</header>
+    <header>
+        <h1>Search</h1>
+    </header>
     <main>
         <form th:action="@{/search}" method="get"
             style="display: flex; gap: 16px; border-bottom: solid; margin-bottom: 24px; padding-bottom: 8px;">

@@ -29,7 +29,7 @@ public class HomeController {
     public String home(Model model) {
 
         User user = authService.getCurrentUser();
-        Iterable<Post> posts = postRepository.findPostsByFollowedArtists(user);
+        Iterable<Post> posts = postRepository.findAll();
 
         LocalDate dateToday = LocalDate.now();
         Iterable<Concert> concerts = concertRepository.findByConcertDateAfterOrderByConcertDateAsc(dateToday);

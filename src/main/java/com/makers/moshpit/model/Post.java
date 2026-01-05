@@ -33,11 +33,6 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "concert_id")
-    private Concert concert;
-
-
     // If posting as a user, artist_id will default to null
     public Post(String content, User user) {
         this.content = content;

@@ -1,9 +1,11 @@
 package com.makers.moshpit.controller;
 
 import com.makers.moshpit.model.Artist;
+import com.makers.moshpit.model.Concert;
 import com.makers.moshpit.model.Post;
 import com.makers.moshpit.model.User;
 import com.makers.moshpit.repository.ArtistRepository;
+import com.makers.moshpit.repository.ConcertGoerRepository;
 import com.makers.moshpit.repository.PostRepository;
 import com.makers.moshpit.repository.UserRepository;
 import com.makers.moshpit.service.AuthService;
@@ -57,6 +59,9 @@ public class UsersController {
 
     @Autowired
     private ArtistRepository artistRepository;
+
+    @Autowired
+    private ConcertGoerRepository concertGoerRepository;
 
     public void SpotifyTopArtistsController(SpotifyApiService spotifyApi,
                                             CurrentUserService currentUserService,
@@ -169,6 +174,7 @@ public class UsersController {
         }
 
         Iterable<Artist> artists = artistRepository.findAllArtistsFollowedByUser(currentUser);
+        Iterable<Concert> concerts = concertGoerRepository.findConcertsByUserId(currentUser.getId());
 
         model.addAttribute("timeRange", timeRange);
         model.addAttribute("user", currentUser);
@@ -176,6 +182,7 @@ public class UsersController {
         model.addAttribute("followedArtists", artists);
         model.addAttribute("editing", false);
         model.addAttribute("isOwner", isOwner);
+        model.addAttribute("concerts", concerts);
         return "users/user_page";
     }
 

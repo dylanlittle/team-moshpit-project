@@ -3,14 +3,11 @@ function handleRsvpClick(e) {
     const btn = e.currentTarget;
     console.log("The button works");
 
-    // 1. Read the data-concert-id attribute
+    // Read the data-concert-id attribute
     const concertId = btn.getAttribute('data-concert-id');
-    console.log(concertId);
 
     const token = document.querySelector('meta[name="_csrf"]').content;
     const url = `/concerts/${concertId}/rsvp`;
-    const isGoing = btn.classList.contains('active');
-    const currentUserCard = document.getElementById("attendee-current-user");
 
      fetch(url, {
                 method: 'POST',
@@ -21,13 +18,17 @@ function handleRsvpClick(e) {
             })
             .then(response => {
                     if (response.ok) {
-                        // Logic to toggle the text based on what it currently is
+                        const currentUserCard = document.getElementById("attendee-current-user");
+                        btn.classList.toggle('active');
+
+                        const isGoing = btn.classList.contains('active');
+
                         if (isGoing) {
-                            btn.classList.remove('active');
-                            currentUserCard.classList.remove('active');
-                        } else {
-                            btn.classList.add('active');
+                            currentUserCard.classList.remove('hidden');
                             currentUserCard.classList.add('active');
+                        } else {
+                            currentUserCard.classList.remove('active');
+                            currentUserCard.classList.add('hidden');
                         }
                     } else {
                         alert("Something went wrong. Please try again.");

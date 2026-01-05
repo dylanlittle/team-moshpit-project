@@ -14,6 +14,8 @@ import java.util.List;
 public interface ConcertGoerRepository extends JpaRepository<ConcertGoer, Long> {
     @Query("SELECT cg.user FROM ConcertGoer cg WHERE cg.concert.id = :concertId")
     List<User> findUsersByConcertId(@Param("concertId") Long concertId);
+    @Query("SELECT cg.concert FROM ConcertGoer cg WHERE cg.user.id = :userId")
+    List<Concert> findConcertsByUserId(@Param("userId") Long userId);
     boolean existsByUserAndConcert(User user, Concert concert);
     @Transactional
     @Modifying

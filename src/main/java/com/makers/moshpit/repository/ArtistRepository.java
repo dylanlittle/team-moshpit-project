@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
     List<Artist> findByNameContainingIgnoreCase(String name);
+    Optional<Artist> findFirstByNameIgnoreCase(String name);
+
     @Query(value = "SELECT a.* FROM artists a " +
             "INNER JOIN artist_admins aa ON a.id = aa.artist_id " +
             "WHERE aa.user_id = :userId",

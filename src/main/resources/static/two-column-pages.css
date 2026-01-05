@@ -29,7 +29,10 @@ input[name="profile-tabs"] {
 /* Show tab panel when its radio is checked - using + combinator */
 #tab-followed:checked ~ .nav-bar ~ #content-followed,
 #tab-history:checked ~ .nav-bar ~ #content-history,
-#tab-posts:checked ~ .nav-bar ~ #content-posts {
+#tab-posts:checked ~ .nav-bar ~ #content-posts,
+#tab-concert-posts:checked ~ .nav-bar ~ #content-concert-posts,
+#tab-concert-crowd:checked ~ .nav-bar ~ #content-concert-crowd,
+#tab-concert-gallery:checked ~ .nav-bar ~ #content-concert-gallery {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -38,7 +41,10 @@ input[name="profile-tabs"] {
 /* Style active tab label */
 #tab-followed:checked ~ .nav-bar label[for="tab-followed"],
 #tab-history:checked ~ .nav-bar label[for="tab-history"],
-#tab-posts:checked ~ .nav-bar label[for="tab-posts"] {
+#tab-posts:checked ~ .nav-bar label[for="tab-posts"],
+#tab-concert-posts:checked ~ .nav-bar label[for="tab-concert-posts"],
+#tab-concert-crowd:checked ~ .nav-bar label[for="tab-concert-crowd"],
+#tab-concert-gallery:checked ~ .nav-bar label[for="tab-concert-gallery"] {
     color: black;
     border-bottom: 2px solid black;
 }

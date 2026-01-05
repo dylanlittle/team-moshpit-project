@@ -29,9 +29,6 @@
     </div>
 
     <div th:if="${!editing}">
-        <h3 th:text="'@' + ${user.username}"></h3>
-        <h4>Fan account</h4>
-
         <a th:if="${isOwner}"
            th:href="@{/users/{id}/edit(id=${user.id})}">
             <button>Edit Profile</button>

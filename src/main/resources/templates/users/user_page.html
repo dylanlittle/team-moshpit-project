@@ -180,11 +180,13 @@
             <div class="box">
                 <h3>Followed Artists</h3>
 
-                <ul th:if="${not #lists.isEmpty(artists)}">
-                    <li th:each="artist : ${followedArtists}" th:text="${artist.name}"></li>
+                <ul th:if="${not #lists.isEmpty(followedArtists)}">
+                    <li th:each="artist : ${followedArtists}">
+                        <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}"></a>
+                    </li>
                 </ul>
 
-                <p th:if="${#lists.isEmpty(followedArtists)}">You aren't following anyone yet.</p>
+                <p th:if="${#lists.isEmpty(followedArtists)}">No followed artists yet!</p>
             </div>
         </section>
 

@@ -87,5 +87,15 @@ public class SpotifyTokenService {
 
         return user.getSpotifyAccessToken();
     }
+
+    public boolean hasSpotifyTokens(User user) {
+        return user.getSpotifyRefreshToken() != null && !user.getSpotifyRefreshToken().isBlank();
+    }
+
+    public String forceRefreshAccessToken(User user) {
+        return refreshAccessToken(user);
+    }
+
+
 }
 

@@ -4,15 +4,24 @@
     <meta charset="UTF-8">
     <title th:text="${artist.name}">Artist Profile</title>
     <link rel="stylesheet" href="/main.css" />
+    <link rel="stylesheet" href="/navbar.css"/>
     <th:block th:replace="~{fragments/timezone-script :: timezone-detector}"></th:block>
 </head>
 
 <body>
-
+<header class="page-header">
+    <div th:insert="~{fragments/navbar :: headerNav}"></div>
+</header>
 <!-- Header -->
 <div class="artist-header">
     <h1 th:text="${artist.name}">Cameron Winter</h1>
     <div class="artist-genre" th:text="${artist.genre}">Folk / Alternative</div>
+    <form th:action="${isFollowing} ? @{/artists/{id}/unfollow(id=${artist.id})} : @{/artists/{id}/follow(id=${artist.id})}" method="post">
+        <button type="submit"
+                th:text="${isFollowing} ? 'Unfollow' : 'Follow'"
+                th:class="${isFollowing} ? 'btn-secondary' : 'btn-primary'">
+        </button>
+    </form>
 </div>
 
 <!-- Temp nav bar

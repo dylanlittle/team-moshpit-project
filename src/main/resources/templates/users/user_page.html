@@ -14,8 +14,9 @@
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
 </header>
 <body>
+<div class="user-wall">
 
-<div class="user-header">
+    <div class="user-header">
 
     <h1 th:text="${user.name}"></h1>
     <h3 th:text="'@' + ${user.username}"></h3>
@@ -85,11 +86,11 @@
     </div>
 
 
-</div>
 
 
-<div class="page-layout" th:if="${!editing}">
 
+
+        <div class="page-layout">
 
     <aside class="left-column">
 
@@ -271,12 +272,12 @@
     <main class="right-column" id="fan-feed">
 
         <input type="radio" name="profile-tabs" id="tab-followed" checked>
-        <input type="radio" name="profile-tabs" id="tab-shows">
+        <input type="radio" name="profile-tabs" id="tab-myshows">
         <input type="radio" name="profile-tabs" id="tab-posts">
 
         <nav class="nav-bar">
             <label for="tab-followed">Followed Artists</label>
-            <label for="tab-shows">My Shows</label>
+            <label for="tab-myshows">My Shows</label>
             <label for="tab-posts">Posts</label>
         </nav>
 
@@ -294,7 +295,7 @@
             </div>
         </section>
 
-        <section class="tab-content" id="content-shows">
+        <section class="tab-content" id="content-myshows">
             <div class="box">
                 <h3>My Shows</h3>
                 <ul>
@@ -342,10 +343,50 @@
         </div>
 
     </main>
+        </div>
 
 </div>
+</div>
 
-</form>
+<script>
+    async function refreshNowPlaying() {
+      try {
+        const res = await fetch('/api/spotify/now-playing', { headers: { 'Accept': 'application/json' }});
+        const data = await res.json();
+
+        const card = document.getElementById('now-playing');
+        const art = document.getElementById('np-art');
+        const title = document.getElementById('np-title');
+        const artist = document.getElementById('np-artist');
+        const status = document.getElementById('np-status');
+        const link = document.getElementById('np-link');
+
+        if (!data.connected) {
+          card.style.display = 'none';
+          return;
+        }
+
+        card.style.display = 'block';
+
+        if (!data.isPlaying) {
+          art.style.display = 'none';
+          link.style.display = 'none';
+          title.textContent = data.message || 'Nothing currently playing';
+          artist.textContent = '';
+          status.textContent = '';
+          return;
+        }
+
+        title.textContent = data.trackName || '';
+        artist.textContent = data.artists || '';
+        status.textContent = data.albumName ? `on ${data.albumName}` : '';
+
+        if (data.albumImageUrl) {
+          art.src = data.albumImageUrl;
+          art.style.display = 'block';
+        } else {
+          art.style.display = 'none';
+        }
 
 </body>
 </html>

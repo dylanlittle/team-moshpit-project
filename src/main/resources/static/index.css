@@ -268,7 +268,6 @@ body{
   box-shadow: 0 10px 24px rgba(0,0,0,.35);
 }
 
-/* 3) Each concert card becomes a “flyer” */
 .concerts-column .feed-post.box{
   position: relative;
   margin: 14px 10px;
@@ -288,7 +287,7 @@ body{
   transform: rotate(-0.6deg);
 }
 
-/* Alternate tilt to feel hand-pinned */
+/* Tilting effect */
 .concerts-column .feed-post.box:nth-child(2n){
   transform: rotate(0.7deg);
 }
@@ -296,7 +295,6 @@ body{
   transform: rotate(-1.1deg);
 }
 
-/* 4) Pushpin! (top-left) */
 .concerts-column .feed-post.box::before{
   content:"";
   position:absolute;
@@ -313,7 +311,7 @@ body{
   border: 1px solid rgba(255,255,255,.18);
 }
 
-/* 5) Pin shadow dent (little ring) */
+/* 5) Pin shadow effect */
 .concerts-column .feed-post.box::after{
   content:"";
   position:absolute;
@@ -327,7 +325,7 @@ body{
   opacity: 0.45;
 }
 
-/* 6) Make the “View all dates” button feel like a ticket */
+/* button for view all dates */
 .concerts-column button{
   margin: 10px 10px 16px;
   width: calc(100% - 20px);
@@ -337,4 +335,5 @@ body{
   color: #14120E;
   box-shadow: 0 16px 30px rgba(0,0,0,.45);
 }
+
 

@@ -156,10 +156,7 @@ public class UsersController {
         model.addAttribute("user", currentUser);
         model.addAttribute("posts", posts);
         model.addAttribute("myArtists", myArtists);
-
-        boolean isOwner =
-                currentUser != null &&
-                        currentUser.getId().equals(currentUser.getId());
+        model.addAttribute("isOwner", true);
 
         if (!timeRange.equals("short_term") && !timeRange.equals("medium_term") && !timeRange.equals("long_term")) {
             timeRange = "short_term";
@@ -185,7 +182,6 @@ public class UsersController {
         model.addAttribute("posts", posts);
         model.addAttribute("followedArtists", artists);
         model.addAttribute("editing", false);
-        model.addAttribute("isOwner", isOwner);
         model.addAttribute("concerts", concerts);
         return "users/user_page";
     }
@@ -196,9 +192,9 @@ public class UsersController {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         User currentUser = authService.getCurrentUser();
 
-        boolean isOwner =
-                currentUser != null &&
-                        currentUser.getId().equals(user.getId());
+        if (currentUser != null && currentUser.getId().equals(id)) {
+            return "redirect:/user";
+        }
 
         Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(id);
 
@@ -208,7 +204,7 @@ public class UsersController {
         model.addAttribute("posts", posts);
         model.addAttribute("followedArtists", artists);
         model.addAttribute("editing", false);
-        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("isOwner", false);
 
         return "users/user_page";
     }

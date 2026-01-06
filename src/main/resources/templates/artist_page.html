@@ -138,7 +138,7 @@
         <div th:fragment="adminList">
             <ul style="display: flex; margin: 12px 0;">
                 <li th:each="admin : ${admins}">
-                    <div th:replace="~{fragments/display-card :: displayCard(${admin.user.name}, '/users/' + ${admin.user.id}, 'https://placehold.co/128', 'Picture of admin', ${artist.id})}"></div>
+                    <div th:replace="~{fragments/display-card :: displayCard(${admin.user.name}, '/users/' + ${admin.user.id}, 'https://placehold.co/128', 'Picture of admin')}"></div>
                 </li>
             </ul>
         </div>

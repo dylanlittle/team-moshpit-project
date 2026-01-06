@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.sound.sampled.Line;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -186,5 +187,23 @@ public class ConcertController {
         concertRepository.save(concert);
 
         return new RedirectView("/artists/" + artistId);
+    }
+
+    // add lineup to concert
+    @PostMapping("/concerts/{concertId}/lineup")
+    public RedirectView addLineup(@PathVariable Long concertId, @ModelAttribute LineupArtist lineupArtist){
+
+        Concert concert = concertRepository.findById(concertId)
+                .orElseThrow(() -> new RuntimeException("Concert not found"));
+
+        // 3. Create concert
+        LineupArtist newLineupArtist = new LineupArtist(
+                lineupArtist.getArtist(),
+                concert
+        );
+
+        concertRepository.save(concert);
+
+        return new RedirectView("/concerts/" + concertId);
     }
 }

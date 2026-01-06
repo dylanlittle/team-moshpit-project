@@ -54,6 +54,14 @@
                     <li><a href="/user">View Profile</a></li>
                     <li><a href="/users/create">Edit Profile</a></li>
                     <li>
+                        <button type="button"
+                                class="dropdown-btn"
+                                data-dialog-open="myArtists"
+                                onclick="document.getElementById('myArtists').showModal()">
+                            Manage My Artists
+                        </button>
+                    </li>
+                    <li>
                         <hr>
                         <form th:action="@{/logout}" method="post">
                             <button type="submit" class="logout-btn">Logout</button>
@@ -64,4 +72,11 @@
         </div>
 
     </nav>
+    <div th:replace="~{fragments/action-dialogue :: dialog(
+        title='My Artists',
+        id='myArtists',
+        cta_link='/artists/new',
+        cta='Add new artist',
+        content=(~{fragments/user-artists :: artistList})
+    )}"></div>
 </div>

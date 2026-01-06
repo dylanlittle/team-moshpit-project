@@ -34,13 +34,6 @@
                 <button>Edit Profile</button>
             </a>
         </div>
-        <form method="post" action="/user/spotify/privacy">
-            <label>
-                <input type="checkbox" name="shareTopArtists" th:checked="${user.shareSpotifyTopArtists}">
-                Show my Top Artists on my public profile
-            </label>
-            <button type="submit" class="btn btn-sm btn-outline-secondary">Save</button>
-        </form>
     </div>
     <form th:if="${editing}"
           th:action="@{/users/{id}(id=${user.id})}"
@@ -99,6 +92,14 @@
         <div th:if="${isOwner or (!isOwner and canShowPublicTopArtists)}">
             <div class="box">
                 <h3 th:text="${isOwner} ? 'Your Top Artists' : 'Top Artists'">Top Artists</h3>
+
+                <form method="post" action="/user/spotify/privacy">
+                    <label>
+                        <input type="checkbox" name="shareTopArtists" th:checked="${user.shareSpotifyTopArtists}">
+                        Show my Top Artists on my public profile
+                    </label>
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">Save</button>
+                </form>
 
                 <div th:if="${user.spotifyRefreshToken == null}">
                     <p>Connect Spotify to show your top artists.</p>

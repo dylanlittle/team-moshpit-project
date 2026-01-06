@@ -24,32 +24,28 @@
 
 
     <!-- Suggested (Spotify) -->
-    <div class="box">
-        <h2>Suggested for you</h2>
+    <div th:if="${spotifyConnected}">
+        <div class="box">
+            <h2>Suggested for you</h2>
+            <div th:if="${spotifyConnected and (suggestedArtists == null or #lists.isEmpty(suggestedArtists))}">
+                <p>No suggestions right now — either your top artists aren’t on Mosh Pit yet, or you already follow them.</p>
+            </div>
 
-        <div th:if="${!spotifyConnected}">
-            <p>Connect Spotify to get personalised suggestions.</p>
-            <a th:href="@{/spotify/connect}">Connect Spotify</a>
-        </div>
+            <div th:if="${suggestedArtists != null and !#lists.isEmpty(suggestedArtists)}">
+                <ul>
+                    <li th:each="artist : ${suggestedArtists}" style="display:flex; justify-content:space-between; align-items:center; padding:8px 0;">
+                        <div>
+                            <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist Name</a>
+                            <div style="opacity:0.7; font-size:0.9em;" th:text="${artist.genre}">Genre</div>
+                        </div>
 
-        <div th:if="${spotifyConnected and (suggestedArtists == null or #lists.isEmpty(suggestedArtists))}">
-            <p>No suggestions right now — either your top artists aren’t on Mosh Pit yet, or you already follow them.</p>
-        </div>
-
-        <div th:if="${suggestedArtists != null and !#lists.isEmpty(suggestedArtists)}">
-            <ul>
-                <li th:each="artist : ${suggestedArtists}" style="display:flex; justify-content:space-between; align-items:center; padding:8px 0;">
-                    <div>
-                        <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist Name</a>
-                        <div style="opacity:0.7; font-size:0.9em;" th:text="${artist.genre}">Genre</div>
-                    </div>
-
-                    <form th:action="@{/artists/{id}/follow(id=${artist.id})}" method="post">
-                        <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <button type="submit">Follow</button>
-                    </form>
-                </li>
-            </ul>
+                        <form th:action="@{/artists/{id}/follow(id=${artist.id})}" method="post">
+                            <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button type="submit">Follow</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 

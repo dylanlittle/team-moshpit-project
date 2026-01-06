@@ -19,7 +19,7 @@
     <form class="box" th:action="@{/artists/{id}/concerts(id=${artist.id})}" method="post" th:object="${concertForm}" enctype="multipart/form-data">
         <div>
             <label for="concert-name">Name:</label>
-            <input type="text" th:field="*{concertName}" name="concert-name" id="concert-name" required/>
+            <input type="text" th:field="*{concertName}" name="concert-name" id="concert-name"/>
         </div>
 
         <div>

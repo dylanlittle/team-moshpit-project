@@ -38,8 +38,7 @@ import java.util.List;
 
 @Controller
 public class UsersController {
-    @Autowired
-    private ArtistRepository artistRepository;
+
     @Autowired
     private UserRepository userRepository;
 

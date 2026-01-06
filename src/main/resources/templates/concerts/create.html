@@ -15,8 +15,8 @@
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
 </header>
 
-<!-- Show only if User has Artist Admin role -->
-<th:block th:if="${isAdmin}">
+<!-- Show only if User is actively Artist Admin role -->
+<th:block th:if="${isAdminMode and activeAdminArtist.id == artist.id}">
     <div class="box">
         <p th:text="'Artist: ' + ${artist.name}"></p>
         <form th:action="@{/artists/{id}/concerts(id=${artist.id})}" method="post" th:object="${concertForm}" enctype="multipart/form-data">
@@ -217,7 +217,7 @@
     </script>
 </th:block>
 <!-- Show if User does not have Artist Admin role -->
-<th:block th:unless="${isAdmin}">
+<th:block th:unless="${isAdminMode and activeAdminArtist.id == artist.id}">
     <p>You do not have permission to view this page.</p>
 </th:block>
 </body>

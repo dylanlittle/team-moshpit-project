@@ -46,11 +46,7 @@ public class ArtistController {
     public String getArtist(@PathVariable Long id, Model model) {
         User currentUser = authService.getCurrentUser();
 
-        /*boolean canEdit = currentUser != null &&
-                artistAdminRepository.existsByArtistIdAndUserId(id, currentUser.getId());*/
         List<ArtistAdmin> admins = artistAdminRepository.findAdminsByArtistId(id);
-
-        /*model.addAttribute("canEdit", canEdit);*/
 
         Artist artist =  artistRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Artist not found"));

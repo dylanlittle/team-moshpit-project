@@ -135,13 +135,13 @@ public class ConcertController {
 
         // 3. Create concert
         Concert concert = new Concert(
+                concertForm.getConcertName(),
                 concertForm.getConcertDate(),
                 concertForm.getStartTime(),
                 venue,
                 artist,
                 concertImage
         );
-
         concertRepository.save(concert);
 
         return new RedirectView("/artists/" + artistId);

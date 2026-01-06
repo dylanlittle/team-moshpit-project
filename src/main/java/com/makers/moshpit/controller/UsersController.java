@@ -157,10 +157,6 @@ public class UsersController {
         model.addAttribute("posts", posts);
         model.addAttribute("myArtists", myArtists);
 
-        boolean isOwner =
-                currentUser != null &&
-                        currentUser.getId().equals(currentUser.getId());
-
         if (!timeRange.equals("short_term") && !timeRange.equals("medium_term") && !timeRange.equals("long_term")) {
             timeRange = "short_term";
         }
@@ -185,7 +181,6 @@ public class UsersController {
         model.addAttribute("posts", posts);
         model.addAttribute("followedArtists", artists);
         model.addAttribute("editing", false);
-        model.addAttribute("isOwner", isOwner);
         model.addAttribute("concerts", concerts);
         return "users/user_page";
     }

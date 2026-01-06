@@ -1,9 +1,6 @@
 package com.makers.moshpit.controller;
 
-import com.makers.moshpit.model.Artist;
-import com.makers.moshpit.model.Concert;
-import com.makers.moshpit.model.Post;
-import com.makers.moshpit.model.User;
+import com.makers.moshpit.model.*;
 import com.makers.moshpit.repository.ArtistRepository;
 import com.makers.moshpit.repository.ConcertRepository;
 import com.makers.moshpit.repository.FollowRepository;
@@ -18,6 +15,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -85,6 +85,7 @@ public class DiscoverController {
 
         List<Artist> remainingArtists = all.stream()
                 .filter(a -> !suggestedIds.contains(a.getId()))
+                .filter(a -> !followedArtistIds.contains(a.getId()))
                 .collect(Collectors.toList());
 
         model.addAttribute("user", user);
@@ -94,5 +95,18 @@ public class DiscoverController {
         model.addAttribute("followedArtistsIds",  followedArtistIds);
 
         return "discover_artists";
+    }
+
+    @PostMapping("/discover/artists/{artistId}/follow")
+    public RedirectView followFromDiscover(@PathVariable Long artistId,
+                                           @AuthenticationPrincipal OAuth2User principal) {
+        User user = currentUserService.getOrCreateFromPrincipal(principal);
+        Artist artist = artistRepository.getById(artistId);
+
+        if (followRepository.findByUserAndArtist(user, artist).isEmpty()) {
+            followRepository.save(new Follow(user, artist));
+        }
+
+        return new RedirectView("/discover");
     }
 }

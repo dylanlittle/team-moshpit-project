@@ -35,11 +35,11 @@
                 <ul>
                     <li th:each="artist : ${suggestedArtists}" style="display:flex; justify-content:space-between; align-items:center; padding:8px 0;">
                         <div>
-                            <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist Name</a>
+                            <a th:href="@{/discover/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist Name</a>
                             <div style="opacity:0.7; font-size:0.9em;" th:text="${artist.genre}">Genre</div>
                         </div>
 
-                        <form th:action="@{/artists/{id}/follow(id=${artist.id})}" method="post">
+                        <form th:action="@{/discover/artists/{id}/follow(id=${artist.id})}" method="post">
                             <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                             <button type="submit">Follow</button>
                         </form>
@@ -66,14 +66,14 @@
 
                 <!-- Follow/Unfollow based on followedArtistIds -->
                 <div th:if="${followedArtistIds != null and followedArtistIds.contains(artist.id)}">
-                    <form th:action="@{/artists/{id}/unfollow(id=${artist.id})}" method="post">
+                    <form th:action="@{/discover/artists/{id}/unfollow(id=${artist.id})}" method="post">
                         <input type="hidden" th:if="${_csrf !=null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                         <button type="submit">Unfollow</button>
                     </form>
                 </div>
 
                 <div th:unless="${followedArtistIds != null and followedArtistIds.contains(artist.id)}">
-                    <form th:action="@{/artists/{id}/follow(id=${artist.id})}" method="post">
+                    <form th:action="@{/discover/artists/{id}/follow(id=${artist.id})}" method="post">
                         <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                         <button type="submit">Follow</button>
                     </form>

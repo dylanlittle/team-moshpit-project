@@ -109,7 +109,7 @@
                         th:class="${isGoing} ? 'active' : 'hidden'">
                         <div th:replace="~{fragments/display-card :: displayCard(
                             ${currentUser.username},
-                            '/users/' + ${currentUser.id},
+                            '/user',
                             ${currentUser.avatar != null ? currentUser.avatar : 'https://placehold.co/128'},
                             'Picture of ' + ${currentUser.username}
                             )}">

@@ -3,12 +3,20 @@
         <li th:each="artist : ${myArtists}">
             <div th:replace="~{fragments/display-card :: displayCard(
                 ${artist.name},
-                'artists/' + ${artist.id},
+                '/artists/' + ${artist.id},
                 'https://placehold.co/128',
                 'Picture of artist'
             )}"></div>
 
-            <form th:action="@{/artists/{artistId}/switch-to-admin(artistId=${artist.id})}" method="post">
+            <form th:if="${isAdminMode and activeAdminArtist.id == artist.id}"
+                  th:action="@{/switch-to-user}" method="post">
+                <button type="submit" style="margin-top: 5px;">
+                    Exit admin mode
+                </button>
+            </form>
+
+            <form th:unless="${isAdminMode and activeAdminArtist.id == artist.id}"
+                  th:action="@{/artists/{artistId}/switch-to-admin(artistId=${artist.id})}" method="post">
                 <button type="submit" style="margin-top: 5px;">
                     Switch to admin mode
                 </button>

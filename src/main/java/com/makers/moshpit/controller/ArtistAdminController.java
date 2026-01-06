@@ -7,7 +7,6 @@ import com.makers.moshpit.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -24,7 +23,7 @@ public class ArtistAdminController {
     private UserRepository userRepository;
 
     @PostMapping("/artists/{id}/switch-to-admin")
-    public String adminMode(@PathVariable Long id, Model model) {
+    public String adminMode(@PathVariable Long id) {
         User user = authService.getCurrentUser();
 
         user.setActive_artist_id(id);
@@ -34,7 +33,7 @@ public class ArtistAdminController {
     }
 
     @PostMapping("/switch-to-user")
-    public String userMode(Model model, HttpServletRequest request) {
+    public String userMode(HttpServletRequest request) {
         User user = authService.getCurrentUser();
 
         user.setActive_artist_id(null);

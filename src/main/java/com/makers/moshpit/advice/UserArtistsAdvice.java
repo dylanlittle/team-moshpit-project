@@ -1,6 +1,5 @@
 package com.makers.moshpit.advice;
 
-
 import com.makers.moshpit.model.Artist;
 import com.makers.moshpit.model.User;
 import com.makers.moshpit.repository.ArtistRepository;

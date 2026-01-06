@@ -234,7 +234,7 @@
                 <ul style="display: flex; margin: 12px 0;">
                     <li th:each="artist : ${myArtists}">
                         <div
-                                th:replace="~{fragments/display-card :: displayCard(${artist.name}, 'artists/' + ${artist.id}, 'https://placehold.co/128', 'Picture of artist')}">
+                                th:replace="~{fragments/display-card :: displayCard(${artist.name}, 'artists/' + ${artist.id}, 'https://placehold.co/128', 'Picture of artist', ${artist.id})}">
                         </div>
                     </li>
                 </ul>

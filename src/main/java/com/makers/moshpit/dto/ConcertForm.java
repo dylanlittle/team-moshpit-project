@@ -7,6 +7,7 @@ import java.time.LocalTime;
 
 @Data
 public class ConcertForm {
+    private String concertName;
     private LocalDate concertDate;
     private LocalTime startTime;
     private String venueName;

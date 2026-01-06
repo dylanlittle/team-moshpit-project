@@ -1,6 +1,7 @@
 package com.makers.moshpit.controller;
 
 import com.makers.moshpit.dto.ConcertForm;
+import com.makers.moshpit.dto.LineupForm;
 import com.makers.moshpit.model.*;
 import com.makers.moshpit.repository.*;
 import com.makers.moshpit.service.AuthService;
@@ -25,7 +26,7 @@ public class ConcertController {
     private ConcertRepository concertRepository;
 
     @Autowired
-    ConcertGoerRepository concertGoerRepository;
+    private ConcertGoerRepository concertGoerRepository;
 
     @Autowired
     private ArtistRepository artistRepository;
@@ -37,10 +38,13 @@ public class ConcertController {
     private MediaService mediaService;
 
     @Autowired
-    PostRepository postRepository;
+    private PostRepository postRepository;
 
     @Autowired
-    AuthService authService;
+    private AuthService authService;
+
+    @Autowired
+    private LineupArtistRepository lineupArtistRepository;
 
     // get concert
     @GetMapping("/concerts/{concertId}")
@@ -186,23 +190,42 @@ public class ConcertController {
 
         concertRepository.save(concert);
 
-        return new RedirectView("/artists/" + artistId);
+        return new RedirectView("/concerts/" + concert.getId() + "/lineup/new");
     }
 
-    // add lineup to concert
-    @PostMapping("/concerts/{concertId}/lineup")
-    public RedirectView addLineup(@PathVariable Long concertId, @ModelAttribute LineupArtist lineupArtist){
+    // render add lineup form
+    @GetMapping("/concerts/{concertId}/lineup/new")
+    public String showLineupForm(@PathVariable Long concertId, Model model) {
 
         Concert concert = concertRepository.findById(concertId)
                 .orElseThrow(() -> new RuntimeException("Concert not found"));
 
-        // 3. Create concert
-        LineupArtist newLineupArtist = new LineupArtist(
-                lineupArtist.getArtist(),
-                concert
-        );
+        model.addAttribute("concert", concert);
+        model.addAttribute("artists", artistRepository.findAll());
+        model.addAttribute("lineupForm", new LineupForm());
 
-        concertRepository.save(concert);
+        return "concerts/lineup_form";
+    }
+
+    // add lineup to concert
+    @PostMapping("/concerts/{concertId}/lineup")
+    public RedirectView addLineup(
+            @PathVariable Long concertId,
+            @ModelAttribute LineupForm lineupForm
+    ) {
+
+        Concert concert = concertRepository.findById(concertId)
+                .orElseThrow(() -> new RuntimeException("Concert not found"));
+
+        for (Long artistId : lineupForm.getArtistIds()) {
+            if (artistId == null) continue; // skip empty selects
+
+            Artist artist = artistRepository.findById(artistId)
+                    .orElseThrow(() -> new RuntimeException("Artist not found"));
+
+            LineupArtist lineupArtist = new LineupArtist(artist, concert);
+            lineupArtistRepository.save(lineupArtist);
+        }
 
         return new RedirectView("/concerts/" + concertId);
     }

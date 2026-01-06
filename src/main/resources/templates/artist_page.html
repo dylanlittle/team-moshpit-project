@@ -155,7 +155,7 @@
                     <li th:href="@{/artists/{id}(id=${artist.id})}" th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></li>
                 </a>
             </ul>
-            <a th:if="${canEdit}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>
+            <a th:if="${isAdmin}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>
         </div>
 
     </aside>

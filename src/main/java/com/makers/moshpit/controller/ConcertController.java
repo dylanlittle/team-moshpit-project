@@ -25,13 +25,13 @@ import java.util.stream.Collectors;
 public class ConcertController {
 
     @Autowired
-    ConcertRepository concertRepository;
+    private ConcertRepository concertRepository;
 
     @Autowired
-    ArtistRepository artistRepository;
+    private ArtistRepository artistRepository;
 
     @Autowired
-    VenueRepository venueRepository;
+    private VenueRepository venueRepository;
 
     @Autowired
     private MediaService mediaService;

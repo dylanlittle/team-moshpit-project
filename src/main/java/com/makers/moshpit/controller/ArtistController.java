@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 public class ArtistController {
@@ -47,6 +48,7 @@ public class ArtistController {
 
         boolean canEdit = currentUser != null &&
                 artistAdminRepository.existsByArtistIdAndUserId(id, currentUser.getId());
+        List<ArtistAdmin> admins = artistAdminRepository.findAdminsByArtistId(id);
 
         model.addAttribute("canEdit", canEdit);
 
@@ -63,6 +65,8 @@ public class ArtistController {
         model.addAttribute("posts", posts);
         model.addAttribute("artist", artist);
         model.addAttribute("concerts", concerts);
+        model.addAttribute("isAdmin", canEdit);
+        model.addAttribute("admins", admins);
         model.addAttribute("isFollowing", isFollowing);
 
         if (!model.containsAttribute("post")) {

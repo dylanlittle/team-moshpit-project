@@ -5,7 +5,9 @@
     <title th:text="${artist.name}">Artist Profile</title>
     <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="/navbar.css"/>
-    <link rel="stylesheet" href="/theme.css">
+    <link rel="stylesheet" href="/theme.css" />
+    <link rel="stylesheet" href="/artist-page.css" />
+
 
     <th:block th:replace="~{fragments/timezone-script :: timezone-detector}"></th:block>
 </head>
@@ -34,6 +36,7 @@
     <a href="#merch">Merch</a>
     <a href="#media">Media</a>
     <a href="#fan-feed">Fan feed</a>
+    <button th:if="${isAdmin}" onclick="document.getElementById('adminPanel').showModal()">Admins</button>
 </div>
 
 <!-- Main -->
@@ -102,7 +105,7 @@
         <div class="box">
             <ul>
                 <li th:each="post : ${posts}" class="mb-3">
-                    <p th:text="${post.content} + ' – Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></p>
+                    <p style="white-space: pre-wrap;" th:text="${post.content} + ' – Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></p>
                     <div th:if="${post.mediaUrl != null}">
 
                         <img th:if="${post.mediaType == 'image'}"
@@ -129,17 +132,55 @@
 
     </main>
 
+    <div th:replace="~{fragments/action-dialogue :: dialog(
+      title='Admins',
+      id='adminPanel',
+      cta_link='/artists/new',
+      cta='Add new admin',
+      content=(~{::adminList})
+    )}">
+        <div th:fragment="adminList">
+            <ul style="display: flex; margin: 12px 0;">
+                <li th:each="admin : ${admins}">
+                    <div th:replace="~{fragments/display-card :: displayCard(${admin.user.name}, '/users/' + ${admin.user.id}, 'https://placehold.co/128', 'Picture of admin')}"></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     <!-- right column
      fan wall could be carousel of images/videos of fans, maybe they tag artist and they show up here.-->
     <aside class="right-column">
 
-        <div class="box">
+        <div class="box upcoming-dates">
             <h3>Upcoming Dates</h3>
-            <ul th:each="concert:${concerts}">
-                <li th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></li>
-            </ul>
-            <button>View all dates</button>
+
+            <div class="concert-card" th:each="concert : ${concerts}">
+                <span class="concert-pin"></span>
+
+                <a th:href="@{/concerts/{id}(id=${concert.id})}">
+                    <h4 th:text="${artist.name}"></h4>
+                    <h5 th:text="${concert.venue.venueName}"></h5>
+                    <p th:text="${#temporals.format(concert.concertDate,'dd MMM yyyy')}
+              + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}">
+                    </p>
+                </a>
+            </div>
+
+            <a th:if="${canEdit}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}">
+                <button>Add new date</button>
+            </a>
         </div>
+
+    </aside>
+
+
+
+    <a th:if="${canEdit}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}">
+            <button>Add new date</button>
+        </a>
+    </div>
+
 
     </aside>
 
@@ -275,7 +316,7 @@
                     console.error(err);
                     status.textContent = "Upload failed. Please try again.";
                     submitBtn.disabled = false;
-                }
+                }   
             });
         });
     </script>

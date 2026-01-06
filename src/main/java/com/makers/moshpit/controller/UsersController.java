@@ -1,9 +1,11 @@
 package com.makers.moshpit.controller;
 
 import com.makers.moshpit.model.Artist;
+import com.makers.moshpit.model.Concert;
 import com.makers.moshpit.model.Post;
 import com.makers.moshpit.model.User;
 import com.makers.moshpit.repository.ArtistRepository;
+import com.makers.moshpit.repository.ConcertGoerRepository;
 import com.makers.moshpit.repository.PostRepository;
 import com.makers.moshpit.repository.UserRepository;
 import com.makers.moshpit.service.AuthService;
@@ -34,9 +36,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.util.List;
+
 @Controller
 public class UsersController {
-
+    @Autowired
+    private ArtistRepository artistRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -56,7 +61,7 @@ public class UsersController {
     SpotifyApiService spotifyApiService;
 
     @Autowired
-    private ArtistRepository artistRepository;
+    private ConcertGoerRepository concertGoerRepository;
 
     public void SpotifyTopArtistsController(SpotifyApiService spotifyApi,
                                             CurrentUserService currentUserService,
@@ -147,6 +152,10 @@ public class UsersController {
                               @RequestParam(defaultValue = "short_term") String timeRange) {
         User currentUser = currentUserService.getOrCreateFromPrincipal(principal);
         Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(currentUser.getId());
+        List<Artist> myArtists =  artistRepository.findArtistsByUserId(currentUser.getId());
+        model.addAttribute("user", currentUser);
+        model.addAttribute("posts", posts);
+        model.addAttribute("myArtists", myArtists);
 
         boolean isOwner =
                 currentUser != null &&
@@ -168,11 +177,16 @@ public class UsersController {
             model.addAttribute("spotifySuggestions", suggestions);
         }
 
+        Iterable<Artist> artists = artistRepository.findAllArtistsFollowedByUser(currentUser);
+        Iterable<Concert> concerts = concertGoerRepository.findConcertsByUserId(currentUser.getId());
+
         model.addAttribute("timeRange", timeRange);
         model.addAttribute("user", currentUser);
         model.addAttribute("posts", posts);
+        model.addAttribute("followedArtists", artists);
         model.addAttribute("editing", false);
         model.addAttribute("isOwner", isOwner);
+        model.addAttribute("concerts", concerts);
         return "users/user_page";
     }
 
@@ -188,8 +202,11 @@ public class UsersController {
 
         Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(id);
 
+        Iterable<Artist> artists = artistRepository.findAllArtistsFollowedByUser(user);
+
         model.addAttribute("user", user);
         model.addAttribute("posts", posts);
+        model.addAttribute("followedArtists", artists);
         model.addAttribute("editing", false);
         model.addAttribute("isOwner", isOwner);
 

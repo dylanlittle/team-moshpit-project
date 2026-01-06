@@ -44,7 +44,11 @@ public class SpotifyAuthController {
         String state = UUID.randomUUID().toString();
         session.setAttribute("spotify_oauth_state", state);
 
-        String scope = "user-top-read";
+        String scope = String.join(" ",
+                "user-top-read",
+                "user-read-playback-state"
+        );
+
 
         String url = UriComponentsBuilder
                 .fromUriString(spotifyProperties.getAuthorizeUrl())
@@ -55,7 +59,7 @@ public class SpotifyAuthController {
                 .queryParam("state", state)
                 .queryParam("show_dialog", "true")
                 .queryParam("prompt", "login")
-                .build(true)
+                .build()
                 .toUriString();
 
         return new RedirectView(url);

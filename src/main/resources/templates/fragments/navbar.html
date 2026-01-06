@@ -30,6 +30,15 @@
             </form>
         </div>
 
+        <div th:if="${isAdminMode}" class="admin-banner">
+        <span>Currently Managing:
+            <strong th:text="${activeAdminArtist.name}">Artist Name</strong>
+        </span>
+            <form th:action="@{/switch-to-user}" method="post" style="display:inline;">
+                <button type="submit">Exit Admin Mode</button>
+            </form>
+        </div>
+
         <!-- Right: Profile -->
         <div class="nav-right">
             <div class="profile-dropdown">

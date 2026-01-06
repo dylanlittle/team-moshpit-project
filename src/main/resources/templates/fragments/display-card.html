@@ -3,9 +3,4 @@
    xmlns:th="http://www.w3.org/1999/xhtml">
     <img height="128" width="128" th:src="${imageSrc}" th:alt="${imageAlt}"></img>
     <div style="margin-top: 8px" th:text="${title}"></div>
-    <form th:action="@{/artists/{artistId}/switch-to-admin(artistId=${id})}" method="post">
-        <button type="submit">
-            Go to admin mode
-        </button>
-    </form>
 </a>

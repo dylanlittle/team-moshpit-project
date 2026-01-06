@@ -110,7 +110,7 @@ public class UsersController {
         form.setName(currentUser.getName());
         form.setBio(currentUser.getBio());
         form.setLocation(currentUser.getLocation());
-        form.setAvatar(currentUser.getLocation());
+        form.setAvatar(currentUser.getAvatar());
         model.addAttribute("newUser", form);
         model.addAttribute("currentUser", currentUser);
         return "/users/create_profile";
@@ -120,7 +120,7 @@ public class UsersController {
     public String submitCreateProfileForm(@Valid @ModelAttribute("newUser") CompleteProfileRequest newUser,
                                           BindingResult result,
                                           RedirectAttributes redirectAttributes,
-                                          @RequestParam("image")MultipartFile imageFile) {
+                                          @RequestParam(value = "image", required = false)MultipartFile imageFile) {
 
         if (result.hasErrors()) {
             return "/users/create_profile";
@@ -186,14 +186,43 @@ public class UsersController {
         return "users/user_page";
     }
 
+    @PostMapping("/user/spotify/privacy")
+    public String updateSpotifyPrivacy(@AuthenticationPrincipal OAuth2User principal,
+                                       @RequestParam(required = false) String shareTopArtists) {
+
+        User currentUser = currentUserService.getOrCreateFromPrincipal(principal);
+        currentUser.setShareSpotifyTopArtists(shareTopArtists != null);
+        userRepository.save(currentUser);
+
+        return "redirect:/user";
+    }
+
+
     @GetMapping("/users/{id}")
-    public String getUser(@PathVariable Long id, Model model) {
+    public String getUser(@PathVariable Long id,
+                          Model model,
+                          @RequestParam(defaultValue = "short_term") String timeRange) {
 
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         User currentUser = authService.getCurrentUser();
 
         if (currentUser != null && currentUser.getId().equals(id)) {
             return "redirect:/user";
+        }
+
+        boolean profileSpotifyConnected = user.getSpotifyRefreshToken() != null
+                && !user.getSpotifyRefreshToken().isBlank();
+
+        boolean canShowPublicTopArtists = profileSpotifyConnected && user.isShareSpotifyTopArtists();
+        model.addAttribute("canShowPublicTopArtists", canShowPublicTopArtists);
+
+        if (canShowPublicTopArtists) {
+            if (!timeRange.equals("short_term") && !timeRange.equals("medium_term") && !timeRange.equals("long_term")) {
+                timeRange = "short_term";
+            }
+            List<SpotifyArtist> topArtists = spotifyApiService.getTopArtists(user, timeRange, 10);
+            model.addAttribute("spotifyTopArtists", topArtists);
+            model.addAttribute("timeRange", timeRange);
         }
 
         Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(id);

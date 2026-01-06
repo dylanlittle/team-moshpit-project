@@ -25,7 +25,7 @@
     <div id="artistContainer">
         <!-- Initial artist select -->
         <div class="artist-select">
-            <select th:field="*{artistIds}">
+            <select th:field="*{artistIds}" class="artist-select-input">
                 <option value="" disabled selected>Select an artist</option>
                 <option th:each="artist : ${artists}"
                         th:value="${artist.id}"
@@ -35,24 +35,42 @@
     </div>
 
     <button type="button" id="addArtistBtn">Add another artist</button>
-    <button type="submit">Submit lineup</button>
+    <button type="submit" id="submitLineupBtn">Skip</button>
 
 </form>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-
+    document.addEventListener("DOMContentLoaded", () => {
+        const submitBtn = document.getElementById("submitLineupBtn");
         const addBtn = document.getElementById("addArtistBtn");
         const container = document.getElementById("artistContainer");
 
-        // HTML template for new select fields
+        const getFirstSelect = () => container.querySelector("select");
+
+        function updateButtons() {
+            const hasSelection = Boolean(getFirstSelect().value);
+
+            // Update submit button text
+            submitBtn.textContent = hasSelection
+                ? "Submit Lineup"
+                : "Skip";
+
+            // Show/hide "Add another artist"
+            addBtn.style.display = hasSelection ? "inline-block" : "none";
+        }
+
+        // Initial state
+        updateButtons();
+
+        // Listen for changes on any select
+        container.addEventListener("change", updateButtons);
+
+        // Add artist functionality
         const template = container.querySelector(".artist-select").outerHTML;
 
-        addBtn.addEventListener("click", function() {
-            // Append a new select input
+        addBtn.addEventListener("click", () => {
             container.insertAdjacentHTML("beforeend", template);
         });
-
     });
 </script>
 </body>

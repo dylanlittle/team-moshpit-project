@@ -34,6 +34,13 @@
                 <button>Edit Profile</button>
             </a>
         </div>
+        <form method="post" action="/user/spotify/privacy">
+            <label>
+                <input type="checkbox" name="shareTopArtists" th:checked="${user.shareSpotifyTopArtists}">
+                Show my Top Artists on my public profile
+            </label>
+            <button type="submit" class="btn btn-sm btn-outline-secondary">Save</button>
+        </form>
     </div>
     <form th:if="${editing}"
           th:action="@{/users/{id}(id=${user.id})}"
@@ -89,62 +96,65 @@
             </div>
         </div>
 
-        <div class="box">
-            <h3>Top Artists</h3>
+        <div th:if="${isOwner or (!isOwner and canShowPublicTopArtists)}">
+            <div class="box">
+                <h3 th:text="${isOwner} ? 'Your Top Artists' : 'Top Artists'">Top Artists</h3>
 
-            <div th:if="${user.spotifyRefreshToken == null}">
-                <p>Connect Spotify to show your top artists.</p>
-            </div>
+                <div th:if="${user.spotifyRefreshToken == null}">
+                    <p>Connect Spotify to show your top artists.</p>
+                </div>
 
-            <div th:if="${user.spotifyRefreshToken != null and (spotifyTopArtists == null or #lists.isEmpty(spotifyTopArtists))}">
-                <p>No top artists returned yet. Try listening on Spotify and check again later.</p>
-            </div>
+                <div th:if="${user.spotifyRefreshToken != null and (spotifyTopArtists == null or #lists.isEmpty(spotifyTopArtists))}">
+                    <p>No top artists returned yet. Try listening on Spotify and check again later.</p>
+                </div>
 
-            <div th:if="${user.spotifyRefreshToken != null}">
-                <form method="get" th:action="@{/user}" style="margin-bottom: 10px;">
-                    <label for="timeRange" style="display:block; margin-bottom:4px;">
-                        Time range
-                    </label>
-                    <select id="timeRange" name="timeRange" onchange="this.form.submit()">
-                        <option value="short_term"
-                                th:selected="${timeRange == 'short_term'}">
-                            Last 4 weeks
-                        </option>
-                        <option value="medium_term"
-                                th:selected="${timeRange == 'medium_term'}">
-                            Last 6 months
-                        </option>
-                        <option value="long_term"
-                                th:selected="${timeRange == 'long_term'}">
-                            All time-ish
-                        </option>
-                    </select>
-                </form>
-            </div>
+                <div th:if="${user.spotifyRefreshToken != null}">
+                    <form method="get"
+                          th:action="${isOwner} ? @{/user} : @{/users/{id}(id=${user.id})}" style="margin-bottom: 10px;">
+                        <label for="timeRange" style="display:block; margin-bottom:4px;">
+                            Time range
+                        </label>
+                        <select id="timeRange" name="timeRange" onchange="this.form.submit()">
+                            <option value="short_term"
+                                    th:selected="${timeRange == 'short_term'}">
+                                Last 4 weeks
+                            </option>
+                            <option value="medium_term"
+                                    th:selected="${timeRange == 'medium_term'}">
+                                Last 6 months
+                            </option>
+                            <option value="long_term"
+                                    th:selected="${timeRange == 'long_term'}">
+                                All time-ish
+                            </option>
+                        </select>
+                    </form>
+                </div>
 
-            <ul th:if="${spotifyTopArtists != null and !#lists.isEmpty(spotifyTopArtists)}">
-                <li th:each="a : ${spotifyTopArtists}">
-                    <div style="display:flex; gap:10px; align-items:center;">
-                        <img th:if="${a.images != null and !#lists.isEmpty(a.images)}"
-                             th:src="${a.images.get(0).url}"
-                             style="width:40px; height:40px; border-radius:8px; object-fit:cover;" />
+                <ul th:if="${spotifyTopArtists != null and !#lists.isEmpty(spotifyTopArtists)}">
+                    <li th:each="a : ${spotifyTopArtists}">
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <img th:if="${a.images != null and !#lists.isEmpty(a.images)}"
+                                 th:src="${a.images.get(0).url}"
+                                 style="width:40px; height:40px; border-radius:8px; object-fit:cover;" />
 
-                        <div style="display:flex; flex-direction:column;">
-                            <span th:text="${a.name}">Artist Name</span>
+                            <div style="display:flex; flex-direction:column;">
+                                <span th:text="${a.name}">Artist Name</span>
 
-                            <a th:if="${spotifySuggestions != null and spotifySuggestions.containsKey(a.id)}"
-                               th:href="@{/artists/{id}(id=${spotifySuggestions.get(a.id).id})}">
-                                View on Mosh Pit
-                            </a>
+                                <a th:if="${spotifySuggestions != null and spotifySuggestions.containsKey(a.id)}"
+                                   th:href="@{/artists/{id}(id=${spotifySuggestions.get(a.id).id})}">
+                                    View on Mosh Pit
+                                </a>
 
-                            <span th:unless="${spotifySuggestions != null and spotifySuggestions.containsKey(a.id)}"
-                                  style="opacity:0.7; font-size:0.9em;">
-                        Not on Mosh Pit yet
-                    </span>
+                                <span th:unless="${spotifySuggestions != null and spotifySuggestions.containsKey(a.id)}"
+                                      style="opacity:0.7; font-size:0.9em;">
+                            Not on Mosh Pit yet
+                        </span>
+                            </div>
                         </div>
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <div th:if="${isOwner}">

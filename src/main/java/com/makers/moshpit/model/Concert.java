@@ -16,6 +16,9 @@ public class Concert {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name")
+    private String concertName;
+
     @Column(name = "concert_date", nullable = false)
     private LocalDate concertDate;
 
@@ -33,7 +36,8 @@ public class Concert {
     @Column(name = "image")
     private String image;
 
-    public Concert(LocalDate concertDate, LocalTime startTime, Venue venue, Artist artist, String image) {
+    public Concert(String concertName, LocalDate concertDate, LocalTime startTime, Venue venue, Artist artist, String image) {
+        this.concertName = concertName;
         this.concertDate = concertDate;
         this.startTime = startTime;
         this.venue = venue;

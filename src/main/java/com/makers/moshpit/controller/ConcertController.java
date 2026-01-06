@@ -132,6 +132,7 @@ public class ConcertController {
         return ResponseEntity.ok(venue.getAddress()); // 200 → autofill
     }
 
+    // create new concert
     @PostMapping("/artists/{artistId}/concerts")
     public RedirectView create(@PathVariable Long artistId, @ModelAttribute ConcertForm concertForm, @RequestParam(value = "image", required = false) MultipartFile imageFile){
 
@@ -174,6 +175,7 @@ public class ConcertController {
 
         // 3. Create concert
         Concert concert = new Concert(
+                concertForm.getConcertName(),
                 concertForm.getConcertDate(),
                 concertForm.getStartTime(),
                 venue,

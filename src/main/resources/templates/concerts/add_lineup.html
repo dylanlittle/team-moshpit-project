@@ -15,22 +15,45 @@
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
 </header>
 
-<p th:text="'Artist: ' + ${artist.name}"></p>
-<form class="box" th:action="@{/artists/{id}/concerts(id=${artist.id})}" method="post" th:object="${concertForm}" enctype="multipart/form-data">
-    <div>
-        <label for="concert-name">Name:</label>
-        <input type="text" th:field="*{concertName}" name="concert-name" id="concert-name" required/>
+<form th:action="@{/concerts/{id}/lineup(id=${concert.id})}"
+      th:object="${lineupForm}"
+      method="post"
+      id="lineupForm">
+
+    <h3>Add lineup</h3>
+
+    <div id="artistContainer">
+        <!-- Initial artist select -->
+        <div class="artist-select">
+            <select th:field="*{artistIds}">
+                <option value="" disabled selected>Select an artist</option>
+                <option th:each="artist : ${artists}"
+                        th:value="${artist.id}"
+                        th:text="${artist.name}"></option>
+            </select>
+        </div>
     </div>
 
-    <div>
-        <label for="date">Date:</label>
-        <input type="date" th:field="*{concertDate}" name="date" id="date" required/>
-    </div>
+    <button type="button" id="addArtistBtn">Add another artist</button>
+    <button type="submit">Submit lineup</button>
 
-    <button type="submit" id="new-concert-submit">Add New Concert</button>
 </form>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const addBtn = document.getElementById("addArtistBtn");
+        const container = document.getElementById("artistContainer");
+
+        // HTML template for new select fields
+        const template = container.querySelector(".artist-select").outerHTML;
+
+        addBtn.addEventListener("click", function() {
+            // Append a new select input
+            container.insertAdjacentHTML("beforeend", template);
+        });
+
+    });
 </script>
 </body>
 </html>

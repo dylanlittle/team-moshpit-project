@@ -5,54 +5,56 @@
     <title th:text="${artist.name}">Artist Profile</title>
     <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="/navbar.css"/>
-    <link rel="stylesheet" href="/theme.css"/>
     <link rel="stylesheet" href="/artist-profile.css"/>
+    <link rel="stylesheet" href="/theme.css"/>
     <th:block th:replace="~{fragments/timezone-script :: timezone-detector}"></th:block>
     <script src="/js/posts.js" defer></script>
+    <script src="/js/dates_toggle.js" defer></script>
 </head>
 
 <body>
+  
+<!-- Header -->
 <header class="page-header">
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
 </header>
-<!-- Header -->
+
 <div class="artist-header">
-    <h1 th:text="${artist.name}">Cameron Winter</h1>
-    <div class="artist-genre" th:text="${artist.genre}">Folk / Alternative</div>
-    <form th:action="${isFollowing} ? @{/artists/{id}/unfollow(id=${artist.id})} : @{/artists/{id}/follow(id=${artist.id})}" method="post">
+    <h1 th:text="${artist.name}"></h1>
+    <div class="artist-genre" th:text="${artist.genre}"></div>
+    <form th:if="${!isAdminMode}" th:action="${isFollowing} ? @{/artists/{id}/unfollow(id=${artist.id})} : @{/artists/{id}/follow(id=${artist.id})}" method="post">
         <button type="submit"
                 th:text="${isFollowing} ? 'Unfollow' : 'Follow'"
                 th:class="${isFollowing} ? 'btn-secondary' : 'btn-primary'">
         </button>
     </form>
-</div>
-
-<!-- Temp nav bar
- fan feed could be live stream of thoughts from fans, helps with bringing the community together idea?-->
-<div class="nav-bar">
-    <a href="#bio">Bio</a>
-    <a href="#tours">Tours</a>
-    <a href="#merch">Merch</a>
-    <a href="#media">Media</a>
-    <a href="#fan-feed">Fan feed</a>
     <button th:if="${isAdminMode and activeAdminArtist.id == artist.id}" onclick="document.getElementById('adminPanel').showModal()">Admins</button>
+    <div th:if="${isAdminMode and activeAdminArtist.id == artist.id}">
+        <a th:href="@{/artists/{id}/update(id=${artist.id})}">
+            <button>Edit artist profile</button>
+        </a>
+    </div>
     <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}"
-        th:href="@{/artists/{id}/spotify/link(id=${artist.id})}"
-        class="btn btn-outline-secondary"
-        th:text="${artist.spotifyArtistId != null} ? 'Spotify linked.' : 'Link Spotify'">Link Spotify</a>
+       th:href="@{/artists/{id}/spotify/link(id=${artist.id})}"
+       class="btn btn-outline-secondary"
+       th:text="${artist.spotifyArtistId != null} ? 'Spotify linked ✓' : 'Link Spotify'">
+        Link Spotify
+    </a>
 </div>
 
-<!-- Main -->
-<div class="page-layout">
+    <!-- Main -->
+    <div class="page-layout">
 
     <!-- Left colum -->
     <aside class="left-column">
 
         <div class="box profile-picture">
-            Artist profile picture
+            <img th:src="${artist.avatar} ?: '/uploads/default_profile.png'"
+                 alt="Artist profile picture"
+                 style="width:160px;height:160px;object-fit:cover;"/>
         </div>
 
-        <div class="box" th:if="${relationshipStats != null and !isAdminMode}">
+        <div class="box" th:if="${relationshipStats != null}">
             <h3>Your relationship with this artist</h3>
 
             <div th:if="${!relationshipStats.connected}">
@@ -196,23 +198,47 @@
      fan wall could be carousel of images/videos of fans, maybe they tag artist and they show up here.-->
     <aside class="right-column">
 
-        <div class="box upcoming-dates">
-            <h3>Upcoming Dates</h3>
+        <div class="box">
+            <label for="dates-selector" class="visually-hidden">
+                Show dates:
+            </label>
+            <select id="dates-selector">
+                <option value="upcoming" selected>Upcoming Shows</option>
+                <option value="previous">Previous Shows</option>
+            </select>
+        </div>
 
+        <div class="box upcoming-dates" id="upcoming-dates">
             <div class="concert-card" th:each="concert : ${futureConcerts}">
                 <span class="concert-pin"></span>
 
                 <a th:href="@{/concerts/{id}(id=${concert.id})}">
                     <h4 th:text="${artist.name}"></h4>
                     <h5 th:text="${concert.venue.venueName}"></h5>
-                    <p th:text="${#temporals.format(concert.concertDate,'dd MMM yyyy')}
-              + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}">
+                    <p th:text="${#temporals.format(concert.concertDate,'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}">
                     </p>
                 </a>
-</div>
-                <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>
-
             </div>
+
+            <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>
+
+        </div>
+
+        <div class="box upcoming-dates" id="previous-dates" hidden>
+            <div class="concert-card" th:each="concert : ${pastConcerts}">
+                <span class="concert-pin"></span>
+
+                <a th:href="@{/concerts/{id}(id=${concert.id})}">
+                    <h4 th:text="${artist.name}"></h4>
+                    <h5 th:text="${concert.venue.venueName}"></h5>
+                    <p th:text="${#temporals.format(concert.concertDate,'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}">
+                    </p>
+                </a>
+            </div>
+
+            <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>
+
+        </div>
 
     </aside>
 

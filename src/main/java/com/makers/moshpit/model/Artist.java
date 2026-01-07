@@ -29,6 +29,9 @@ public class Artist {
     private Long createdBy;
 
     private String spotifyArtistId;
+  
+    @Column
+    private String avatar;
 
     public Artist(String name, String bio, String genre, Long createdBy ) {
         this.name = name;

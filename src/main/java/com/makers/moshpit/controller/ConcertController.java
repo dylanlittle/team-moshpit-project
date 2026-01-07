@@ -144,7 +144,7 @@ public class ConcertController {
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new RuntimeException("Artist not found"));
 
-        // 1. Find or create venue
+        // Find or create venue
         Venue venue = venueRepository
                 .findByVenueNameAndCityAndCountry(
                         concertForm.getVenueName(),
@@ -164,7 +164,7 @@ public class ConcertController {
 
         String concertImage = null;
 
-        // 2. If an image has been uploaded, upload to cloud and extract URL
+        // If an image has been uploaded, upload to cloud and extract URL
         if (imageFile != null && !imageFile.isEmpty()) {
             if (imageFile.getSize() > (10 * 1024 * 1024)) {
                 throw new RuntimeException("File too large — maximum allowed size is 10MB.");
@@ -178,7 +178,7 @@ public class ConcertController {
             }
         }
 
-        // 3. Create concert
+        // Create concert
         Concert concert = new Concert(
                 concertForm.getConcertName(),
                 concertForm.getConcertDate(),
@@ -189,6 +189,10 @@ public class ConcertController {
         );
 
         concertRepository.save(concert);
+
+        // Add artist to LineupArtist table
+        LineupArtist lineupArtist = new LineupArtist(artist, concert);
+        lineupArtistRepository.save(lineupArtist);
 
         return new RedirectView("/concerts/" + concert.getId() + "/lineup/new");
     }

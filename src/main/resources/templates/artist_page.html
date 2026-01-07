@@ -54,7 +54,7 @@
                  style="width:160px;height:160px;object-fit:cover;"/>
         </div>
 
-        <div class="box" th:if="${relationshipStats != null}">
+        <div class="box" th:if="${relationshipStats != null and !isAdminMode}">
             <h3>Your relationship with this artist</h3>
 
             <div th:if="${!relationshipStats.connected}">

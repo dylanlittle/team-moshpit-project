@@ -48,26 +48,6 @@ public class ArtistController {
     @Autowired
     private MediaService mediaService;
 
-    public ArtistController(ArtistRepository artistRepository,
-                            PostRepository postRepository,
-                            UserRepository userRepository,
-                            ConcertRepository concertRepository,
-                            ArtistAdminRepository artistAdminRepository,
-                            FollowRepository followRepository,
-                            AuthService authService,
-                            RelationshipService relationshipService,
-                            MediaService mediaService) {
-        this.artistRepository = artistRepository;
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
-        this.concertRepository = concertRepository;
-        this.artistAdminRepository = artistAdminRepository;
-        this.followRepository = followRepository;
-        this.authService = authService;
-        this.relationshipService = relationshipService;
-        this.mediaService = mediaService;
-    }
-
 
     @GetMapping("/artists/{id}")
     public String getArtist(@PathVariable Long id, Model model,

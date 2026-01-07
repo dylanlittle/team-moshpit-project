@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="/two-column-pages.css" />
     <link rel="stylesheet" href="/navbar.css"/>
+    <link rel="stylesheet" href="/user-profile.css"/>
 </head>
 <header class="page-header">
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
@@ -18,7 +19,6 @@
     <h1 th:text="${user.name}"></h1>
     <h3 th:text="'@' + ${user.username}"></h3>
     <div th:if="${isOwner}">
-        <button onclick="document.getElementById('myArtists').showModal()">My artists</button>
         <h4>Fan account</h4>
         <div th:if="${user.spotifyRefreshToken == null}">
             <a th:href="@{/spotify/connect}" class="btn btn-success">Connect Spotify</a>
@@ -238,13 +238,17 @@
     <main class="right-column" id="fan-feed">
 
         <input type="radio" name="profile-tabs" id="tab-followed" checked>
-        <input type="radio" name="profile-tabs" id="tab-shows">
+        <input type="radio" name="profile-tabs" id="tab-myshows">
         <input type="radio" name="profile-tabs" id="tab-posts">
+        <input type="radio" name="profile-tabs" id="tab-myartists">
 
         <nav class="nav-bar">
             <label for="tab-followed">Followed Artists</label>
-            <label for="tab-shows">My Shows</label>
+            <label for="tab-myshows">My Shows</label>
             <label for="tab-posts">Posts</label>
+            <label onclick="document.getElementById('myArtists').showModal()">
+                My Artists
+            </label>
         </nav>
 
         <section class="tab-content" id="content-followed">

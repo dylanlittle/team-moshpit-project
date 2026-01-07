@@ -4,7 +4,7 @@
             <div th:replace="~{fragments/display-card :: displayCard(
                 ${artist.name},
                 '/artists/' + ${artist.id},
-                'https://placehold.co/128',
+                ${artist.avatar} ?: 'https://placehold.co/128',
                 'Picture of artist'
             )}"></div>
 

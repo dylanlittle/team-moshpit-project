@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>
+        Add artist admin
+    </title>
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/navbar.css" />
+</head>
+
+<body>
+    <header class="page-header">
+        <div th:insert="~{fragments/navbar :: headerNav}"></div>
+        <h1>Add artist admins</h1>
+    </header>
+    <main>
+        <form th:action="@{/artists/{id}/newAdmin(id=${id})}" method="get"
+            style="display: flex; gap: 16px; border-bottom: solid; margin-bottom: 24px; padding-bottom: 8px;">
+            <div>
+                <label for="query">Search term:</label>
+                <input type="text" id="query" name="query" placeholder="Enter name or username" th:value="${query}"
+                    required />
+            </div>
+            <div>
+                <button type="submit" style="margin: 0 0 0 8px;">Search</button>
+            </div>
+        </form>
+
+        <section>
+            <div th:if="${#lists.isEmpty(userResults)}">
+                No users found.
+            </div>
+
+            <ol style="display: flex;">
+                <li th:each="user: ${userResults}">
+                    <div style="display: flex; flex-direction: column; margin: 8px; cursor: pointer;"
+                        onclick="this.querySelector('form').submit()">
+
+                        <img height="128" width="128" src="https://placehold.co/128" alt="Picture of user">
+                        <div style="margin-top: 8px" th:text="${user.username}"></div>
+
+                        <form th:action="@{/artists/{id}/newAdmin(id=${id})}" method="post" style="display: none;">
+                            <input type="hidden" name="userId" th:value="${user.id}">
+                        </form>
+                    </div>
+                </li>
+            </ol>
+        </section>
+        <section>
+            <h2>Existing admins</h2>
+            <ul style="display: flex; margin: 12px 0;">
+                <li th:each="admin : ${admins}">
+                    <div
+                        th:replace="~{fragments/display-card :: displayCard(${admin.user.name}, '/users/' + ${admin.user.id}, ${admin.user.avatar} ?: 'https://placehold.co/128', 'Picture of admin')}">
+                    </div>
+                </li>
+            </ul>
+        </section>
+    </main>
+</body>
+
+</html>

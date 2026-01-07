@@ -14,7 +14,7 @@
 <h1>Edit Artist Page</h1>
 
 <div>
-    <form method="post" id="update-artist-form" th:action="@{/artists/{id}/update" th:object="${newUser}" enctype="multipart/form-data">
+    <form method="post" id="update-artist-form" th:action="@{/artists/{id}/update(id=${artist.id})}" th:object="${artist}" enctype="multipart/form-data">
         <label for="name" class="required-label">Artist Name:</label>
         <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></div><br>
         <input required type="text" id="name" th:field="*{name}"><br><br>
@@ -45,7 +45,7 @@
     </form>
 </div>
 <script>
-    const mediaInput = document.getElementById("image");
+    const mediaInput = document.getElementById("avatar");
     const clearBtn = document.getElementById("clearMediaBtn");
 
     clearBtn.classList.add("d-none");

@@ -115,6 +115,56 @@ public class ArtistController {
         return new RedirectView("/artists/" + savedArtist.getId());
     }
 
+    @GetMapping("/artists/{id}/update")
+    public String getArtistUpdateForm(@PathVariable Long id, Model model) {
+
+        Artist artist = artistRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Artist not found"));
+
+        model.addAttribute("artist", artist);
+
+        return "artist_edit";
+    }
+
+    @PostMapping("/artists/{id}/update")
+    public String updateArtist(
+            @PathVariable Long id,
+            @ModelAttribute Artist updatedArtist,
+            @RequestParam(value = "image", required = false) MultipartFile image
+    ) {
+        // 1. Fetch the existing artist from the database
+        Artist existingArtist = artistRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Artist not found"));
+
+        // 2. Update only the fields allowed in the form
+        existingArtist.setName(updatedArtist.getName());
+        existingArtist.setGenre(updatedArtist.getGenre());
+        existingArtist.setBio(updatedArtist.getBio());
+
+        // 3. Handle the image only if a new file was actually selected
+        if (image != null && !image.isEmpty()) {
+            try {
+                // Check file size (e.g., 10MB limit)
+                if (image.getSize() > (10 * 1024 * 1024)) {
+                    throw new RuntimeException("File too large");
+                }
+
+                // Upload new image and update the avatar URL
+                String imageUrl = mediaService.uploadImage(image);
+                existingArtist.setAvatar(imageUrl);
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Optionally add an error message to redirectAttributes here
+            }
+        }
+
+        // 4. Save the merged artist back to the database
+        artistRepository.save(existingArtist);
+
+        // 5. Redirect back to the artist profile page
+        return "redirect:/artists/" + id;
+    }
+
 }
 
 

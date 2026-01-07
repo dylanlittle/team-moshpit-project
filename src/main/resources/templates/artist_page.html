@@ -34,6 +34,11 @@
     <a href="#media">Media</a>
     <a href="#fan-feed">Fan feed</a>
     <button th:if="${isAdminMode and activeAdminArtist.id == artist.id}" onclick="document.getElementById('adminPanel').showModal()">Admins</button>
+    <div th:if="${isAdminMode and activeAdminArtist.id == artist.id}">
+        <a th:href="@{/artists/{id}/update(id=${artist.id})}">
+            <button>Edit artist profile</button>
+        </a>
+    </div>
 </div>
 
 <!-- Main -->
@@ -43,7 +48,9 @@
     <aside class="left-column">
 
         <div class="box profile-picture">
-            Artist profile picture
+            <img th:src="${artist.avatar} ?: '/uploads/default_profile.png'"
+                 alt="Artist profile picture"
+                 style="width:160px;height:160px;object-fit:cover;"/>
         </div>
 
         <div class="box">

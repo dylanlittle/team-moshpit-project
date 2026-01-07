@@ -3,16 +3,16 @@ function openModal(element) {
     const modalImg = document.getElementById("modalImg");
     const modalVideo = document.getElementById("modalVideo");
 
-    // 1. Get the data from the clicked element
+    // Get the data from the clicked element
     const type = element.getAttribute("data-type"); // Ensure your <img> and <video> in the grid have th:data-type
     const source = element.getAttribute("src");
 
-    // 2. Hide both initially and stop any playing video
+    // Hide both initially and stop any playing video
     modalImg.style.display = "none";
     modalVideo.style.display = "none";
     modalVideo.pause();
 
-    // 3. Show the correct one
+    // Show the correct one
     if (type === 'image') {
         modalImg.src = source;
         modalImg.style.display = "block";
@@ -23,7 +23,7 @@ function openModal(element) {
         modalVideo.play();
     }
 
-    // 4. Set Text
+    // Set Text
     document.getElementById("modalAuthor").innerText = "Posted by: " + element.getAttribute("data-author");
     document.getElementById("modalCaption").innerText = element.getAttribute("data-caption");
 
@@ -35,6 +35,6 @@ function closeModal() {
     const modalVideo = document.getElementById("modalVideo");
 
     modal.style.display = "none";
-    modalVideo.pause(); // Stop the sound when closing!
+    modalVideo.pause();
     modalVideo.src = "";
 }

@@ -62,6 +62,9 @@ public class ConcertController {
         model.addAttribute("venue", venue);
         model.addAttribute("isGoing", isGoing);
         model.addAttribute("currentUser", currentUser);
+        if (!model.containsAttribute("post")) {
+            model.addAttribute("post", new Post());
+        }
         return "concerts/concert_page";
     }
 

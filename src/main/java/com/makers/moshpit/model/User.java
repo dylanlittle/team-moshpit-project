@@ -21,6 +21,7 @@ public class User {
     private Long active_artist_id;
     private String avatar;
     private String location;
+    private boolean shareSpotifyTopArtists;
 
     @Column(name = "auth0_sub", unique = true)
     private String auth0Sub;

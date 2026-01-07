@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${artist.name}">Artist Profile</title>
+    <link rel="stylesheet" href="/main.css" />
+    <link rel="stylesheet" href="/navbar.css"/>
+    <link rel="stylesheet" href="/theme.css"/>
+    <link rel="stylesheet" href="/artist-profile.css"/>
+    <th:block th:replace="~{fragments/timezone-script :: timezone-detector}"></th:block>
+    <script src="/js/posts.js" defer></script>
+</head>
+
+<body>
+    <header class="page-header">
+        <div th:insert="~{fragments/navbar :: headerNav}"></div>
+    </header>
+    <div class="box" style="max-width: 900px; margin: 20px auto;">
+        <h2 th:text="'Link Spotify for ' + ${artist.name}"></h2>
+
+        <div th:if="${artist.spotifyArtistId != null}" style="margin: 10px 0;">
+            <p>
+                Currently linked Spotify ID:
+                <code th:text="${artist.spotifyArtistId}"></code>
+            </p>
+            <form th:action="@{/artists/{id}/spotify/unlink(id=${artist.id})}" method="post">
+                <button type="submit">Unlink</button>
+            </form>
+        </div>
+
+        <form method="get" th:action="@{/artists/{id}/spotify/link(id=${artist.id})}" style="margin: 14px 0;">
+            <label for="q">Search Spotify</label>
+            <input id="q" name="q" type="text" th:value="${query}" placeholder="e.g. Radiohead" style="width: 60%;"/>
+            <button type="submit">Search</button>
+        </form>
+
+        <div th:if="${results != null and !#lists.isEmpty(results)}">
+            <h3>Results</h3>
+
+            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:12px;">
+                <li th:each="r : ${results}"
+                    style="display:flex; gap:12px; align-items:center; border:1px solid rgba(0,0,0,0.08); padding:12px; border-radius:12px;">
+                    <img th:if="${r.images != null and !#lists.isEmpty(r.images)}"
+                         th:src="${r.images.get(0).url}"
+                         style="width:64px; height:64px; object-fit:cover; border-radius:12px;"/>
+
+                    <div style="flex:1;">
+                        <div style="font-weight:700;" th:text="${r.name}"></div>
+                        <div style="opacity:0.75; font-size:0.9em;">
+                <span th:if="${r.followers != null and r.followers.total != null}"
+                      th:text="${#numbers.formatInteger(r.followers.total, 0, 'COMMA')} + ' followers'"></span>
+                            <span th:if="${r.popularity != null}" th:text="' · popularity ' + ${r.popularity}"></span>
+                        </div>
+                        <a th:if="${r.externalUrls != null and r.externalUrls.get('spotify') != null}"
+                           th:href="${r.externalUrls.get('spotify')}" target="_blank" style="font-size:0.9em;">
+                            View on Spotify
+                        </a>
+                    </div>
+
+                    <form th:action="@{/artists/{id}/spotify/link(id=${artist.id})}" method="post">
+                        <input type="hidden" name="spotifyArtistId" th:value="${r.id}"/>
+                        <button type="submit">Link this artist</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+
+        <div th:if="${results == null or #lists.isEmpty(results)}" style="opacity:0.8;">
+            <p th:if="${query != null and !query.isBlank()}">No results found.</p>
+        </div>
+    </div>
+
+</body>
+</body>
+</html>

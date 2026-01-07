@@ -36,6 +36,10 @@
     <a href="#media">Media</a>
     <a href="#fan-feed">Fan feed</a>
     <button th:if="${isAdminMode and activeAdminArtist.id == artist.id}" onclick="document.getElementById('adminPanel').showModal()">Admins</button>
+    <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}"
+        th:href="@{/artists/{id}/spotify/link(id=${artist.id})}"
+        class="btn btn-outline-secondary"
+        th:text="${artist.spotifyArtistId != null} ? 'Spotify linked.' : 'Link Spotify'">Link Spotify</a>
 </div>
 
 <!-- Main -->
@@ -48,7 +52,7 @@
             Artist profile picture
         </div>
 
-        <div class="box" th:if="${relationshipStats != null}">
+        <div class="box" th:if="${relationshipStats != null and !isAdminMode}">
             <h3>Your relationship with this artist</h3>
 
             <div th:if="${!relationshipStats.connected}">
@@ -76,7 +80,6 @@
                 </p>
 
                 <div th:if="${relationshipStats.topTracksByArtist != null and !#lists.isEmpty(relationshipStats.topTracksByArtist)}">
-                    <h4 style="margin-top:12px;">Your top tracks by this artist</h4>
                     <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px;">
                         <li th:each="t : ${relationshipStats.topTracksByArtist}"
                             style="display:flex; align-items:center; gap:10px;">

@@ -104,10 +104,10 @@ public class RelationshipService {
     }
 
     private String normalizeTimeRange(String timeRange) {
-        if (timeRange == null) return "medium_term";
+        if (timeRange == null) return "long_term";
         return switch (timeRange) {
             case "short_term", "medium_term", "long_term" -> timeRange;
-            default -> "medium_term";
+            default -> "long_term";
         };
     }
 }

@@ -71,4 +71,23 @@ public class SpotifyApiService {
                 .retrieve()
                 .body(SpotifySavedTracksResponse.class);
     }
+
+    public List<SpotifySearchArtistsResponse.Item> searchArtistsApp(String query, int limit) {
+        String token = tokenService.getAppAccessToken();
+
+        SpotifySearchArtistsResponse res = client.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/search")
+                        .queryParam("q", query)
+                        .queryParam("type", "artist")
+                        .queryParam("limit", limit)
+                        .build())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .retrieve()
+                .body(SpotifySearchArtistsResponse.class);
+
+        if (res == null || res.artists() == null || res.artists().items() == null) return List.of();
+        return res.artists().items();
+    }
+
 }

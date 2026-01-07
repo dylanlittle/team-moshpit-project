@@ -164,6 +164,8 @@
               + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}">
                     </p>
                 </a>
+                <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>
+
             </div>
 
     </aside>

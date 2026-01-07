@@ -68,6 +68,22 @@ body::before{
 }
 
 /* Header */
+.user-header {
+    display: flex;
+    align-items: flex-start;
+}
+
+.user-header > :last-child {
+    margin-left: auto;
+}
+
+.header-box {
+    border: 1px solid #ccc;
+    padding: 12px;
+    border: none;
+    background: none;
+}
+
 .user-header h1{
   margin: 10px 0 4px;
   font-weight: 900;

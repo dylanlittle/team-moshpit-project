@@ -14,120 +14,134 @@
 </header>
 <body>
 
-<div class="user-header">
-
-    <h1 th:text="${user.name}"></h1>
-    <h3 th:text="'@' + ${user.username}"></h3>
-    <div th:if="${isOwner}">
-        <h4>Fan account</h4>
-        <div th:if="${user.spotifyRefreshToken == null}">
-            <a th:href="@{/spotify/connect}" class="btn btn-success">Connect Spotify</a>
-        </div>
-        <div th:unless="${user.spotifyRefreshToken == null}">
-            <form th:action="@{/spotify/disconnect}" method="post">
-                <button class="btn btn-outline-danger" type="submit">Disconnect Spotify</button>
-            </form>
-            <p></p>
-        </div>
-        <div th:if="${!editing}">
-            <a th:href="@{/users/{id}/edit(id=${user.id})}">
-                <button>Edit Profile</button>
-            </a>
-        </div>
-    </div>
-    <form th:if="${editing}"
-          th:action="@{/users/{id}(id=${user.id})}"
-          method="post"
-          enctype="multipart/form-data">
-
-        <label for="edit-username">Username</label>
-        <input type="text"
-               name="username"
-               id="edit-username"
-               th:value="${user.username}"
-               required/>
-
-        <div class="actions">
-            <button type="submit">Save Changes</button>
-            <a th:href="@{/users/{id}(id=${user.id})}">
-                <button type="button">Cancel</button>
-            </a>
-        </div>
-    </form>
-</div>
-
-
-<div class="page-layout">
-
-    <aside class="left-column">
-
-
-        <div class="box profile-picture">
-
+<!-- header box when not in editing mode -->
+<div th:if="${!editing}" class="box user-header">
+        <!-- profile picture -->
+        <div class="header-box profile-picture">
             <!-- Hides old image when changing profile picture -->
-            <img th:if="${!editing}"
-                 th:src="${user.avatar} ?: '/uploads/default_profile.png'"
+            <img th:src="${user.avatar} ?: '/uploads/default_profile.png'"
                  alt="Profile picture"
                  style="width:160px;height:160px;object-fit:cover;"/>
+        </div>
 
-            <form th:if="${editing}"
-                  th:action="@{/users/{id}(id=${user.id})}"
-                  method="post"
-                  enctype="multipart/form-data">
+        <!-- account type, name, username, bio and location -->
+        <div class="header-box">
+            <!-- Account type-->
+            <h4>Fan account</h4>
+            <!-- Name -->
+            <h1 th:text="${user.name}"></h1>
+            <!-- Username -->
+            <p th:text="'@' + ${user.username}"></p>
+
+            <!-- Bio -->
+            <p th:text="${user.bio}"></p>
+            <div th:if="${editing}">
+                <textarea name="bio" rows="4" th:text="${user.bio}"></textarea>
+            </div>
+
+            <!-- Location -->
+            <div th:if="${user.location != null}">
+                <p th:text="'📍 ' + ${user.location}"></p>
+            </div>
+
+        </div>
+    <div>
+        <a th:href="@{/users/{id}/edit(id=${user.id})}">
+            <button>Edit Profile</button>
+        </a>
+    </div>
+</div>
+
+<!-- header box when in edit mode-->
+<!--<div class="box" th:if="${editing}">-->
+    <form th:if="${editing}"
+            th:action="@{/users/{id}(id=${user.id})}"
+            method="post"
+            enctype="multipart/form-data"
+            class="box user-header">
+        <!-- profile picture -->
+        <div class="header-box profile-picture">
+            <!-- Hides old image when changing profile picture -->
+            <div class="header-box profile-picture">
                 <div>
                     <label>Change profile image</label>
                     <input type="file" name="image" accept="image/*"/>
                 </div>
-                <div class="actions">
-                    <button type="submit">Save Changes</button>
-                    <a th:href="@{/users/{id}(id=${user.id})}">
-                        <button type="button">Cancel</button>
-                    </a>
-                </div>
-            </form>
+            </div>
         </div>
 
-
-        <div class="box">
-            <h3>About Me</h3>
-            <p th:if="${!editing}" th:text="${user.bio}"></p>
-            <form th:if="${editing}"
-                  th:action="@{/users/{id}(id=${user.id})}"
-                  method="post"
-                  enctype="multipart/form-data">
-                <textarea name="bio"
-                          rows="4"
-                          th:text="${user.bio}"></textarea>
-                <div class="actions">
-                    <button type="submit">Save Changes</button>
-                    <a th:href="@{/users/{id}(id=${user.id})}">
-                        <button type="button">Cancel</button>
-                    </a>
-                </div>
-            </form>
-
-
-            <div th:if="${user.location != null and !editing}">
-                <p th:text="'📍 ' + ${user.location}"></p>
+        <!-- account type, name, username, bio and location -->
+        <div class="header-box">
+            <!-- Account type-->
+            <h4>Fan account</h4>
+            <!-- Name -->
+            <h1 th:text="${user.name}"></h1>
+            <!-- Username -->
+            <p th:text="'@' + ${user.username}"></p>
+            <div>
+                <label for="edit-username">Username</label>
+                <input type="text"
+                       name="username"
+                       id="edit-username"
+                       th:value="${user.username}"
+                       required/>
             </div>
 
-            <form th:if="${user.location != null and editing}"
-                  th:action="@{/users/{id}(id=${user.id})}"
-                  method="post"
-                  enctype="multipart/form-data">
+            <!-- Bio -->
+            <div>
+                    <textarea name="bio"
+                              rows="4"
+                              th:text="${user.bio}"></textarea>
+            </div>
+
+            <!-- Location -->
+            <div th:if="${user.location != null}">
                 <div>
                     <label for="edit-location">Change location</label>
                     <input type="text" name="location" id="edit-location" th:value="${user.location}"/>
                 </div>
-                <div class="actions">
-                    <button type="submit">Save Changes</button>
-                    <a th:href="@{/users/{id}(id=${user.id})}">
-                        <button type="button">Cancel</button>
-                    </a>
-                </div>
-            </form>
+            </div>
         </div>
 
+        <div>
+            <!-- actions -->
+            <div class="actions">
+                <button type="submit">Save Changes</button>
+                <a th:href="@{/users/{id}(id=${user.id})}" class="btn">
+                    Cancel
+                </a>
+            </div>
+        </div>
+    </form>
+
+    <!--<div th:if="${!editing}">
+        <a th:href="@{/users/{id}/edit(id=${user.id})}">
+            <button>Edit Profile</button>
+        </a>
+    </div>-->
+    <!--</div>-->
+
+
+<div class="page-layout">
+
+    <!-- left column -->
+    <aside class="left-column">
+
+        <!--<div class="box">
+        </div>-->
+
+        <!-- Spotify box -->
+        <div th:if="${isOwner}">
+            <div th:if="${user.spotifyRefreshToken == null}">
+                <a th:href="@{/spotify/connect}" class="btn btn-success">Connect Spotify</a>
+            </div>
+            <div th:unless="${user.spotifyRefreshToken == null}">
+                <form th:action="@{/spotify/disconnect}" method="post">
+                    <button class="btn btn-outline-danger" type="submit">Disconnect Spotify</button>
+                </form>
+                <p></p>
+            </div>
+        </div>
         <div th:if="${isOwner or (!isOwner and canShowPublicTopArtists)}">
             <div class="box">
                 <h3 th:text="${isOwner} ? 'Your Top Artists' : 'Top Artists'">Top Artists</h3>

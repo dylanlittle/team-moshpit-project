@@ -40,9 +40,10 @@
           method="post"
           enctype="multipart/form-data">
 
-        <label>Username</label>
+        <label for="edit-username">Username</label>
         <input type="text"
                name="username"
+               id="edit-username"
                th:value="${user.username}"
                required/>
 
@@ -69,24 +70,62 @@
                  alt="Profile picture"
                  style="width:160px;height:160px;object-fit:cover;"/>
 
-            <div th:if="${editing}">
-                <label>Change profile image</label>
-                <input type="file" name="image" accept="image/*"/>
-            </div>
+            <form th:if="${editing}"
+                  th:action="@{/users/{id}(id=${user.id})}"
+                  method="post"
+                  enctype="multipart/form-data">
+                <div>
+                    <label>Change profile image</label>
+                    <input type="file" name="image" accept="image/*"/>
+                </div>
+                <div class="actions">
+                    <button type="submit">Save Changes</button>
+                    <a th:href="@{/users/{id}(id=${user.id})}">
+                        <button type="button">Cancel</button>
+                    </a>
+                </div>
+            </form>
         </div>
 
 
         <div class="box">
             <h3>About Me</h3>
             <p th:if="${!editing}" th:text="${user.bio}"></p>
-            <textarea th:if="${editing}"
-                      name="bio"
-                      rows="4"
-                      th:text="${user.bio}"></textarea>
+            <form th:if="${editing}"
+                  th:action="@{/users/{id}(id=${user.id})}"
+                  method="post"
+                  enctype="multipart/form-data">
+                <textarea name="bio"
+                          rows="4"
+                          th:text="${user.bio}"></textarea>
+                <div class="actions">
+                    <button type="submit">Save Changes</button>
+                    <a th:href="@{/users/{id}(id=${user.id})}">
+                        <button type="button">Cancel</button>
+                    </a>
+                </div>
+            </form>
 
-            <div th:if="${user.location}">
+
+            <div th:if="${user.location != null and !editing}">
                 <p th:text="'📍 ' + ${user.location}"></p>
             </div>
+
+            <form th:if="${user.location != null and editing}"
+                  th:action="@{/users/{id}(id=${user.id})}"
+                  method="post"
+                  enctype="multipart/form-data">
+                <div>
+                    <label for="edit-location">Change location</label>
+                    <input type="text" name="location" id="edit-location" th:value="${user.location}"/>
+                </div>
+                <div class="actions">
+                    <button type="submit">Save Changes</button>
+                    <a th:href="@{/users/{id}(id=${user.id})}">
+                        <button type="button">Cancel</button>
+                    </a>
+                </div>
+            </form>
         </div>
 
         <div th:if="${isOwner or (!isOwner and canShowPublicTopArtists)}">

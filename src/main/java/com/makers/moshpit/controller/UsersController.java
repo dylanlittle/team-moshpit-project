@@ -240,8 +240,8 @@ public class UsersController {
     @PostMapping("/users/{id}")
     public String updateProfile(
             @PathVariable Long id,
-            @RequestParam String username,
-            @RequestParam(required = false) String bio, MultipartFile image) {
+            /*@RequestParam String username,*/
+            @RequestParam(required = false) String bio, MultipartFile image, String username, String location) {
 
 
         User user = userRepository.findById(id)
@@ -253,9 +253,15 @@ public class UsersController {
             return "redirect:/users/" + id;
         }
 
-        user.setUsername(username);
-        user.setBio(bio);
-
+        if (username != null && !username.isEmpty()) {
+            user.setUsername(username);
+        }
+        if (bio != null && !bio.isEmpty()) {
+            user.setBio(bio);
+        }
+        if (location != null && !location.isEmpty()) {
+            user.setLocation(location);
+        }
 
         if (image != null && !image.isEmpty()) {
 
@@ -306,35 +312,6 @@ public class UsersController {
         User user = authService.getCurrentUser();
         model.addAttribute("user", user);
         return "users/edit_profile";
-    }
-
-    @PostMapping("/users/edit")
-    public String updateProfile(
-            @RequestParam String username,
-            @RequestParam(required = false) String bio,
-            Model model) {
-
-        User user = authService.getCurrentUser();
-
-        if (username == null || username.trim().length() < 4) {
-            model.addAttribute("user", user);
-            model.addAttribute("error", "Username must be at least 4 characters");
-            return "users/edit_profile";
-        }
-
-        if (userRepository.existsByUsername(username)
-                && !username.equals(user.getUsername())) {
-            model.addAttribute("user", user);
-            model.addAttribute("error", "Username already taken");
-            return "users/edit_profile";
-        }
-
-        user.setUsername(username);
-        user.setBio(bio);
-
-        userRepository.save(user);
-
-        return "redirect:/user";
     }
 
 }

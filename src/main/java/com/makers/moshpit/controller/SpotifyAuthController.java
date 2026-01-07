@@ -43,6 +43,8 @@ public class SpotifyAuthController {
 
         String scope = String.join(" ",
                 "user-top-read",
+                "user-library-read",
+                "user-read-currently-playing",
                 "user-read-playback-state"
         );
 

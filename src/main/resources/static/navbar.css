@@ -1,126 +1,276 @@
-/* Reset and Base Navbar Styles */
-.navbar {
-    display: flex;
-    align-items: center; /* Vertically centers everything in the bar */
-    justify-content: space-between;
-    height: 60px;
-    background-color: #f8f9fa;
-    padding: 0 20px;
-    border-bottom: 1px solid #ddd;
-    box-sizing: border-box;
+/* Nav bar */
+:root{
+  --bg-main:#0F0E0C;             /* venue wall */
+  --nav-surface:#181715;          /* poster strip */
+  --ink:#F3EFE8;                  /* off-white ink */
+  --muted:#A8A39A;                /* worn ink */
+  --border:rgba(243,239,232,.16);
+  --red:#C43A2F;                  /* show-flyer red */
+  --yellow:#F4C430;               /* ticket-yellow */
+  --shadow: 0 10px 28px rgba(0,0,0,.45);
+}
+
+/* Navbar */
+.navbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height:64px;
+  padding:0 20px;
+  box-sizing:border-box;
+
+  /* gritty strip */
+  background:
+    radial-gradient(900px 120px at 15% 0%, rgba(196,58,47,.22), transparent 60%),
+    radial-gradient(700px 120px at 85% 0%, rgba(30,127,122,.18), transparent 60%),
+    linear-gradient(180deg, rgba(24,23,21,.94), rgba(24,23,21,.88));
+  border-bottom:3px solid rgba(196,58,47,.75);
+  box-shadow: var(--shadow);
+  outline:1px solid rgba(243,239,232,.08);
 }
 
 /* Left Section */
-.nav-left {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+.nav-left{
+  display:flex;
+  align-items:center;
+  gap:22px;
 }
 
-.nav-links {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    gap: 15px;
+/* Logo/Home link */
+.nav-logo{
+  text-decoration:none;
+  color:var(--ink);
+  font-weight:900;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-size:16px;
+  padding:8px 10px;
+  border:1px solid rgba(243,239,232,.12);
+  border-radius:10px;
+  background: rgba(15,14,12,.55);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.25);
+}
+.nav-logo:hover{
+  border-color: rgba(244,196,48,.55);
+  box-shadow: 0 0 0 3px rgba(244,196,48,.12);
 }
 
-.nav-links a, .nav-logo {
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
+/* Links */
+.nav-links{
+  display:flex;
+  list-style:none;
+  margin:0;
+  padding:0;
+  gap:18px;
+}
+
+.nav-links a{
+  text-decoration:none;
+  color:var(--ink);
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.10em;
+  font-size:12px;
+  padding:10px 4px;
+  opacity:.92;
+  position:relative;
+}
+
+.nav-links a:hover{
+  opacity:1;
+}
+
+/* underline hover like flyer highlight */
+.nav-links a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:6px;
+  height:2px;
+  background:transparent;
+  transform:scaleX(.75);
+  transform-origin:left;
+  transition: .18s ease;
+}
+.nav-links a:hover::after{
+  background: rgba(244,196,48,.9);
+  transform:scaleX(1);
 }
 
 /* Center Section: Search */
-.nav-search {
-    flex-grow: 1;
-    max-width: 500px;
-    margin: 0 20px;
+.nav-search{
+  flex-grow:1;
+  max-width:520px;
+  margin:0 20px;
 }
 
-.nav-search input {
-    width: 100%;
-    padding: 8px 15px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
+.nav-search form{
+  width:100%;
+  position:relative;
 }
 
-/* Right Section: Profile & Dropdown */
-.nav-right {
-    display: flex;
-    align-items: center;
-    position: relative;
-    height: 100%; /* Important for the hover bridge */
+.nav-search input[type="search"]{
+  width:100%;
+  padding:10px 14px 10px 36px; /* room for icon */
+  border:1px solid var(--border);
+  border-radius:12px;
+  background: rgba(15,14,12,.62);
+  color:var(--ink);
+  font-size:13px;
+  outline:none;
+  box-sizing:border-box;
 }
 
-.profile-dropdown {
-    position: relative;
-    display: flex;
-    align-items: center;
-    height: 100%;
-    cursor: pointer;
+/* faux search icon */
+.nav-search form::before{
+  content:"⌕";
+  position:absolute;
+  left:12px;
+  top:50%;
+  transform: translateY(-50%);
+  color: rgba(243,239,232,.72);
+  font-size:14px;
+  pointer-events:none;
 }
 
-.profile-avatar {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1px solid #ccc;
+.nav-search input[type="search"]::placeholder{
+  color: rgba(168,163,154,.85);
 }
 
-/* The Dropdown Menu */
-.dropdown-content {
-    display: none;
-    position: absolute;
-    top: 100%; /* Aligns exactly to the bottom of the navbar */
-    right: 0;
-    background-color: #fff;
-    min-width: 160px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    border-radius: 8px;
-    padding: 8px 0;
-    list-style: none;
-    z-index: 1000;
-    margin: 0;
-    /* This invisible border bridges the gap so the menu stays open */
-    border-top: 10px solid transparent;
-    margin-top: -5px;
+.nav-search input[type="search"]:focus{
+  border-color: rgba(244,196,48,.65);
+  box-shadow: 0 0 0 3px rgba(244,196,48,.14);
 }
 
-/* Show on Hover */
-.profile-dropdown:hover .dropdown-content {
-    display: block;
+/* Right Section */
+.nav-right{
+  display:flex;
+  align-items:center;
+  position:relative;
+  height:100%;
 }
 
-/* Dropdown Items */
-.dropdown-content li {
-    width: 100%;
+/* Profile dropdown wrapper (keep your hover behavior) */
+.profile-dropdown{
+  position:relative;
+  display:flex;
+  align-items:center;
+  height:100%;
+  cursor:pointer;
 }
 
+/* Avatar - make it feel like a pinned badge */
+.profile-avatar{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  object-fit:cover;
+  border: 1px solid rgba(243,239,232,.20);
+  background: rgba(15,14,12,.55);
+  box-shadow:
+    0 0 0 3px rgba(0,0,0,.25),
+    0 8px 18px rgba(0,0,0,.35);
+}
+
+.profile-dropdown:hover .profile-avatar{
+  border-color: rgba(244,196,48,.55);
+  box-shadow:
+    0 0 0 3px rgba(244,196,48,.12),
+    0 10px 22px rgba(0,0,0,.45);
+}
+
+/* Dropdown Menu */
+.dropdown-content{
+  display:none;
+  position:absolute;
+  top:100%;
+  right:0;
+
+  min-width:180px;
+  list-style:none;
+  margin:0;
+  padding:8px 0;
+
+  /* flyer panel */
+  background: linear-gradient(180deg, rgba(24,23,21,.98), rgba(24,23,21,.92));
+  border:1px solid rgba(243,239,232,.14);
+  border-radius:12px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.55);
+  z-index:1000;
+
+  /* keep your “hover bridge” */
+  border-top: 12px solid transparent;
+  margin-top:-6px;
+}
+
+.profile-dropdown:hover .dropdown-content{
+  display:block;
+}
+
+/* Dropdown items */
+.dropdown-content li{
+  width:100%;
+}
+
+/* Style both anchors and the logout button */
 .dropdown-content li a,
-.dropdown-content li button {
-    display: block;
-    width: 100%;
-    padding: 10px 20px;
-    box-sizing: border-box; /* Keeps hover background inside the box */
-    text-decoration: none;
-    color: #333;
-    font-size: 14px;
-    text-align: left;
-    border: none;
-    background: transparent;
-    cursor: pointer;
+.dropdown-content li button{
+  display:block;
+  width:100%;
+  padding:10px 16px;
+  box-sizing:border-box;
+  text-decoration:none;
+
+  color:var(--ink);
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+
+  border:none;
+  background:transparent;
+  text-align:left;
+  cursor:pointer;
 }
 
+/* Hover = ticket yellow highlight */
 .dropdown-content li a:hover,
-.dropdown-content li button:hover {
-    background-color: #f1f1f1;
+.dropdown-content li button:hover{
+  background: rgba(244,196,48,.14);
 }
 
-/* Small divider for logout */
-.dropdown-divider {
-    height: 1px;
-    background-color: #eee;
-    margin: 4px 0;
+/* Make the hr match theme */
+.dropdown-content hr{
+  border:0;
+  height:1px;
+  background: rgba(243,239,232,.12);
+  margin:6px 0;
 }
+
+/* Optional: reduce default link color from earlier rules */
+.nav-links a, .nav-logo{
+  color:var(--ink);
+}
+
+/* Responsive tweaks */
+@media (max-width: 900px){
+  .nav-search{ max-width: 360px; }
+  .nav-links{ gap: 12px; }
+}
+
+@media (max-width: 700px){
+  .navbar{
+    flex-wrap:wrap;
+    height:auto;
+    padding:12px 14px;
+    gap:10px;
+  }
+  .nav-search{
+    order:3;
+    width:100%;
+    max-width:unset;
+    margin:6px 0 0;
+  }
+}
+

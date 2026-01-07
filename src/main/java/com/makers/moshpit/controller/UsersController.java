@@ -73,22 +73,14 @@ public class UsersController {
 
     @GetMapping("/users/after-login")
     public String afterLogin() {
-        String email = authService.getAuthenticatedUserEmail();
+        User user = authService.getCurrentUser(); // find-or-create
 
-        User user = userRepository.findUserByEmail(email)
-                .orElseGet(() -> userRepository.save(new User(email)));
-
-        if (user.getUsername() == null
-                || user.getUsername().equals("null")
-                || user.getUsername().isEmpty()
-                || user.getName() == null
-                || user.getName().equals("null")
-                || user.getName().isEmpty()) {
-
+        if (!user.isProfileComplete()) {
             return "redirect:/users/create";
         }
         return "redirect:/";
     }
+
 
     @Data
     public static class CompleteProfileRequest {
@@ -142,6 +134,7 @@ public class UsersController {
                 e.printStackTrace();
             }
         }
+        currentUser.setProfileComplete(true);
         userRepository.save(currentUser);
         return "redirect:/user";
     }

@@ -3,15 +3,15 @@ package com.makers.moshpit.controller;
 import com.makers.moshpit.model.*;
 import com.makers.moshpit.repository.*;
 import com.makers.moshpit.service.AuthService;
+import com.makers.moshpit.spotify.CurrentUserService;
+import com.makers.moshpit.spotify.relationship.RelationshipService;
+import com.makers.moshpit.spotify.relationship.RelationshipStats;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDate;
@@ -39,12 +39,17 @@ public class ArtistController {
     private FollowRepository followRepository;
 
     @Autowired
-    private AuthService authService;
+    private CurrentUserService currentUserService;
+
+    @Autowired
+    private RelationshipService relationshipService;
 
 
     @GetMapping("/artists/{id}")
-    public String getArtist(@PathVariable Long id, Model model) {
-        User currentUser = authService.getCurrentUser();
+    public String getArtist(@PathVariable Long id, Model model,
+                            @AuthenticationPrincipal OAuth2User principal,
+                            @RequestParam(value="timeRange", required=false) String timeRange) {
+        User currentUser = currentUserService.getOrCreateFromPrincipal(principal);
 
         List<ArtistAdmin> admins = artistAdminRepository.findAdminsByArtistId(id);
 
@@ -58,6 +63,13 @@ public class ArtistController {
         LocalDate dateToday = LocalDate.now();
         Iterable<Concert> futureConcerts = concertRepository.findAllByArtistIdAndConcertDateAfterOrderByConcertDateAsc(id, dateToday);
         Iterable<Concert> pastConcerts = concertRepository.findAllByArtistIdAndConcertDateBeforeOrderByConcertDateDesc(id, dateToday);
+
+        model.addAttribute("timeRange", timeRange == null ? "medium_term" : timeRange);
+
+        if (currentUser != null) {
+            RelationshipStats stats = relationshipService.build(currentUser, artist, timeRange);
+            model.addAttribute("relationshipStats", stats);
+        }
 
         model.addAttribute("posts", posts);
         model.addAttribute("artist", artist);

@@ -89,7 +89,7 @@
             </div>
         </div>
 
-        <div th:if="${isOwner or (!isOwner and canShowPublicTopArtists)}">
+        <div th:if="${!editing and (isOwner or (!isOwner and canShowPublicTopArtists))}">
             <div class="box">
                 <h3 th:text="${isOwner} ? 'Your Top Artists' : 'Top Artists'">Top Artists</h3>
 

@@ -28,6 +28,8 @@ public class Artist {
     @Column(name = "created_by", nullable = false)
     private Long createdBy;
 
+    private String spotifyArtistId;
+
     public Artist(String name, String bio, String genre, Long createdBy ) {
         this.name = name;
         this.bio = bio;

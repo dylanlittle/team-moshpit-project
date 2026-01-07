@@ -7,56 +7,90 @@
     <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="/two-column-pages.css" />
     <link rel="stylesheet" href="/navbar.css"/>
+    <link rel="stylesheet" href="/user-profile.css" />
+
 </head>
 <header class="page-header">
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
 </header>
 <body>
+<div class="user-wall">
 
-<div class="user-header">
+    <div class="user-header">
 
     <h1 th:text="${user.name}"></h1>
     <h3 th:text="'@' + ${user.username}"></h3>
-    <div th:if="${isOwner}">
-        <button onclick="document.getElementById('myArtists').showModal()">My artists</button>
-        <h4>Fan account</h4>
-        <div th:if="${user.spotifyRefreshToken == null}">
-            <a th:href="@{/spotify/connect}" class="btn btn-success">Connect Spotify</a>
-        </div>
-        <div th:unless="${user.spotifyRefreshToken == null}">
-            <form th:action="@{/spotify/disconnect}" method="post">
-                <button class="btn btn-outline-danger" type="submit">Disconnect Spotify</button>
-            </form>
-            <p></p>
-        </div>
-        <div th:if="${!editing}">
-            <a th:href="@{/users/{id}/edit(id=${user.id})}">
-                <button>Edit Profile</button>
-            </a>
-        </div>
+    <button onclick="document.getElementById('myArtists').showModal()">My artists</button>
+    <h4>Fan account</h4>
+    <div th:if="${user.spotifyRefreshToken == null}">
+        <a th:href="@{/spotify/connect}" class="btn btn-success">Connect Spotify</a>
     </div>
-    <form th:if="${editing}"
-          th:action="@{/users/{id}(id=${user.id})}"
-          method="post"
-          enctype="multipart/form-data">
+    <div th:unless="${user.spotifyRefreshToken == null}">
+        <form th:action="@{/spotify/disconnect}" method="post">
+            <button class="btn btn-outline-danger" type="submit">Disconnect Spotify</button>
+        </form>
+        <p></p>
+    </div>
 
-        <label>Username</label>
-        <input type="text"
-               name="username"
-               th:value="${user.username}"
-               required/>
+    <div th:if="${!editing}">
+        <a th:if="${isOwner}"
+           th:href="@{/users/{id}/edit(id=${user.id})}">
+            <button>Edit Profile</button>
+        </a>
+    </div>
 
-        <div class="actions">
-            <button type="submit">Save Changes</button>
-            <a th:href="@{/users/{id}(id=${user.id})}">
-                <button type="button">Cancel</button>
-            </a>
-        </div>
-    </form>
-</div>
+    <div th:if="${editing}" class="page-layout">
+
+        <form th:action="@{/users/{id}(id=${user.id})}"
+              method="post"
+              enctype="multipart/form-data"
+              class="profile-edit-form">
+
+            <!-- LEFT COLUMN -->
+            <aside class="left-column">
+
+                <div class="box profile-picture">
+                    <label>Change profile image</label>
+                    <input type="file" name="image" accept="image/*"/>
+                </div>
+
+                <div class="box">
+                    <h3>About Me</h3>
+                    <textarea name="bio"
+                              rows="4"
+                              th:text="${user.bio}"
+                              placeholder="Tell people about you..."></textarea>
+                </div>
+
+            </aside>
+
+            <!-- RIGHT COLUMN -->
+            <main class="right-column">
+
+                <div class="box">
+                    <label>Username</label>
+                    <input type="text"
+                           name="username"
+                           th:value="${user.username}"
+                           required/>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                    <a th:href="@{/users/{id}(id=${user.id})}">Cancel</a>
+                </div>
+
+            </main>
+
+        </form>
+    </div>
 
 
-<div class="page-layout">
+
+
+
+
+        <div class="page-layout">
 
     <aside class="left-column">
 
@@ -89,147 +123,79 @@
             </div>
         </div>
 
-        <div th:if="${isOwner or (!isOwner and canShowPublicTopArtists)}">
-            <div class="box">
-                <h3 th:text="${isOwner} ? 'Your Top Artists' : 'Top Artists'">Top Artists</h3>
+        <div class="box">
+            <h3>Top Artists</h3>
 
-                <div th:if="${isOwner and user.spotifyRefreshToken != null}">
-                    <form method="post" action="/user/spotify/privacy">
-                        <label>
-                            <input type="checkbox" name="shareTopArtists" th:checked="${user.shareSpotifyTopArtists}">
-                            Show my Top Artists on my public profile
-                        </label>
-                        <button type="submit" class="btn btn-sm btn-outline-secondary">Save</button>
-                    </form>
-                </div>
-
-                <div th:if="${user.spotifyRefreshToken == null}">
-                    <p>Connect Spotify to show your top artists.</p>
-                </div>
-
-                <div th:if="${user.spotifyRefreshToken != null and (spotifyTopArtists == null or #lists.isEmpty(spotifyTopArtists))}">
-                    <p>No top artists returned yet. Try listening on Spotify and check again later.</p>
-                </div>
-
-                <div th:if="${user.spotifyRefreshToken != null}">
-                    <form method="get"
-                          th:action="${isOwner} ? @{/user} : @{/users/{id}(id=${user.id})}" style="margin-bottom: 10px;">
-                        <label for="timeRange" style="display:block; margin-bottom:4px;">
-                            Time range
-                        </label>
-                        <select id="timeRange" name="timeRange" onchange="this.form.submit()">
-                            <option value="short_term"
-                                    th:selected="${timeRange == 'short_term'}">
-                                Last 4 weeks
-                            </option>
-                            <option value="medium_term"
-                                    th:selected="${timeRange == 'medium_term'}">
-                                Last 6 months
-                            </option>
-                            <option value="long_term"
-                                    th:selected="${timeRange == 'long_term'}">
-                                All time-ish
-                            </option>
-                        </select>
-                    </form>
-                </div>
-
-                <ul th:if="${spotifyTopArtists != null and !#lists.isEmpty(spotifyTopArtists)}">
-                    <li th:each="a : ${spotifyTopArtists}">
-                        <div style="display:flex; gap:10px; align-items:center;">
-                            <img th:if="${a.images != null and !#lists.isEmpty(a.images)}"
-                                 th:src="${a.images.get(0).url}"
-                                 style="width:40px; height:40px; border-radius:8px; object-fit:cover;" />
-
-                            <div style="display:flex; flex-direction:column;">
-                                <span th:text="${a.name}">Artist Name</span>
-
-                                <a th:if="${spotifySuggestions != null and spotifySuggestions.containsKey(a.id)}"
-                                   th:href="@{/artists/{id}(id=${spotifySuggestions.get(a.id).id})}">
-                                    View on Mosh Pit
-                                </a>
-
-                                <span th:unless="${spotifySuggestions != null and spotifySuggestions.containsKey(a.id)}"
-                                      style="opacity:0.7; font-size:0.9em;">
-                            Not on Mosh Pit yet
-                        </span>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+            <div th:if="${user.spotifyRefreshToken == null}">
+                <p>Connect Spotify to show your top artists.</p>
             </div>
+
+            <div th:if="${user.spotifyRefreshToken != null and (spotifyTopArtists == null or #lists.isEmpty(spotifyTopArtists))}">
+                <p>No top artists returned yet. Try listening on Spotify and check again later.</p>
+            </div>
+
+            <div th:if="${user.spotifyRefreshToken != null}">
+                <form method="get" th:action="@{/user}" style="margin-bottom: 10px;">
+                    <label for="timeRange" style="display:block; margin-bottom:4px;">
+                        Time range
+                    </label>
+                    <select id="timeRange" name="timeRange" onchange="this.form.submit()">
+                        <option value="short_term"
+                                th:selected="${timeRange == 'short_term'}">
+                            Last 4 weeks
+                        </option>
+                        <option value="medium_term"
+                                th:selected="${timeRange == 'medium_term'}">
+                            Last 6 months
+                        </option>
+                        <option value="long_term"
+                                th:selected="${timeRange == 'long_term'}">
+                            All time-ish
+                        </option>
+                    </select>
+                </form>
+            </div>
+
+            <ul th:if="${spotifyTopArtists != null and !#lists.isEmpty(spotifyTopArtists)}">
+                <li th:each="a : ${spotifyTopArtists}">
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <img th:if="${a.images != null and !#lists.isEmpty(a.images)}"
+                             th:src="${a.images.get(0).url}"
+                             style="width:40px; height:40px; border-radius:8px; object-fit:cover;" />
+
+                        <div style="display:flex; flex-direction:column;">
+                            <span th:text="${a.name}">Artist Name</span>
+
+                            <a th:if="${spotifySuggestions != null and spotifySuggestions.containsKey(a.id)}"
+                               th:href="@{/artists/{id}(id=${spotifySuggestions.get(a.id).id})}">
+                                View on Mosh Pit
+                            </a>
+
+                            <span th:unless="${spotifySuggestions != null and spotifySuggestions.containsKey(a.id)}"
+                                  style="opacity:0.7; font-size:0.9em;">
+                        Not on Mosh Pit yet
+                    </span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
         </div>
 
-        <div th:if="${isOwner}">
-            <div class="box">
-                <h3>Currently Listening</h3>
-                <div id="now-playing" class="card shadow-sm mb-4" style="display:none;">
-                    <div class="card-body d-flex align-items-center gap-3">
-                        <img id="np-art" alt="Album art"
-                             style="width:64px;height:64px;object-fit:cover;border-radius:8px;display:none;">
-                        <div style="flex:1;">
-                            <div class="text-muted" style="font-size:0.9rem;">Currently listening</div>
-                            <div id="np-title" style="font-weight:600;"></div>
-                            <div id="np-artist" class="text-muted"></div>
-                            <div id="np-status" class="text-muted" style="font-size:0.9rem;"></div>
-                        </div>
-                        <a id="np-link" target="_blank" class="btn btn-sm btn-outline-secondary" style="display:none;">Open</a>
+
+        <div class="box">
+            <h3>Currently Listening</h3>
+            <div id="now-playing" class="card shadow-sm mb-4" style="display:none;">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <img id="np-art" alt="Album art"
+                         style="width:64px;height:64px;object-fit:cover;border-radius:8px;display:none;">
+                    <div style="flex:1;">
+                        <div class="text-muted" style="font-size:0.9rem;">Currently listening</div>
+                        <div id="np-title" style="font-weight:600;"></div>
+                        <div id="np-artist" class="text-muted"></div>
+                        <div id="np-status" class="text-muted" style="font-size:0.9rem;"></div>
                     </div>
+                    <a id="np-link" target="_blank" class="btn btn-sm btn-outline-secondary" style="display:none;">Open</a>
                 </div>
-                <script>
-                    async function refreshNowPlaying() {
-                      try {
-                        const res = await fetch('/api/spotify/now-playing', { headers: { 'Accept': 'application/json' }});
-                        const data = await res.json();
-
-                        const card = document.getElementById('now-playing');
-                        const art = document.getElementById('np-art');
-                        const title = document.getElementById('np-title');
-                        const artist = document.getElementById('np-artist');
-                        const status = document.getElementById('np-status');
-                        const link = document.getElementById('np-link');
-
-                        if (!data.connected) {
-                          card.style.display = 'none';
-                          return;
-                        }
-
-                        card.style.display = 'block';
-
-                        if (!data.isPlaying) {
-                          art.style.display = 'none';
-                          link.style.display = 'none';
-                          title.textContent = data.message || 'Nothing currently playing';
-                          artist.textContent = '';
-                          status.textContent = '';
-                          return;
-                        }
-
-                        title.textContent = data.trackName || '';
-                        artist.textContent = data.artists || '';
-                        status.textContent = data.albumName ? `on ${data.albumName}` : '';
-
-                        if (data.albumImageUrl) {
-                          art.src = data.albumImageUrl;
-                          art.style.display = 'block';
-                        } else {
-                          art.style.display = 'none';
-                        }
-
-                        if (data.spotifyUrl) {
-                          link.href = data.spotifyUrl;
-                          link.style.display = 'inline-block';
-                        } else {
-                          link.style.display = 'none';
-                        }
-                      } catch (e) {
-                        console.warn('Now playing refresh failed', e);
-                      }
-                    }
-
-                    refreshNowPlaying();
-                    setInterval(refreshNowPlaying, 5000);
-                </script>
             </div>
         </div>
 
@@ -238,12 +204,12 @@
     <main class="right-column" id="fan-feed">
 
         <input type="radio" name="profile-tabs" id="tab-followed" checked>
-        <input type="radio" name="profile-tabs" id="tab-shows">
+        <input type="radio" name="profile-tabs" id="tab-myshows">
         <input type="radio" name="profile-tabs" id="tab-posts">
 
         <nav class="nav-bar">
             <label for="tab-followed">Followed Artists</label>
-            <label for="tab-shows">My Shows</label>
+            <label for="tab-myshows">My Shows</label>
             <label for="tab-posts">Posts</label>
         </nav>
 
@@ -261,7 +227,7 @@
             </div>
         </section>
 
-        <section class="tab-content" id="content-shows">
+        <section class="tab-content" id="content-myshows">
             <div class="box">
                 <h3>My Shows</h3>
                 <ul>
@@ -309,10 +275,64 @@
         </div>
 
     </main>
+        </div>
 
 </div>
+</div>
 
-</form>
+<script>
+    async function refreshNowPlaying() {
+      try {
+        const res = await fetch('/api/spotify/now-playing', { headers: { 'Accept': 'application/json' }});
+        const data = await res.json();
 
+        const card = document.getElementById('now-playing');
+        const art = document.getElementById('np-art');
+        const title = document.getElementById('np-title');
+        const artist = document.getElementById('np-artist');
+        const status = document.getElementById('np-status');
+        const link = document.getElementById('np-link');
+
+        if (!data.connected) {
+          card.style.display = 'none';
+          return;
+        }
+
+        card.style.display = 'block';
+
+        if (!data.isPlaying) {
+          art.style.display = 'none';
+          link.style.display = 'none';
+          title.textContent = data.message || 'Nothing currently playing';
+          artist.textContent = '';
+          status.textContent = '';
+          return;
+        }
+
+        title.textContent = data.trackName || '';
+        artist.textContent = data.artists || '';
+        status.textContent = data.albumName ? `on ${data.albumName}` : '';
+
+        if (data.albumImageUrl) {
+          art.src = data.albumImageUrl;
+          art.style.display = 'block';
+        } else {
+          art.style.display = 'none';
+        }
+
+        if (data.spotifyUrl) {
+          link.href = data.spotifyUrl;
+          link.style.display = 'inline-block';
+        } else {
+          link.style.display = 'none';
+        }
+      } catch (e) {
+        console.warn('Now playing refresh failed', e);
+      }
+    }
+
+    refreshNowPlaying();
+    setInterval(refreshNowPlaying, 5000);
+</script>
 </body>
 </html>

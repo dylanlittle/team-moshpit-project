@@ -134,7 +134,7 @@
     <div th:replace="~{fragments/action-dialogue :: dialog(
       title='Admins',
       id='adminPanel',
-      cta_link='/artists/new',
+      cta_link=@{/artists/{id}/newAdmin(id=${artist.id})},
       cta='Add new admin',
       content=(~{::adminList})
     )}">

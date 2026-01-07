@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Artist Page</title>
+    <link rel="stylesheet" href="/navbar.css"/>
+</head>
+
+<body>
+<header class="page-header">
+    <div th:insert="~{fragments/navbar :: headerNav}"></div>
+</header>
+
+<h1>Edit Artist Page</h1>
+
+<div>
+    <form method="post" id="update-artist-form" th:action="@{/artists/{id}/update" th:object="${newUser}" enctype="multipart/form-data">
+        <label for="name" class="required-label">Artist Name:</label>
+        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></div><br>
+        <input required type="text" id="name" th:field="*{name}"><br><br>
+
+        <label for="genre" class="required-label">Genre:</label>
+        <div th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}" style="color: red;"></div><br>
+        <input required type="text" id="genre" th:field="*{genre}"><br><br>
+
+        <label for="bio">Bio:</label>
+        <div th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}" style="color: red;"></div><br>
+        <input type="text" id="bio" th:field="*{bio}"><br><br>
+
+        <div class="mb-3">
+            <label for="avatar">Profile Picture:</label><br>
+            <input type="file"
+                   class="form-control mb-3"
+                   id="avatar"
+                   name="image"
+                   accept="image/*">
+            <button type="button"
+                    id="clearMediaBtn"
+                    class="btn btn-outline-secondary btn-sm mt-2 d-none">
+                Remove selected file
+            </button>
+        </div>
+
+        <input id="submit" type="submit" value="Update">
+    </form>
+</div>
+<script>
+    const mediaInput = document.getElementById("image");
+    const clearBtn = document.getElementById("clearMediaBtn");
+
+    clearBtn.classList.add("d-none");
+
+    mediaInput.addEventListener("change", function () {
+        if (mediaInput.files && mediaInput.files.length > 0) {
+            clearBtn.classList.remove("d-none");
+        } else {
+            clearBtn.classList.add("d-none");
+        }
+    });
+
+    clearBtn.addEventListener("click", function () {
+        mediaInput.value = "";
+        clearBtn.classList.add("d-none");
+    });
+
+</script>
+
+</body>
+</html>

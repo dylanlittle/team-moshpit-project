@@ -3,15 +3,14 @@ package com.makers.moshpit.controller;
 import com.makers.moshpit.model.*;
 import com.makers.moshpit.repository.*;
 import com.makers.moshpit.service.AuthService;
+import com.makers.moshpit.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDate;
@@ -40,6 +39,9 @@ public class ArtistController {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private MediaService mediaService;
 
 
     @GetMapping("/artists/{id}")
@@ -77,7 +79,8 @@ public class ArtistController {
     @PostMapping("/artists")
     public RedirectView createArtist(
             @ModelAttribute Artist artist,
-            @AuthenticationPrincipal OAuth2User principal
+            @AuthenticationPrincipal OAuth2User principal,
+            @RequestParam(value = "image", required = false) MultipartFile image
     ) {
 
         String email = principal.getAttribute("email");
@@ -86,6 +89,20 @@ public class ArtistController {
 
         artist.setVerified(false);
         artist.setCreatedBy(user.getId());
+
+        if (image != null && !image.isEmpty()) {
+
+            if (image.getSize() > (10 * 1024 * 1024)) {
+                throw new RuntimeException("File too large — max 10MB");
+            }
+
+            try {
+                String imageUrl = mediaService.uploadImage(image);
+                artist.setAvatar(imageUrl);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         Artist savedArtist = artistRepository.save(artist);
 

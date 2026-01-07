@@ -1,14 +1,11 @@
 package com.makers.moshpit.controller;
 
 import com.makers.moshpit.model.User;
-import com.makers.moshpit.spotify.CurrentUserService;
+import com.makers.moshpit.service.AuthService;
 import com.makers.moshpit.spotify.SpotifyProperties;
 import com.makers.moshpit.spotify.SpotifyTokenService;
-import jakarta.persistence.Column;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,14 +26,14 @@ public class SpotifyAuthController {
     private SpotifyTokenService tokenService;
 
     @Autowired
-    private CurrentUserService currentUserService;
+    private AuthService authService;
 
     public SpotifyAuthController(SpotifyProperties spotifyProperties,
                                  SpotifyTokenService tokenService,
-                                 CurrentUserService currentUserService) {
+                                 AuthService authService) {
         this.spotifyProperties = spotifyProperties;
         this.tokenService = tokenService;
-        this.currentUserService = currentUserService;
+        this.authService = authService;
     }
 
     @GetMapping("/spotify/connect")
@@ -69,8 +66,7 @@ public class SpotifyAuthController {
     public RedirectView callback(@RequestParam(required = false) String code,
                                  @RequestParam(required = false) String state,
                                  @RequestParam(required = false) String error,
-                                 HttpSession session,
-                                 @AuthenticationPrincipal OAuth2User principal) {
+                                 HttpSession session) {
 
         if (error != null) {
             return new RedirectView("/user?spotifyError=" + UriUtils.encode(error, StandardCharsets.UTF_8));
@@ -82,7 +78,7 @@ public class SpotifyAuthController {
             return new RedirectView("/user?spotifyError=state_mismatch");
         }
 
-        User user = currentUserService.getOrCreateFromPrincipal(principal);
+        User user = authService.getCurrentUser();
         tokenService.exchangeCodeAndStoreTokens(user, code);
 
         return new RedirectView("/user?spotifyConnected=true");

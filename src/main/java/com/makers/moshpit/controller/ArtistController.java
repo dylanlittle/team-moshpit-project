@@ -3,7 +3,6 @@ package com.makers.moshpit.controller;
 import com.makers.moshpit.model.*;
 import com.makers.moshpit.repository.*;
 import com.makers.moshpit.service.AuthService;
-import com.makers.moshpit.spotify.CurrentUserService;
 import com.makers.moshpit.spotify.relationship.RelationshipService;
 import com.makers.moshpit.spotify.relationship.RelationshipStats;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,7 @@ public class ArtistController {
     private FollowRepository followRepository;
 
     @Autowired
-    private CurrentUserService currentUserService;
+    private AuthService authService;
 
     @Autowired
     private RelationshipService relationshipService;
@@ -47,9 +46,8 @@ public class ArtistController {
 
     @GetMapping("/artists/{id}")
     public String getArtist(@PathVariable Long id, Model model,
-                            @AuthenticationPrincipal OAuth2User principal,
                             @RequestParam(value="timeRange", required=false) String timeRange) {
-        User currentUser = currentUserService.getOrCreateFromPrincipal(principal);
+        User currentUser = authService.getCurrentUser();
 
         List<ArtistAdmin> admins = artistAdminRepository.findAdminsByArtistId(id);
 

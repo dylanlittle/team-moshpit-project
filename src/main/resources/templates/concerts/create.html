@@ -15,201 +15,210 @@
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
 </header>
 
-<p th:text="'Artist: ' + ${artist.name}"></p>
-    <form class="box" th:action="@{/artists/{id}/concerts(id=${artist.id})}" method="post" th:object="${concertForm}" enctype="multipart/form-data">
-        <div>
-            <label for="concert-name">Name:</label>
-            <input type="text" th:field="*{concertName}" name="concert-name" id="concert-name" required/>
-        </div>
+<!-- Show only if User is actively Artist Admin role -->
+<th:block th:if="${isAdminMode and activeAdminArtist.id == artist.id}">
+    <div class="box">
+        <p th:text="'Artist: ' + ${artist.name}"></p>
+        <form th:action="@{/artists/{id}/concerts(id=${artist.id})}" method="post" th:object="${concertForm}" enctype="multipart/form-data">
+            <div>
+                <label for="concert-name">Name (optional):</label>
+                <input type="text" th:field="*{concertName}" name="concert-name" id="concert-name"/>
+            </div>
 
-        <div>
-            <label for="date">Date:</label>
-            <input type="date" th:field="*{concertDate}" name="date" id="date" required/>
-        </div>
+            <div>
+                <label for="date">Date:</label>
+                <input type="date" th:field="*{concertDate}" name="date" id="date" required/>
+            </div>
 
-        <div>
-            <label for="start-time">Start time:</label>
-            <input type="time" th:field="*{startTime}" name="start-time" id="start-time" required/>
-        </div>
+            <div>
+                <label for="start-time">Start time:</label>
+                <input type="time" th:field="*{startTime}" name="start-time" id="start-time" required/>
+            </div>
 
-        <div>
-            <label for="country">Country:</label>
-            <input type="text" th:field="*{country}" name="country" id="country" list="countries-list" placeholder="Start typing country name..." autocomplete="off" required/>
-            <datalist id="countries-list">
-                <option th:each="country : ${countries}" th:value="${country}"></option>
-            </datalist>
-        </div>
+            <div>
+                <label for="country">Country:</label>
+                <input type="text" th:field="*{country}" name="country" id="country" list="countries-list" placeholder="Start typing country name..." autocomplete="off" required/>
+                <datalist id="countries-list">
+                    <option th:each="country : ${countries}" th:value="${country}"></option>
+                </datalist>
+            </div>
 
-        <div>
-            <label for="city">City:</label>
-            <input type="text" th:field="*{city}" name="city" id="city" list="cities-list" placeholder="Start typing city name..." autocomplete="off" required/>
-            <datalist id="cities-list">
-                <!-- Dynamically populated based on country (using JS) -->
-            </datalist>
-        </div>
+            <div>
+                <label for="city">City:</label>
+                <input type="text" th:field="*{city}" name="city" id="city" list="cities-list" placeholder="Start typing city name..." autocomplete="off" required/>
+                <datalist id="cities-list">
+                    <!-- Dynamically populated based on country (using JS) -->
+                </datalist>
+            </div>
 
-        <div>
-            <label for="venue-name">Venue Name:</label>
-            <input type="text" th:field="*{venueName}" name="venue-name" id="venue-name" list="venues-list" placeholder="Start typing venue name..." autocomplete="off" required/>
-            <datalist id="venues-list">
-                <!-- Dynamically populated based on city (using JS) -->
-            </datalist>
-        </div>
+            <div>
+                <label for="venue-name">Venue Name:</label>
+                <input type="text" th:field="*{venueName}" name="venue-name" id="venue-name" list="venues-list" placeholder="Start typing venue name..." autocomplete="off" required/>
+                <datalist id="venues-list">
+                    <!-- Dynamically populated based on city (using JS) -->
+                </datalist>
+            </div>
 
-        <div>
-            <label for="venue-address">Address:</label>
-            <input type="text" th:field="*{address}" name="address" id="venue-address" required />
-        </div>
+            <div>
+                <label for="venue-address">Address:</label>
+                <input type="text" th:field="*{address}" name="address" id="venue-address" required />
+            </div>
 
-        <div class="mb-3">
-            <label for="concert-image">Image:</label><br>
-            <input type="file"
-                   id="concert-image"
-                   name="image"
-                   accept="image/*">
-            <button type="button"
-                    id="clearMediaBtn"
-                    class="btn btn-outline-secondary btn-sm mt-2 d-none">
-                Remove selected file
-            </button>
-        </div>
+            <div class="mb-3">
+                <label for="concert-image">Image:</label><br>
+                <input type="file"
+                       id="concert-image"
+                       name="image"
+                       accept="image/*">
+                <button type="button"
+                        id="clearMediaBtn"
+                        class="btn btn-outline-secondary btn-sm mt-2 d-none">
+                    Remove selected file
+                </button>
+            </div>
 
-        <button type="submit" id="new-concert-submit">Add New Concert</button>
-    </form>
+            <button type="submit" id="new-concert-submit">Add New Concert</button>
+        </form>
+    </div>
 
-<script>
-    const countryInput = document.getElementById('country');
-    const cityInput = document.getElementById('city');
-    const venueNameInput = document.getElementById('venue-name');
-    const venueAddressInput = document.getElementById('venue-address');
-    const citiesList = document.getElementById('cities-list');
-    const venuesList = document.getElementById('venues-list');
+    <script>
+        const countryInput = document.getElementById('country');
+        const cityInput = document.getElementById('city');
+        const venueNameInput = document.getElementById('venue-name');
+        const venueAddressInput = document.getElementById('venue-address');
+        const citiesList = document.getElementById('cities-list');
+        const venuesList = document.getElementById('venues-list');
 
-    let venueTimeout;
+        let venueTimeout;
 
-    // Helper functions for cascaded input clearing
-    function clearCityAndBelow() {
-        cityInput.value = '';
-        citiesList.innerHTML = '';
+        // Helper functions for cascaded input clearing
+        function clearCityAndBelow() {
+            cityInput.value = '';
+            citiesList.innerHTML = '';
 
-        clearVenueAndBelow();
-    }
-
-    function clearVenueAndBelow() {
-        venueNameInput.value = '';
-        venuesList.innerHTML = '';
-
-        clearAddress();
-    }
-
-    function clearAddress() {
-        venueAddressInput.value = '';
-        venueAddressInput.readOnly = false;
-    }
-
-    // When country changes or is typed, fetch cities. If country changes to empty, clear city and below
-    countryInput.addEventListener('input', function() {
-        const country = this.value.trim();
-
-        if (country === '') {
-            clearCityAndBelow();
-            return;
-        }
-
-        clearTimeout(venueTimeout);
-        venueTimeout = setTimeout(async () => {
-            if (country.length >= 2) {
-                try {
-                    const response = await fetch(`/venues/cities?country=${encodeURIComponent(country)}`);
-                    const cities = await response.json();
-
-                    // Clear
-                    citiesList.innerHTML = '';
-
-                    // Populate cities datalist
-                    cities.forEach(city => {
-                        const option = document.createElement('option');
-                        option.value = city;
-                        citiesList.appendChild(option);
-                    });
-                } catch (error) {
-                    console.error('Error fetching cities:', error);
-                }
-            }
-        }, 300); // Wait 300ms after user stops typing
-    });
-
-    // When city changes, fetch venues. If city changes to empty, clear venue and below
-    cityInput.addEventListener('input', function() {
-        const city = this.value.trim();
-
-        if (city === '') {
             clearVenueAndBelow();
-            return;
         }
 
-        clearTimeout(venueTimeout);
-        venueTimeout = setTimeout(async () => {
-            const country = countryInput.value.trim();
+        function clearVenueAndBelow() {
+            venueNameInput.value = '';
+            venuesList.innerHTML = '';
 
-            if (city.length >= 2 && country.length >= 2) {
-                try {
-                    const response = await fetch(`/venues/by-location?country=${encodeURIComponent(country)}&city=${encodeURIComponent(city)}`
-                    );
-                    const venues = await response.json();
+            clearAddress();
+        }
 
-                    // clear
-                    venuesList.innerHTML = '';
+        function clearAddress() {
+            venueAddressInput.value = '';
+            venueAddressInput.readOnly = false;
+        }
 
-                    // Populate venues dataList
-                    venues.forEach(venue => {
-                        const option = document.createElement('option');
-                        option.value = venue;
-                        venuesList.appendChild(option);
-                    });
-                } catch (error) {
-                    console.error('Error fetching venues:', error);
-                }
+        // When country changes or is typed, fetch cities. If country changes to empty, clear city and below
+        countryInput.addEventListener('input', function() {
+            const country = this.value.trim();
+
+            if (country === '') {
+                clearCityAndBelow();
+                return;
             }
-        }, 300);
-    });
 
-    // When venue name changes, fetch address. If venue name changes to empty, clear venue address.
-    venueNameInput.addEventListener('input', function() {
-        const venueName = this.value.trim();
+            clearTimeout(venueTimeout);
+            venueTimeout = setTimeout(async () => {
+                if (country.length >= 2) {
+                    try {
+                        const response = await fetch(`/venues/cities?country=${encodeURIComponent(country)}`);
+                        const cities = await response.json();
 
-        if (venueName === '') {
-            clearAddress();
-            return;
-        }
+                        // Clear
+                        citiesList.innerHTML = '';
 
-        clearTimeout(venueTimeout);
-        venueTimeout = setTimeout(async () => {
-            const city = cityInput.value.trim();
-            const country = countryInput.value.trim();
-
-            clearAddress();
-
-            if (city.length >= 2 && country.length >= 2 && venueName.length >= 2) {
-                try {
-                    const response = await fetch(`/venue-address/by-location?venueName=${encodeURIComponent(venueName)}&country=${encodeURIComponent(country)}&city=${encodeURIComponent(city)}`);
-
-                    // Venue exists → autofill
-                    if (response.ok) {
-                        const address = await response.text();
-
-                        if (address) {
-                            venueAddressInput.value = address;
-                            venueAddressInput.readOnly = true; // lock if from DB
-                        }
+                        // Populate cities datalist
+                        cities.forEach(city => {
+                            const option = document.createElement('option');
+                            option.value = city;
+                            citiesList.appendChild(option);
+                        });
+                    } catch (error) {
+                        console.error('Error fetching cities:', error);
                     }
-                    // If venue does NOT exist → user types freely (no action needed)
-                } catch (error) {
-                    console.error('Error fetching venue address:', error);
                 }
+            }, 300); // Wait 300ms after user stops typing
+        });
+
+        // When city changes, fetch venues. If city changes to empty, clear venue and below
+        cityInput.addEventListener('input', function() {
+            const city = this.value.trim();
+
+            if (city === '') {
+                clearVenueAndBelow();
+                return;
             }
-        }, 300);
-    });
-</script>
+
+            clearTimeout(venueTimeout);
+            venueTimeout = setTimeout(async () => {
+                const country = countryInput.value.trim();
+
+                if (city.length >= 2 && country.length >= 2) {
+                    try {
+                        const response = await fetch(`/venues/by-location?country=${encodeURIComponent(country)}&city=${encodeURIComponent(city)}`
+                        );
+                        const venues = await response.json();
+
+                        // clear
+                        venuesList.innerHTML = '';
+
+                        // Populate venues dataList
+                        venues.forEach(venue => {
+                            const option = document.createElement('option');
+                            option.value = venue;
+                            venuesList.appendChild(option);
+                        });
+                    } catch (error) {
+                        console.error('Error fetching venues:', error);
+                    }
+                }
+            }, 300);
+        });
+
+        // When venue name changes, fetch address. If venue name changes to empty, clear venue address.
+        venueNameInput.addEventListener('input', function() {
+            const venueName = this.value.trim();
+
+            if (venueName === '') {
+                clearAddress();
+                return;
+            }
+
+            clearTimeout(venueTimeout);
+            venueTimeout = setTimeout(async () => {
+                const city = cityInput.value.trim();
+                const country = countryInput.value.trim();
+
+                clearAddress();
+
+                if (city.length >= 2 && country.length >= 2 && venueName.length >= 2) {
+                    try {
+                        const response = await fetch(`/venue-address/by-location?venueName=${encodeURIComponent(venueName)}&country=${encodeURIComponent(country)}&city=${encodeURIComponent(city)}`);
+
+                        // Venue exists → autofill
+                        if (response.ok) {
+                            const address = await response.text();
+
+                            if (address) {
+                                venueAddressInput.value = address;
+                                venueAddressInput.readOnly = true; // lock if from DB
+                            }
+                        }
+                        // If venue does NOT exist → user types freely (no action needed)
+                    } catch (error) {
+                        console.error('Error fetching venue address:', error);
+                    }
+                }
+            }, 300);
+        });
+    </script>
+</th:block>
+<!-- Show if User does not have Artist Admin role -->
+<th:block th:unless="${isAdminMode and activeAdminArtist.id == artist.id}">
+    <p>You do not have permission to view this page.</p>
+</th:block>
 </body>
 </html>

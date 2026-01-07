@@ -114,16 +114,12 @@ body{
 .concerts-column .feed-post.box h2{
   margin: 0;
   padding: 10px 12px;
-
-
   background: linear-gradient(90deg, rgba(196,58,47,.88), rgba(196,58,47,.55));
   color: #14120E;
-
   font-size: 13px;
   font-weight: 900;
   letter-spacing: .10em;
   text-transform: uppercase;
-
   border-radius: 12px 12px 0 0;
 }
 

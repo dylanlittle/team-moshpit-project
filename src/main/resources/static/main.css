@@ -3,10 +3,12 @@ body {
     margin: 24px;
 }
 
-/*URLS*/
+/* URLS */
 a {
 text-decoration: none;
 }
+
+/* Lists */
 
 ul { list-style-type: none; margin: 0; padding: 0; }
 ol { list-style-type: none; margin: 0; padding: 0; }

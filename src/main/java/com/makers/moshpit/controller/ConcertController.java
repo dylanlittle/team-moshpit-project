@@ -237,6 +237,10 @@ public class ConcertController {
             Artist artist = artistRepository.findById(artistId)
                     .orElseThrow(() -> new RuntimeException("Artist not found"));
 
+            if (lineupArtistRepository.existsByArtistAndConcert(artist, concert)) {
+                continue;
+            }
+
             LineupArtist lineupArtist = new LineupArtist(artist, concert);
             lineupArtistRepository.save(lineupArtist);
         }

@@ -56,11 +56,13 @@ public class ArtistController {
         Iterable<Post> posts = postRepository.findAllByArtistIdOrderByTimestampDesc(id);
 
         LocalDate dateToday = LocalDate.now();
-        Iterable<Concert> concerts = concertRepository.findAllByArtistIdAndConcertDateAfterOrderByConcertDateAsc(id, dateToday);
+        Iterable<Concert> futureConcerts = concertRepository.findAllByArtistIdAndConcertDateAfterOrderByConcertDateAsc(id, dateToday);
+        Iterable<Concert> pastConcerts = concertRepository.findAllByArtistIdAndConcertDateBeforeOrderByConcertDateDesc(id, dateToday);
 
         model.addAttribute("posts", posts);
         model.addAttribute("artist", artist);
-        model.addAttribute("concerts", concerts);
+        model.addAttribute("futureConcerts", futureConcerts);
+        model.addAttribute("pastConcerts", pastConcerts);
         model.addAttribute("admins", admins);
         model.addAttribute("isFollowing", isFollowing);
 

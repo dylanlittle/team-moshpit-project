@@ -178,9 +178,16 @@ public class ConcertController {
             }
         }
 
+        String concertName;
+        if (concertForm.getConcertName().isBlank()) {
+            concertName = artist.getName() + " at " + venue.getVenueName();
+        } else {
+            concertName = concertForm.getConcertName();
+        }
+
         // Create concert
         Concert concert = new Concert(
-                concertForm.getConcertName(),
+                concertName,
                 concertForm.getConcertDate(),
                 concertForm.getStartTime(),
                 venue,

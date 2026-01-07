@@ -1,6 +1,7 @@
 package com.makers.moshpit.controller;
 
 import com.makers.moshpit.dto.ConcertForm;
+import com.makers.moshpit.dto.LineupForm;
 import com.makers.moshpit.model.*;
 import com.makers.moshpit.repository.*;
 import com.makers.moshpit.service.AuthService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.sound.sampled.Line;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +26,7 @@ public class ConcertController {
     private ConcertRepository concertRepository;
 
     @Autowired
-    ConcertGoerRepository concertGoerRepository;
+    private ConcertGoerRepository concertGoerRepository;
 
     @Autowired
     private ArtistRepository artistRepository;
@@ -36,10 +38,13 @@ public class ConcertController {
     private MediaService mediaService;
 
     @Autowired
-    PostRepository postRepository;
+    private PostRepository postRepository;
 
     @Autowired
-    AuthService authService;
+    private AuthService authService;
+
+    @Autowired
+    private LineupArtistRepository lineupArtistRepository;
 
     // get concert
     @GetMapping("/concerts/{concertId}")
@@ -142,7 +147,7 @@ public class ConcertController {
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new RuntimeException("Artist not found"));
 
-        // 1. Find or create venue
+        // Find or create venue
         Venue venue = venueRepository
                 .findByVenueNameAndCityAndCountry(
                         concertForm.getVenueName(),
@@ -162,7 +167,7 @@ public class ConcertController {
 
         String concertImage = null;
 
-        // 2. If an image has been uploaded, upload to cloud and extract URL
+        // If an image has been uploaded, upload to cloud and extract URL
         if (imageFile != null && !imageFile.isEmpty()) {
             if (imageFile.getSize() > (10 * 1024 * 1024)) {
                 throw new RuntimeException("File too large — maximum allowed size is 10MB.");
@@ -183,7 +188,7 @@ public class ConcertController {
             concertName = concertForm.getConcertName();
         }
 
-        // 3. Create concert
+        // Create concert
         Concert concert = new Concert(
                 concertName,
                 concertForm.getConcertDate(),
@@ -195,6 +200,51 @@ public class ConcertController {
 
         concertRepository.save(concert);
 
-        return new RedirectView("/artists/" + artistId);
+        // Add artist to LineupArtist table
+        LineupArtist lineupArtist = new LineupArtist(artist, concert);
+        lineupArtistRepository.save(lineupArtist);
+
+        return new RedirectView("/concerts/" + concert.getId() + "/lineup/new");
+    }
+
+    // render add lineup form
+    @GetMapping("/concerts/{concertId}/lineup/new")
+    public String showLineupForm(@PathVariable Long concertId, Model model) {
+
+        Concert concert = concertRepository.findById(concertId)
+                .orElseThrow(() -> new RuntimeException("Concert not found"));
+
+        model.addAttribute("concert", concert);
+        model.addAttribute("artists", artistRepository.findAll());
+        model.addAttribute("lineupForm", new LineupForm());
+
+        return "concerts/lineup_form";
+    }
+
+    // add lineup to concert
+    @PostMapping("/concerts/{concertId}/lineup")
+    public RedirectView addLineup(
+            @PathVariable Long concertId,
+            @ModelAttribute LineupForm lineupForm
+    ) {
+
+        Concert concert = concertRepository.findById(concertId)
+                .orElseThrow(() -> new RuntimeException("Concert not found"));
+
+        for (Long artistId : lineupForm.getArtistIds()) {
+            if (artistId == null) continue; // skip empty selects
+
+            Artist artist = artistRepository.findById(artistId)
+                    .orElseThrow(() -> new RuntimeException("Artist not found"));
+
+            if (lineupArtistRepository.existsByArtistAndConcert(artist, concert)) {
+                continue;
+            }
+
+            LineupArtist lineupArtist = new LineupArtist(artist, concert);
+            lineupArtistRepository.save(lineupArtist);
+        }
+
+        return new RedirectView("/concerts/" + concertId);
     }
 }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Concert Date</title>
+    <link rel="stylesheet" href="/main.css" />
+    <link rel="stylesheet" href="/navbar.css"/>
+    <link rel="stylesheet" href="/create-concert.css"/>
+    <link rel="stylesheet" href="/theme.css"/>
+    <script src="/js/lineup_form.js" defer></script>
+    <th:block th:replace="~{fragments/timezone-script :: timezone-detector}"></th:block>
+</head>
+
+<body>
+<header class="page-header">
+    <div th:insert="~{fragments/navbar :: headerNav}"></div>
+</header>
+
+<form th:action="@{/concerts/{id}/lineup(id=${concert.id})}"
+      th:object="${lineupForm}"
+      method="post"
+      id="lineupForm">
+
+    <h3 th:text="'Add More Artists to ' + ${concert.concertName} + ' Lineup'"></h3>
+
+    <div id="artistContainer">
+        <!-- Initial artist select -->
+        <div class="artist-select">
+            <select th:field="*{artistIds}" class="artist-select-input">
+                <option value="" disabled selected>Select an artist</option>
+                <option th:each="artist : ${artists}"
+                        th:value="${artist.id}"
+                        th:text="${artist.name}"></option>
+            </select>
+        </div>
+    </div>
+
+    <button type="button" id="addArtistBtn">Add another artist</button>
+    <button type="submit" id="submitLineupBtn">Skip</button>
+
+</form>
+</body>
+</html>

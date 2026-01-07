@@ -5,12 +5,14 @@ import com.makers.moshpit.repository.*;
 import com.makers.moshpit.service.AuthService;
 import com.makers.moshpit.spotify.relationship.RelationshipService;
 import com.makers.moshpit.spotify.relationship.RelationshipStats;
+import com.makers.moshpit.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDate;
@@ -42,6 +44,7 @@ public class ArtistController {
 
     @Autowired
     private RelationshipService relationshipService;
+    private MediaService mediaService;
 
 
     @GetMapping("/artists/{id}")
@@ -89,7 +92,8 @@ public class ArtistController {
     @PostMapping("/artists")
     public RedirectView createArtist(
             @ModelAttribute Artist artist,
-            @AuthenticationPrincipal OAuth2User principal
+            @AuthenticationPrincipal OAuth2User principal,
+            @RequestParam(value = "image", required = false) MultipartFile image
     ) {
 
         String email = principal.getAttribute("email");
@@ -98,6 +102,20 @@ public class ArtistController {
 
         artist.setVerified(false);
         artist.setCreatedBy(user.getId());
+
+        if (image != null && !image.isEmpty()) {
+
+            if (image.getSize() > (10 * 1024 * 1024)) {
+                throw new RuntimeException("File too large — max 10MB");
+            }
+
+            try {
+                String imageUrl = mediaService.uploadImage(image);
+                artist.setAvatar(imageUrl);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         Artist savedArtist = artistRepository.save(artist);
 
@@ -108,6 +126,56 @@ public class ArtistController {
         artistAdminRepository.save(adminLink);
 
         return new RedirectView("/artists/" + savedArtist.getId());
+    }
+
+    @GetMapping("/artists/{id}/update")
+    public String getArtistUpdateForm(@PathVariable Long id, Model model) {
+
+        Artist artist = artistRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Artist not found"));
+
+        model.addAttribute("artist", artist);
+
+        return "artist_edit";
+    }
+
+    @PostMapping("/artists/{id}/update")
+    public String updateArtist(
+            @PathVariable Long id,
+            @ModelAttribute Artist updatedArtist,
+            @RequestParam(value = "image", required = false) MultipartFile image
+    ) {
+        // 1. Fetch the existing artist from the database
+        Artist existingArtist = artistRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Artist not found"));
+
+        // 2. Update only the fields allowed in the form
+        existingArtist.setName(updatedArtist.getName());
+        existingArtist.setGenre(updatedArtist.getGenre());
+        existingArtist.setBio(updatedArtist.getBio());
+
+        // 3. Handle the image only if a new file was actually selected
+        if (image != null && !image.isEmpty()) {
+            try {
+                // Check file size (e.g., 10MB limit)
+                if (image.getSize() > (10 * 1024 * 1024)) {
+                    throw new RuntimeException("File too large");
+                }
+
+                // Upload new image and update the avatar URL
+                String imageUrl = mediaService.uploadImage(image);
+                existingArtist.setAvatar(imageUrl);
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Optionally add an error message to redirectAttributes here
+            }
+        }
+
+        // 4. Save the merged artist back to the database
+        artistRepository.save(existingArtist);
+
+        // 5. Redirect back to the artist profile page
+        return "redirect:/artists/" + id;
     }
 
 }

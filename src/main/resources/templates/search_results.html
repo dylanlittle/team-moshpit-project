@@ -46,7 +46,7 @@
             <ol style="display: flex;">
                 <li th:each="artist : ${artistResults}">
                     <div
-                        th:replace="~{fragments/display-card :: displayCard(${artist.name}, 'artists/' + ${artist.id}, 'https://placehold.co/128', 'Picture of artist')}">
+                        th:replace="~{fragments/display-card :: displayCard(${artist.name}, 'artists/' + ${artist.id}, ${artist.avatar} ?: 'https://placehold.co/128', 'Picture of artist')}">
                     </div>
                 </li>
                 </ol>

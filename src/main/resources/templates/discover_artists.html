@@ -35,7 +35,7 @@
                 <ul>
                     <li th:each="artist : ${suggestedArtists}" style="display:flex; justify-content:space-between; align-items:center; padding:8px 0;">
                         <div>
-                            <a th:href="@{/discover/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist Name</a>
+                            <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist Name</a>
                             <div style="opacity:0.7; font-size:0.9em;" th:text="${artist.genre}">Genre</div>
                         </div>
 

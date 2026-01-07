@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
-public class ArtistAdminController {
+public class AddArtistAdminController {
     @Autowired
     private UserRepository userRepository;
 

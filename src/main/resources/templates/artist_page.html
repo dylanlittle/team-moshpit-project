@@ -141,7 +141,7 @@
     <div th:replace="~{fragments/action-dialogue :: dialog(
       title='Admins',
       id='adminPanel',
-      cta_link='/artists/new',
+      cta_link=@{/artists/{id}/newAdmin(id=${artist.id})},
       cta='Add new admin',
       content=(~{::adminList})
     )}">
@@ -161,7 +161,7 @@
         <div class="box upcoming-dates">
             <h3>Upcoming Dates</h3>
 
-            <div class="concert-card" th:each="concert : ${concerts}">
+            <div class="concert-card" th:each="concert : ${futureConcerts}">
                 <span class="concert-pin"></span>
 
                 <a th:href="@{/concerts/{id}(id=${concert.id})}">

@@ -1,15 +1,11 @@
 package com.makers.moshpit.controller;
 
 import com.makers.moshpit.dto.ConcertForm;
-import com.makers.moshpit.model.Artist;
-import com.makers.moshpit.model.Concert;
-import com.makers.moshpit.model.Venue;
-import com.makers.moshpit.dto.ConcertForm;
-import com.makers.moshpit.repository.ArtistRepository;
-import com.makers.moshpit.repository.ConcertRepository;
-import com.makers.moshpit.repository.VenueRepository;
+import com.makers.moshpit.model.*;
+import com.makers.moshpit.repository.*;
+import com.makers.moshpit.service.AuthService;
 import com.makers.moshpit.service.MediaService;
-import jakarta.validation.Valid;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,6 +24,9 @@ public class ConcertController {
     private ConcertRepository concertRepository;
 
     @Autowired
+    ConcertGoerRepository concertGoerRepository;
+
+    @Autowired
     private ArtistRepository artistRepository;
 
     @Autowired
@@ -35,6 +34,49 @@ public class ConcertController {
 
     @Autowired
     private MediaService mediaService;
+
+    @Autowired
+    PostRepository postRepository;
+
+    @Autowired
+    AuthService authService;
+
+    // get concert
+    @GetMapping("/concerts/{concertId}")
+    public String getConcert(@PathVariable Long concertId, Model model) {
+        Concert concert = concertRepository.findById(concertId)
+                .orElseThrow(() -> new EntityNotFoundException("Concert not found"));
+        Venue venue = concert.getVenue();
+        User currentUser = authService.getCurrentUser();
+        List<Post> posts = postRepository.findAllByConcertIdOrderByTimestampDesc(concertId);
+        List<User> crowd = concertGoerRepository.findUsersByConcertId(concertId);
+        boolean isGoing = concertGoerRepository.existsByUserAndConcert(currentUser, concert);
+        model.addAttribute("crowd", crowd);
+        model.addAttribute("posts", posts);
+        model.addAttribute("concert", concert);
+        model.addAttribute("venue", venue);
+        model.addAttribute("isGoing", isGoing);
+        model.addAttribute("currentUser", currentUser);
+        if (!model.containsAttribute("post")) {
+            model.addAttribute("post", new Post());
+        }
+        return "concerts/concert_page";
+    }
+
+    // rsvp to concert
+    @PostMapping("/concerts/{concertId}/rsvp")
+    public ResponseEntity<Void> rsvp(@PathVariable Long concertId) {
+        Concert concert = concertRepository.findById(concertId)
+                .orElseThrow(() -> new EntityNotFoundException("Concert not found"));
+        User currentUser = authService.getCurrentUser();
+        boolean isGoing = concertGoerRepository.existsByUserAndConcert(currentUser, concert);
+        if (isGoing) {
+            concertGoerRepository.deleteByUserAndConcert(currentUser, concert);
+        } else {
+            concertGoerRepository.save(new ConcertGoer(currentUser, concert));
+        }
+        return ResponseEntity.ok().build();
+    }
 
     // Render add new concert page
     @GetMapping("/artists/{artistId}/concerts/new")
@@ -93,6 +135,7 @@ public class ConcertController {
         return ResponseEntity.ok(venue.getAddress()); // 200 → autofill
     }
 
+    // create new concert
     @PostMapping("/artists/{artistId}/concerts")
     public RedirectView create(@PathVariable Long artistId, @ModelAttribute ConcertForm concertForm, @RequestParam(value = "image", required = false) MultipartFile imageFile){
 
@@ -149,6 +192,7 @@ public class ConcertController {
                 artist,
                 concertImage
         );
+
         concertRepository.save(concert);
 
         return new RedirectView("/artists/" + artistId);

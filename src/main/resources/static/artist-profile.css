@@ -31,12 +31,20 @@
     0 22px 46px rgba(0,0,0,.75);
 }
 
-.upcoming-dates h3{
+.upcoming-dates h3 {
   font-size:13px;
   letter-spacing:.18em;
   opacity:.85;
   margin-bottom:14px;
 }
+
+.upcoming-dates h4 {
+  font-size:11px;
+  letter-spacing:.18em;
+  opacity:.85;
+  margin-bottom:14px;
+}
+
 
 /* Concert card*/
 

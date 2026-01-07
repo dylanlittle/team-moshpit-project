@@ -47,6 +47,9 @@
                th:value="${user.username}"
                required/>
 
+        <label>Change profile image</label>
+        <input type="file" name="image" accept="image/*"/>
+
         <div class="actions">
             <button type="submit">Save Changes</button>
             <a th:href="@{/users/{id}(id=${user.id})}">
@@ -69,11 +72,6 @@
                  th:src="${user.avatar} ?: '/uploads/default_profile.png'"
                  alt="Profile picture"
                  style="width:160px;height:160px;object-fit:cover;"/>
-
-            <div th:if="${editing}">
-                <label>Change profile image</label>
-                <input type="file" name="image" accept="image/*"/>
-            </div>
         </div>
 
 
@@ -90,7 +88,7 @@
             </div>
         </div>
 
-        <div th:if="${isOwner or (!isOwner and canShowPublicTopArtists)}">
+        <div th:if="${!editing and (isOwner or (!isOwner and canShowPublicTopArtists))}">
             <div class="box">
                 <h3 th:text="${isOwner} ? 'Your Top Artists' : 'Top Artists'">Top Artists</h3>
 

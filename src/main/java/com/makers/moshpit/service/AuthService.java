@@ -10,45 +10,84 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
-
 @Service
 public class AuthService {
+
     @Autowired
     UserRepository userRepository;
 
-    public String getAuthenticatedUserEmail() {
+    public DefaultOidcUser getAuthenticatedPrincipal() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Check if the security context has an authenticated user and assign to principal if so.
-        if (authentication != null && authentication.isAuthenticated()
+        if (authentication != null
+                && authentication.isAuthenticated()
                 && authentication.getPrincipal() instanceof DefaultOidcUser principal) {
-
-            String email = principal.getEmail();
-            if (email == null || email.isBlank()) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No email on authenticated user");
-            }
-            return email;
+            return principal;
         }
+
         throw new ResponseStatusException(
                 HttpStatus.UNAUTHORIZED,
                 "No valid authentication session found."
         );
     }
 
-    /**
-     Use this when you expect current user to be authenticated AND stored in the database.
-     Returns a User object or throws a 401 Unauthorized exception.
-     */
+    public String getAuthenticatedUserEmail() {
+        DefaultOidcUser principal = getAuthenticatedPrincipal();
+
+        String email = principal.getEmail();
+        if (email == null || email.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No email on authenticated user");
+        }
+        return email;
+    }
+
     public User getCurrentUser() {
+        DefaultOidcUser principal = getAuthenticatedPrincipal();
 
+        String email = principal.getEmail();
+        if (email == null || email.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No email on authenticated user");
+        }
+
+        return userRepository.findUserByEmail(email)
+                .orElseGet(() -> {
+                    User newUser = new User(email);
+
+                    Object nameClaim = principal.getClaims().get("name");
+                    if (nameClaim instanceof String name && !name.isBlank()) {
+                        newUser.setName(name);
+                    }
+
+                    Object nicknameClaim = principal.getClaims().get("nickname");
+                    if (nicknameClaim instanceof String nickname && !nickname.isBlank()) {
+                        newUser.setUsername(nickname);
+                    }
+
+                    Object pictureClaim = principal.getClaims().get("picture");
+                    if (pictureClaim instanceof String picture && !picture.isBlank()) {
+                        newUser.setAvatar(picture);
+                    }
+
+                    return userRepository.save(newUser);
+                });
+    }
+
+    public User getCurrentUserOrThrow() {
         String email = getAuthenticatedUserEmail();
-
-        // Find the user in our DB, or throw exception if not found
         return userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.UNAUTHORIZED,
-                        "User authenticated with Okta but not found in the database."
+                        "User authenticated but not found in the database."
                 ));
     }
+
+    public User getCurrentUserOrNull() {
+        try {
+            return getCurrentUser();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }
+

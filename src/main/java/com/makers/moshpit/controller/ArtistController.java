@@ -3,6 +3,8 @@ package com.makers.moshpit.controller;
 import com.makers.moshpit.model.*;
 import com.makers.moshpit.repository.*;
 import com.makers.moshpit.service.AuthService;
+import com.makers.moshpit.spotify.relationship.RelationshipService;
+import com.makers.moshpit.spotify.relationship.RelationshipStats;
 import com.makers.moshpit.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,11 +43,15 @@ public class ArtistController {
     private AuthService authService;
 
     @Autowired
+    private RelationshipService relationshipService;
+
+    @Autowired
     private MediaService mediaService;
 
 
     @GetMapping("/artists/{id}")
-    public String getArtist(@PathVariable Long id, Model model) {
+    public String getArtist(@PathVariable Long id, Model model,
+                            @RequestParam(value="timeRange", required=false) String timeRange) {
         User currentUser = authService.getCurrentUser();
 
         List<ArtistAdmin> admins = artistAdminRepository.findAdminsByArtistId(id);
@@ -60,6 +66,13 @@ public class ArtistController {
         LocalDate dateToday = LocalDate.now();
         Iterable<Concert> futureConcerts = concertRepository.findAllByArtistIdAndConcertDateAfterOrderByConcertDateAsc(id, dateToday);
         Iterable<Concert> pastConcerts = concertRepository.findAllByArtistIdAndConcertDateBeforeOrderByConcertDateDesc(id, dateToday);
+
+        model.addAttribute("timeRange", timeRange == null ? "medium_term" : timeRange);
+
+        if (currentUser != null) {
+            RelationshipStats stats = relationshipService.build(currentUser, artist, timeRange);
+            model.addAttribute("relationshipStats", stats);
+        }
 
         model.addAttribute("posts", posts);
         model.addAttribute("artist", artist);

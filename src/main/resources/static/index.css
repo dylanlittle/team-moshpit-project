@@ -110,6 +110,12 @@ body{
 
 /* upcoming concerts section */
 
+/* Concert artist name inside the card */
+.concerts-column .feed-post.box h2{
+  margin: 0;
+  padding: 10px 12px;
+  background: linear-gradient(90deg, rgba(196,58,47,.88), rgba(196,58,47,.55));
+  color: #14120E;
 /* =========================================
    HOME — Upcoming Concerts (match Artist Upcoming Dates)
    ========================================= */
@@ -133,7 +139,18 @@ body{
   font-weight: 900;
   letter-spacing: .15em;
   text-transform: uppercase;
-  opacity: .85;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Venue name */
+.concerts-column .feed-post.box h3{
+  margin: 0;
+  padding: 10px 12px 6px;
+
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .02em;
+  text-transform: none;
 }
 
 /* Each concert card */

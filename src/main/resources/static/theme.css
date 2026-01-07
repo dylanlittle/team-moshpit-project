@@ -44,6 +44,11 @@ body{
   font-family: system-ui, sans-serif;
 }
 
+/* URLS */
+a {
+text-decoration: none;
+}
+
 /* concert cards */
 .box, .panel, .card{
   background: linear-gradient(180deg, rgba(24,23,21,.96), rgba(24,23,21,.90));

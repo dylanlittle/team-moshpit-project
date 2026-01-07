@@ -13,6 +13,7 @@
     <meta name="_csrf" th:content="${_csrf?.token}"/>
     <script src="/js/rsvp.js" defer></script>
     <script src="/js/posts.js" defer></script>
+    <script src="/js/concertGallery.js" defer></script>
 </head>
 <header class="page-header">
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
@@ -179,13 +180,60 @@
         <section class="tab-content" id="content-concert-gallery">
             <div class="box">
                 <h3>Gallery</h3>
-                <p>No media yet.</p>
+                <div class="gallery-grid">
+                    <div th:each="post : ${posts}"
+                         th:if="${post.mediaType == 'image' || post.mediaType == 'video'}"
+                         th:class="gallery-item">
+                        <img th:if="${post.mediaType == 'image'}"
+                             th:src="${post.mediaUrl}"
+                             alt="Concert image"
+                             class="gallery-media"
+                             onclick="openModal(this)"
+                             th:data-author="${post.artist} ? ${post.artist.name} + ':' : ${post.user.username} + ':'"
+                             th:data-caption="${post.content}"
+                             th:data-type="'image'"
+                             style="cursor: pointer;">
+
+                        <div th:if="${post.mediaType == 'video'}" class="video-container" style="position: relative; width: 100%; height: 100%;">
+                            <video th:src="${post.mediaUrl}"
+                                   controls
+                                   class="gallery-media"
+                                   th:data-author="${post.artist} ? ${post.artist.name} : ${post.user.username}"
+                                   th:data-caption="${post.content}"
+                                   th:data-type="'video'">
+                            </video>
+
+                            <div class="modal-trigger-overlay"
+                                 onclick="openModal(this.previousElementSibling)"
+                                 style="position: absolute; top: 0; left: 0; width: 100%; height: 60%; cursor: pointer;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Media Modal (Pop Up)-->
+                <div id="galleryModal" class="modal-overlay" onclick="closeModal()">
+                    <span class="close-btn">&times;</span>
+                    <div class="modal-content" onclick="event.stopPropagation()">
+
+                        <img id="modalImg" src="" alt="Full view" style="display: none; width: 100%;">
+
+                        <video id="modalVideo" controls playsinline style="display: none; width: 100%; max-height: 70vh; background: black;">
+                            Your browser does not support the video tag.
+                        </video>
+
+                        <div class="modal-info">
+                            <h4 id="modalAuthor"></h4>
+                            <p id="modalCaption"></p>
+                        </div>
+                    </div>
+                </div>
+                </div>
             </div>
         </section>
 
     </main>
 
 </div>
-
 </body>
 </html>

@@ -38,6 +38,9 @@ public class User {
     @Column(name = "spotify_token_expires_at")
     private LocalDateTime spotifyTokenExpiresAt;
 
+    @Column(name = "profile_complete", nullable = false)
+    private boolean profileComplete = false;
+
     public User(String email) {
         this.name = "";
         this.email = email;

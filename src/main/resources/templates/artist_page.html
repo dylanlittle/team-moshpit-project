@@ -34,6 +34,12 @@
             <button>Edit artist profile</button>
         </a>
     </div>
+    <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}"
+       th:href="@{/artists/{id}/spotify/link(id=${artist.id})}"
+       class="btn btn-outline-secondary"
+       th:text="${artist.spotifyArtistId != null} ? 'Spotify linked ✓' : 'Link Spotify'">
+        Link Spotify
+    </a>
 </div>
 
     <!-- Main -->
@@ -48,10 +54,51 @@
                  style="width:160px;height:160px;object-fit:cover;"/>
         </div>
 
-        <div class="box">
-            <h3>Spotify</h3>
-            <p>Spotify embed will go here.</p>
+        <div class="box" th:if="${relationshipStats != null and !isAdminMode}">
+            <h3>Your relationship with this artist</h3>
+
+            <div th:if="${!relationshipStats.connected}">
+                <p>Connect Spotify to see your relationship with this artist.</p>
+                <a th:href="@{/spotify/connect}" class="btn btn-success">Connect Spotify</a>
+            </div>
+
+            <div th:if="${relationshipStats.connected}">
+                <p th:if="${relationshipStats.inTopArtists}">
+                    Appears in your Top Artists
+                    <span th:if="${relationshipStats.topArtistRank != null}"
+                          th:text="'(#' + ${relationshipStats.topArtistRank} + ')'"></span>
+                </p>
+
+                <p th:if="${!relationshipStats.inTopArtists}">
+                    Not in your Top Artists for this time range.
+                </p>
+
+                <p th:if="${relationshipStats.savedTracksCount != null}"
+                   th:text="'Saved tracks by this artist: ' + ${relationshipStats.savedTracksCount}"></p>
+
+                <p th:if="${relationshipStats.lastListenedAt != null}">
+                    Last listened:
+                    <span th:text="${#temporals.format(relationshipStats.lastListenedAt, 'dd MMM yyyy HH:mm')}"></span>
+                </p>
+
+                <div th:if="${relationshipStats.topTracksByArtist != null and !#lists.isEmpty(relationshipStats.topTracksByArtist)}">
+                    <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px;">
+                        <li th:each="t : ${relationshipStats.topTracksByArtist}"
+                            style="display:flex; align-items:center; gap:10px;">
+                            <img th:if="${t.albumImageUrl != null}"
+                                 th:src="${t.albumImageUrl}"
+                                 style="width:44px;height:44px;border-radius:10px;object-fit:cover;"/>
+                            <div style="display:flex; flex-direction:column;">
+                                <span th:text="${t.name}" style="font-weight:600;"></span>
+                                <a th:if="${t.spotifyUrl != null}" th:href="${t.spotifyUrl}" target="_blank"
+                                   style="font-size:0.9em; opacity:0.8;">Open on Spotify</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
+
 
         <div class="box">
             <h3>Bio</h3>

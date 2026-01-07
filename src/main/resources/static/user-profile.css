@@ -276,3 +276,12 @@ input:focus, textarea:focus, select:focus{
   .user-header, .page-layout{ padding-left: 14px; padding-right: 14px; }
   #fan-feed .nav-bar{ flex-wrap: wrap; }
 }
+/* Myartist pop up text is readable */
+#myArtists {
+  color: #111;
+}
+#myArtists h1 {
+  color: #111
+}
+
+

@@ -20,7 +20,7 @@
     0 18px 42px rgba(0,0,0,.8);
 }
 
-/* Upcoming dates/converts */
+/* Upcoming dates/concerts */
 
 .upcoming-dates{
   background: linear-gradient(180deg, rgba(30,15,15,.95), rgba(10,10,10,.95));
@@ -125,3 +125,6 @@
   color:#ffd966 !important;
   text-shadow:0 0 16px rgba(244,196,48,.7);
 }
+
+
+

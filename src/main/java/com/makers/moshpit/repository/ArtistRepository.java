@@ -22,4 +22,6 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
 
     @Query("SELECT f.artist FROM Follow f WHERE f.user = :user")
     List<Artist> findAllArtistsFollowedByUser(@Param("user") User user);
+
+    List<Artist> findAllByOrderByNameAsc();
 }

@@ -13,32 +13,28 @@
 </head>
 
 <body>
-    <header class="page-header">
-        <div th:insert="~{fragments/navbar :: headerNav}"></div>
-    </header>
+  
+<!-- Header -->
+<header class="page-header">
+    <div th:insert="~{fragments/navbar :: headerNav}"></div>
+</header>
 
-    <!-- Header -->
-    <div class="artist-header">
-        <h1 th:text="${artist.name}">Cameron Winter</h1>
-        <div class="artist-genre" th:text="${artist.genre}">Folk / Alternative</div>
-        <form th:action="${isFollowing} ? @{/artists/{id}/unfollow(id=${artist.id})} : @{/artists/{id}/follow(id=${artist.id})}" method="post">
-            <button type="submit"
-                    th:text="${isFollowing} ? 'Unfollow' : 'Follow'"
-                    th:class="${isFollowing} ? 'btn-secondary' : 'btn-primary'">
-            </button>
-        </form>
+<div class="artist-header">
+    <h1 th:text="${artist.name}"></h1>
+    <div class="artist-genre" th:text="${artist.genre}"></div>
+    <form th:if="${!isAdminMode}" th:action="${isFollowing} ? @{/artists/{id}/unfollow(id=${artist.id})} : @{/artists/{id}/follow(id=${artist.id})}" method="post">
+        <button type="submit"
+                th:text="${isFollowing} ? 'Unfollow' : 'Follow'"
+                th:class="${isFollowing} ? 'btn-secondary' : 'btn-primary'">
+        </button>
+    </form>
+    <button th:if="${isAdminMode and activeAdminArtist.id == artist.id}" onclick="document.getElementById('adminPanel').showModal()">Admins</button>
+    <div th:if="${isAdminMode and activeAdminArtist.id == artist.id}">
+        <a th:href="@{/artists/{id}/update(id=${artist.id})}">
+            <button>Edit artist profile</button>
+        </a>
     </div>
-
-    <!-- Temp nav bar
-     fan feed could be live stream of thoughts from fans, helps with bringing the community together idea?-->
-    <div class="nav-bar">
-        <a href="#bio">Bio</a>
-        <a href="#tours">Tours</a>
-        <a href="#merch">Merch</a>
-        <a href="#media">Media</a>
-        <a href="#fan-feed">Fan feed</a>
-        <button th:if="${isAdminMode and activeAdminArtist.id == artist.id}" onclick="document.getElementById('adminPanel').showModal()">Admins</button>
-    </div>
+</div>
 
     <!-- Main -->
     <div class="page-layout">
@@ -47,7 +43,9 @@
     <aside class="left-column">
 
         <div class="box profile-picture">
-            Artist profile picture
+            <img th:src="${artist.avatar} ?: '/uploads/default_profile.png'"
+                 alt="Artist profile picture"
+                 style="width:160px;height:160px;object-fit:cover;"/>
         </div>
 
         <div class="box">

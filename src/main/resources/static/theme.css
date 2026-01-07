@@ -10,6 +10,30 @@
   --glow:0 10px 28px rgba(0,0,0,.45);
 }
 
+/* Makes text yellow and readable */
+a{
+  color: var(--yellow);
+  text-decoration: none;
+}
+
+a:visited{
+  color: var(--yellow);
+}
+
+a:hover{
+  text-decoration: underline;
+}
+
+.artist-link,
+.concert-artist{
+  color: #FFD95A;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+
+
 /* General theme for site*/
 body{
   background:
@@ -119,4 +143,41 @@ button:hover,.btn:hover{
 .event-card:hover{
   border-color: rgba(244,196,48,.45);
   box-shadow: 0 0 0 3px rgba(244,196,48,.10), 0 10px 28px rgba(0,0,0,.35);
+}
+
+/* makes background consistent on every page */
+/* Ensures background is consistent when scrolling*/
+html, body{ min-height: 100%; }
+
+body{
+  background: var(--bg);          /* fallback */
+  color: var(--ink);
+  position: relative;
+}
+
+/* Background effect stays in the background */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    radial-gradient(900px 500px at 50% 20%, rgba(0,0,0,.15), rgba(0,0,0,.55)),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.06) 0px,
+      rgba(255,255,255,.06) 3px,
+      transparent 3px,
+      transparent 44px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 90px,
+      rgba(255,255,255,.05) 90px,
+      rgba(255,255,255,.05) 93px
+    ),
+    linear-gradient(180deg, #3a2a22, #2a1d18);
 }

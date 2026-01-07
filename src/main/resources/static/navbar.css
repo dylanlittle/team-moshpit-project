@@ -273,4 +273,9 @@
     margin:6px 0 0;
   }
 }
-
+/* Navbar links are ALWAYS neutral unless active */
+.page-header a,
+.page-header a:visited {
+  color: var(--ink);
+  text-decoration: none;
+}

@@ -29,14 +29,9 @@
 
 <!-- Temp nav bar
  fan feed could be live stream of thoughts from fans, helps with bringing the community together idea?-->
-<div class="nav-bar">
-    <a href="#bio">Bio</a>
-    <a href="#tours">Tours</a>
-    <a href="#merch">Merch</a>
-    <a href="#media">Media</a>
-    <a href="#fan-feed">Fan feed</a>
+
     <button th:if="${isAdminMode and activeAdminArtist.id == artist.id}" onclick="document.getElementById('adminPanel').showModal()">Admins</button>
-</div>
+
 
 <!-- Main -->
 <div class="page-layout">

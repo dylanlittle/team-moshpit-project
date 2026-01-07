@@ -14,41 +14,7 @@
   --shadow: 0 10px 28px rgba(0,0,0,.45);
 }
 
-/* Ensures background is consistent when scrolling*/
-html, body{ min-height: 100%; }
 
-body{
-  background: var(--bg);          /* fallback */
-  color: var(--ink);
-  position: relative;
-}
-
-/* Background effect stays in the background */
-body::before{
-  content:"";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-
-  background:
-    radial-gradient(900px 500px at 50% 20%, rgba(0,0,0,.15), rgba(0,0,0,.55)),
-    repeating-linear-gradient(
-      0deg,
-      rgba(255,255,255,.06) 0px,
-      rgba(255,255,255,.06) 3px,
-      transparent 3px,
-      transparent 44px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent 0px,
-      transparent 90px,
-      rgba(255,255,255,.05) 90px,
-      rgba(255,255,255,.05) 93px
-    ),
-    linear-gradient(180deg, #3a2a22, #2a1d18);
-}
 
 /* Stops other CSS making text black */
 .user-header, .page-layout{ color: var(--ink); }
@@ -230,6 +196,7 @@ input:focus, textarea:focus, select:focus{
   border:1px solid rgba(243,239,232,.14);
   background: var(--field);
   margin-bottom:12px;
+  overflow: visible;
 }
 
 #fan-feed .nav-bar label,
@@ -260,18 +227,18 @@ input:focus, textarea:focus, select:focus{
 
 #tab-followed:checked ~ .nav-bar label[for="tab-followed"],
 #tab-myshows:checked  ~ .nav-bar label[for="tab-myshows"],
-#tab-posts:checked    ~ .nav-bar label[for="tab-posts"],
-#tab-myartists:checked    ~ .nav-bar label[for="tab-myartists"]{
+#tab-posts:checked    ~ .nav-bar label[for="tab-posts"]{
   background: rgba(244,196,48,.14);
   border-color: rgba(244,196,48,.55);
   box-shadow: 0 0 0 3px rgba(244,196,48,.10);
 }
 
+
 .tab-content{ display:none; }
 #tab-followed:checked ~ #content-followed{ display:block; }
 #tab-myshows:checked  ~ #content-myshows{ display:block; }
 #tab-posts:checked    ~ #content-posts{ display:block; }
-#tab-myartists:checked    ~ #content-myartists{ display:block; }
+
 
 
 /* Makes site adapatable for smaller screens, phones for example */

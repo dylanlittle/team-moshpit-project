@@ -61,7 +61,7 @@
     <!-- middle column-->
     <main class="middle-column" id="fan-feed">
 
-        <div class="box">
+        <div class="box" th:if="${isAdminMode and activeAdminArtist.id == artist.id}">
             <form id="new-post-form" th:action="@{/artists/{id}/posts(id=${artist.id})}" th:object="${post}" method="post" enctype="multipart/form-data">
                 <label class="label" for="post-content" aria-hidden="false">Content</label>
                 <textarea

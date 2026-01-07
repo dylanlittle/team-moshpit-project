@@ -5,8 +5,8 @@
     <title th:text="${artist.name}">Artist Profile</title>
     <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="/navbar.css"/>
-    <link rel="stylesheet" href="/theme.css"/>
     <link rel="stylesheet" href="/artist-profile.css"/>
+    <link rel="stylesheet" href="/theme.css"/>
     <th:block th:replace="~{fragments/timezone-script :: timezone-detector}"></th:block>
     <script src="/js/posts.js" defer></script>
     <script src="/js/dates_toggle.js" defer></script>
@@ -154,12 +154,12 @@
     <aside class="right-column">
 
         <div class="box">
-            <label for="dates-selector" style="display:block; margin-bottom: 8px;">
+            <label for="dates-selector" class="visually-hidden">
                 Show dates:
             </label>
             <select id="dates-selector">
-                <option value="upcoming" selected>Upcoming Dates</option>
-                <option value="previous">Previous Dates</option>
+                <option value="upcoming" selected>Upcoming Shows</option>
+                <option value="previous">Previous Shows</option>
             </select>
         </div>
 

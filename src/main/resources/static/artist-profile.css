@@ -31,11 +31,27 @@
     0 22px 46px rgba(0,0,0,.75);
 }
 
-.upcoming-dates h3{
+.upcoming-dates h3 {
   font-size:13px;
   letter-spacing:.18em;
   opacity:.85;
   margin-bottom:14px;
+}
+
+#dates-selector {
+    border: none;
+    background: none;
+    font-size: 1rem;
+    letter-spacing:.18em;
+    font-weight: 900;
+    letter-spacing: .10em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+#dates-selector:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(100, 150, 250, 0.5);
 }
 
 /* Concert card*/
@@ -118,6 +134,7 @@
 .upcoming-dates .concert-card h5{
   color:#f4c430 !important;
   text-shadow:0 0 10px rgba(244,196,48,.45);
+  text-decoration: none;
 }
 
 .upcoming-dates .concert-card:hover,

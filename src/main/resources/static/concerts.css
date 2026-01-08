@@ -153,3 +153,27 @@
     justify-content: center;
     background: #000;
 }
+
+#concert_tabs .nav-bar label {
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 6px 10px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+#tab-concert-posts:checked ~ .nav-bar label[for="tab-concert-posts"],
+#tab-concert-crowd:checked ~ .nav-bar label[for="tab-concert-crowd"],
+#tab-concert-gallery:checked ~ .nav-bar label[for="tab-concert-gallery"] {
+    color: #ffffff;
+    border-bottom: 2px solid #ffffff;
+}
+
+#concert_tabs .nav-bar label:hover {
+    color: #e5e7eb;
+}
+
+#concert_tabs .nav-bar label {
+    border-bottom: 2px solid transparent;
+}
+
+

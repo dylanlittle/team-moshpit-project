@@ -156,12 +156,17 @@ public class UsersController {
         }
 
         Iterable<Artist> artists = artistRepository.findAllArtistsFollowedByUser(currentUser);
-        Iterable<Concert> concerts = concertGoerRepository.findConcertsByUserId(currentUser.getId());
+        List<Concert> upcomingConcerts =
+                concertGoerRepository.findUpcomingConcertsByUserId(currentUser.getId());
+
+        List<Concert> pastConcerts =
+                concertGoerRepository.findPastConcertsByUserId(currentUser.getId());
 
         model.addAttribute("timeRange", timeRange);
         model.addAttribute("followedArtists", artists);
         model.addAttribute("editing", false);
-        model.addAttribute("concerts", concerts);
+        model.addAttribute("upcomingConcerts", upcomingConcerts);
+        model.addAttribute("pastConcerts", pastConcerts);
         return "users/user_page";
     }
 

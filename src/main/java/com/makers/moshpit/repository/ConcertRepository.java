@@ -17,14 +17,7 @@ public interface ConcertRepository extends JpaRepository<Concert, Long> {
     List<Concert> findAllByArtistIdAndConcertDateBeforeOrderByConcertDateDesc(Long artistId, LocalDate dateToday);
     List<Concert> findByConcertDateAfterOrderByConcertDateAsc(LocalDate dateToday);
 
-    @Query("""
-    SELECT c
-    FROM Concert c
-    JOIN Follow f ON c.artist = f.artist
-    WHERE f.user = :user
-      AND c.concertDate >= CURRENT_DATE
-    ORDER BY c.concertDate ASC, c.startTime ASC
-""")
+    @Query("SELECT c FROM Concert c JOIN Follow f ON c.artist = f.artist WHERE f.user = :user AND c.concertDate >= CURRENT_DATE ORDER BY c.concertDate ASC, c.startTime ASC")
     List<Concert> findUpcomingConcertsByFollowedArtists(@Param("user") User user);
 
 }

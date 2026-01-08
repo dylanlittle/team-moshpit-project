@@ -1,14 +1,12 @@
 package com.makers.moshpit.controller;
 
 import com.makers.moshpit.model.User;
-import com.makers.moshpit.spotify.CurrentUserService;
+import com.makers.moshpit.service.AuthService;
 import com.makers.moshpit.spotify.SpotifyTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
@@ -22,22 +20,22 @@ import java.util.stream.Collectors;
 public class SpotifyNowPlayingController {
 
     @Autowired
-    private CurrentUserService currentUserService;
+    private AuthService authService;
 
     @Autowired
     private SpotifyTokenService tokenService;
 
     private final RestClient restClient = RestClient.create();
 
-    public SpotifyNowPlayingController(CurrentUserService currentUserService,
+    public SpotifyNowPlayingController(AuthService authService,
                                        SpotifyTokenService tokenService) {
-        this.currentUserService = currentUserService;
+        this.authService = authService;
         this.tokenService = tokenService;
     }
 
     @GetMapping("/api/spotify/now-playing")
-    public ResponseEntity<?> nowPlaying(@AuthenticationPrincipal OAuth2User principal) {
-        User user = currentUserService.getOrCreateFromPrincipal(principal);
+    public ResponseEntity<?> nowPlaying() {
+        User user = authService.getCurrentUser();
 
         if (!tokenService.hasSpotifyTokens(user)) {
             return ResponseEntity.ok(Map.of(

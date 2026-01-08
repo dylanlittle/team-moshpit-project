@@ -84,11 +84,11 @@ public class ArtistController {
         if (!model.containsAttribute("post")) {
             model.addAttribute("post", new Post());
         }
-        return "artist_page";
+        return "artists/artist_page";
     }
     @GetMapping("/artists/new")
     public String showArtistCreateForm() {
-        return "artist_create";
+        return "artists/artist_create";
     }
 
     @PostMapping("/artists")
@@ -138,7 +138,7 @@ public class ArtistController {
 
         model.addAttribute("artist", artist);
 
-        return "artist_edit";
+        return "artists/artist_edit";
     }
 
     @PostMapping("/artists/{id}/update")

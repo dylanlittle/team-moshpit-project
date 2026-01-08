@@ -1,25 +1,25 @@
+
 spring:
   config:
-    import: optional:file:.env[.properties]
+  import: optional:file:.env[.properties]
 
 okta:
   oauth2:
-    ISSUER: ${AUTH_ISSUER}
-    CLIENT_ID: ${AUTH_CLIENT_ID}
-    CLIENT_SECRET: ${AUTH_CLIENT_SECRET}
+    issuer: ${AUTH_ISSUER}
+    client-id: ${AUTH_CLIENT_ID}
+    client-secret: ${AUTH_CLIENT_SECRET}
+    redirect-uri: http://localhost:8080/login/oauth2/code/auth0
 
-  cloudinary:
-    CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
-    API_KEY: ${CLOUDINARY_API_KEY}
-    API_SECRET: ${CLOUDINARY_API_SECRET}
+
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
 
 spotify:
-  CLIENT_ID: ${SPOTIFY_CLIENT_ID}
-  CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
-  AUTHORIZE_URL: ${SPOTIFY_AUTHORIZE_URL}
-  TOKEN_URL: ${SPOTIFY_TOKEN_URL}
-  API_BASE_URL: ${SPOTIFY_API_BASE_URL}
-  REDIRECT_URI: ${SPOTIFY_REDIRECT_URL}
-
-
-
+  client-id: ${SPOTIFY_CLIENT_ID}
+  client-secret: ${SPOTIFY_CLIENT_SECRET}
+  authorize-url: ${SPOTIFY_AUTHORIZE_URL}
+  token-url: ${SPOTIFY_TOKEN_URL}
+  api-base-url: ${SPOTIFY_API_BASE_URL}
+  redirect-uri: ${SPOTIFY_REDIRECT_URL}

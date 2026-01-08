@@ -4,22 +4,22 @@ spring:
 
 okta:
   oauth2:
-    issuer: ${auth-issuer}
-    client-id: ${auth-client-id}
-    client-secret: ${auth-client-secret}
+    ISSUER: ${AUTH_ISSUER}
+    CLIENT_ID: ${AUTH_CLIENT_ID}
+    CLIENT_SECRET: ${AUTH_CLIENT_SECRET}
 
   cloudinary:
-    cloud-name: ${cloudinary-cloud-name}
-    api-key: ${cloudinary-api-key}
-    api-secret: ${cloudinary-api-secret}
+    CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
+    API_KEY: ${CLOUDINARY_API_KEY}
+    API_SECRET: ${CLOUDINARY_API_SECRET}
 
 spotify:
-  client-id: ${spotify-client-id}
-  client-secret: ${spotify-client-secret}
-  authorize-url: ${spotify-authorize-url}
-  token-url: ${spotify-token-url}
-  api-base-url: ${spotify-api-base-url}
-  redirect-uri: ${spotify-redirect-uri}
+  CLIENT_ID: ${SPOTIFY_CLIENT_ID}
+  CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
+  AUTHORIZE_URL: ${SPOTIFY_AUTHORIZE_URL}
+  TOKEN_URL: ${SPOTIFY_TOKEN_URL}
+  API_BASE_URL: ${SPOTIFY_API_BASE_URL}
+  REDIRECT_URI: ${SPOTIFY_REDIRECT_URL}
 
 
 

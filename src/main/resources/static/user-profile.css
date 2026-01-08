@@ -73,23 +73,35 @@ body::before{
     align-items: flex-start;
 }
 
+/* div containing the form */
 .form-container {
     max-width: 1100px;
     margin: 0 auto;
     padding: 18px;
 }
 
+/* edit form */
+form.user-header.edit-mode {
+    padding: none;
+}
+
+/* divs inside edit form */
 form.user-header.edit-mode > * {
     flex: 1;
 }
 
-form.user-header.edit-mode > :nth-child(2) {
-    align-items: bottom;
+/* edit form action buttons */
+form.user-header.edit-mode > div:last-child {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
 }
 
+/* div containing edit profile button */
 .user-header > :last-child {
     margin-left: auto;
-    align: right;
+    align-items: right;
 }
 
 .header-box {
@@ -106,7 +118,8 @@ form.user-header.edit-mode > :nth-child(2) {
   text-shadow: 0 2px 0 rgba(0,0,0,.75);
 }
 
-.user-header.edit-mode h2{
+/* Edit profile information header */
+.form-container h2{
   margin: 10px 0 4px;
   font-weight: 900;
   letter-spacing: .08em;

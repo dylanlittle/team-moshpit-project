@@ -148,32 +148,40 @@
             </form>
         </div>
 
-        <div class="box">
-            <ul>
-                <li th:each="post : ${posts}" class="mb-3">
-                    <p style="white-space: pre-wrap;" th:text="${post.content} + ' – Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></p>
-                    <div th:if="${post.mediaUrl != null}">
+        <div class="box artist-updates">
+            <h2 th:text="Updates">Artist Updates</h2>
 
+            <div th:if="${posts != null and !#lists.isEmpty(posts)}">
+                <div class="feed-post box" th:each="post : ${posts}">
+                    <div class="post-header">
+                        <h3 th:text="${artist.name}">Artist Name</h3>
+                        <span class="post-time"
+                              th:text="${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></span>
+                    </div>
+
+                    <p style="white-space: pre-wrap;" th:text="${post.content}"></p>
+
+                    <div th:if="${post.mediaUrl != null}" class="post-media">
                         <img th:if="${post.mediaType == 'image'}"
                              th:src="${post.mediaUrl}"
-                             alt="Post image"
-                             style="width: 50%; height: auto; object-fit: cover;">
+                             alt="Post image">
 
                         <video th:if="${post.mediaType == 'video'}"
                                th:src="${post.mediaUrl}"
-                               controls
-                               style="width: 100%; height: auto; object-fit: cover;">
+                               controls>
                         </video>
 
                         <audio th:if="${post.mediaType == 'audio'}"
                                th:src="${post.mediaUrl}"
                                controls>
                         </audio>
-
                     </div>
-                </li>
-            </ul>
+                </div>
+            </div>
+
+            <p th:if="${posts == null or #lists.isEmpty(posts)}">No updates yet.</p>
         </div>
+
 
 
     </main>

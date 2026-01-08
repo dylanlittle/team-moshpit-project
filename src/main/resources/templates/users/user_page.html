@@ -276,20 +276,37 @@
         </section>
 
         <section class="tab-content" id="content-posts">
-            <div class="box">
+            <div class="box user-posts">
                 <h3>Posts</h3>
 
-                <ul th:if="${posts != null and !#lists.isEmpty(posts)}"
-                    th:each="post : ${posts}">
-                    <li th:text="${post.content}"></li>
-                </ul>
+                <div th:if="${posts != null and !#lists.isEmpty(posts)}">
+                    <div class="feed-post box" th:each="post : ${posts}">
+                        <div class="post-header">
+                            <h3 th:text="${user.name}">User Name</h3>
+                            <span class="post-time"
+                                  th:text="${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></span>
+                        </div>
 
-                <p th:if="${posts == null or #lists.isEmpty(posts)}">
-                    No posts yet.
-                </p>
+                        <p class="post-content"
+                           style="white-space: pre-wrap;"
+                           th:text="${post.content}">
+                        </p>
+
+                        <a class="post-meta-link"
+                           th:href="@{/concerts/{id}(id=${post.concert.id})}">
+                            <span th:text="${post.concert.artist.name}"></span>
+                            <span class="post-meta-sep">•</span>
+                            <span th:text="${post.concert.venue.venueName}"></span>
+                        </a>
+
+
+                    </div>
+                </div>
+
+                <p th:if="${posts == null or #lists.isEmpty(posts)}">No posts yet.</p>
             </div>
-        </section>
 
+        </section>
         <div th:replace="~{fragments/action-dialogue :: dialog(
         title='My Artists',
         id='myArtists',

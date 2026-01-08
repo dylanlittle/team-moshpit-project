@@ -239,3 +239,75 @@
     color: #fff;
     transform: translateY(-2px);
 }
+
+/* posts formatting */
+/* Artist Updates (match homepage cards) */
+.artist-updates > h2{
+  margin: 0;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  border-bottom: 2px solid rgba(243,239,232,.10);
+  background:
+    linear-gradient(90deg, rgba(196,58,47,.22), transparent 60%),
+    rgba(15,14,12,.45);
+  text-shadow: 0 1px 0 rgba(0,0,0,.75);
+}
+
+.artist-updates .feed-post.box{
+  margin: 14px;
+  border-radius: 14px;
+  background: rgba(15,14,12,.35);
+  border: 1px solid rgba(243,239,232,.14);
+  box-shadow: none;
+}
+
+.artist-updates .post-header{
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px 6px;
+}
+
+.artist-updates .post-header h3{
+  margin: 0;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+}
+
+.artist-updates .post-time{
+  font-size: 12px;
+  color: rgba(243,239,232,.65);
+  white-space: nowrap;
+}
+
+.artist-updates .feed-post.box p{
+  margin: 0;
+  padding: 0 12px 12px;
+  color: rgba(243,239,232,.92);
+  line-height: 1.45;
+}
+
+/* media styling */
+.artist-updates .post-media{
+  padding: 0 12px 12px;
+}
+
+.artist-updates .post-media img,
+.artist-updates .post-media video{
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(243,239,232,.12);
+  display: block;
+}
+
+.artist-updates .post-media audio{
+  width: 100%;
+}
+

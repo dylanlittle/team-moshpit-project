@@ -186,3 +186,34 @@ body::before{
     ),
     linear-gradient(180deg, #3a2a22, #2a1d18);
 }
+/* =============================
+   GLOBAL CLEAN BACKGROUND
+   ============================= */
+
+/* ===== KILL GRID / WALL EVERYWHERE ===== */
+html, body{
+  background: #0B0A08 !important;
+  background-image: none !important;
+}
+
+/* if any page uses the fixed overlay trick */
+body::before,
+body::after,
+html::before,
+html::after{
+  content: none !important;
+  background: none !important;
+  background-image: none !important;
+  display: none !important;
+}
+
+/* stop any layout wrappers painting a grid */
+.page-layout,
+.home-layout,
+.page-wrapper,
+.main-content,
+.content,
+.container{
+  background: transparent !important;
+  background-image: none !important;
+}

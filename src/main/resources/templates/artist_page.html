@@ -261,11 +261,11 @@
                 <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}"><button style="margin-top: 28px;margin-bottom: 14px">Add new date</button></a>
                 <div class="feed-post box" th:each="concert:${futureConcerts}">
                     <div>
-                        <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
+                        <a th:href="@{/concerts/{id}(id=${concert.id})}">
                             <h2 th:text="${artist.name}"></h2>
+                            <h3 th:text="${concert.venue.venueName}"></h3>
+                            <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
                         </a>
-                        <h3 th:text="${concert.venue.venueName}"></h3>
-                        <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
                     </div>
                 </div>
                 <p th:if="${#lists.isEmpty(futureConcerts)}">No upcoming shows.</p>
@@ -275,11 +275,11 @@
                 <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button style="margin-top: 28px;margin-bottom: 14px">Add new date</button></a>
                 <div class="feed-post box" th:each="concert:${pastConcerts}">
                     <div>
-                        <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
+                        <a th:href="@{/concerts/{id}(id=${concert.id})}">
                             <h2 th:text="${artist.name}"></h2>
+                            <h3 th:text="${concert.venue.venueName}"></h3>
+                            <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
                         </a>
-                        <h3 th:text="${concert.venue.venueName}"></h3>
-                        <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
                     </div>
                 </div>
                 <p th:if="${#lists.isEmpty(pastConcerts)}">No previous shows.</p>

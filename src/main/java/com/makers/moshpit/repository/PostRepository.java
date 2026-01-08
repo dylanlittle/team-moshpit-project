@@ -13,6 +13,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByArtistIdOrderByTimestampDesc(Long artistId);
     Iterable<Post> findAllByUserIdOrderByTimestampDesc(Long userId);
     List<Post> findAllByConcertIdOrderByTimestampDesc(Long concertId);
+    //Finds all posts by a specific user where there is no associated artist.
+    List<Post> findAllByUserIdAndArtistIdIsNullOrderByTimestampDesc(Long userId);
 
     @Query("SELECT p FROM Post p JOIN Follow f ON p.artist = f.artist WHERE f.user = :user ORDER BY p.timestamp DESC")
     List<Post> findPostsByFollowedArtists(@Param("user") User user);

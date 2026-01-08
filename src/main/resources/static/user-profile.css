@@ -73,6 +73,12 @@ body::before{
     align-items: flex-start;
 }
 
+.form-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 18px;
+}
+
 form.user-header.edit-mode > * {
     flex: 1;
 }
@@ -83,6 +89,7 @@ form.user-header.edit-mode > :nth-child(2) {
 
 .user-header > :last-child {
     margin-left: auto;
+    align: right;
 }
 
 .header-box {

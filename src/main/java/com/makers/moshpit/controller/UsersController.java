@@ -280,8 +280,6 @@ public class UsersController {
             }
         }
 
-
-
         userRepository.save(user);
 
         return "redirect:/users/" + id;

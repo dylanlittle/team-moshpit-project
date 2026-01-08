@@ -54,14 +54,14 @@
 
 <!-- header box when in EDITING MODE-->
 <!--<div class="box" th:if="${editing}">-->
-    <form th:if="${editing}"
-            th:action="@{/users/{id}(id=${user.id})}"
+<div th:if="${editing}" class="box form-container">
+    <h2>Edit Profile Information</h2>
+    <form th:action="@{/users/{id}(id=${user.id})}"
             method="post"
             enctype="multipart/form-data"
-            class="box user-header edit-mode">
+            class="user-header edit-mode">
         <!-- profile picture -->
         <div class="header-box"><!--edit-profile-picture-->
-            <h2>Edit Profile Information</h2>
             <div>
                 <label>Change profile image</label>
                 <input type="file" name="image" accept="image/*"/>
@@ -106,14 +106,15 @@
 
         <div>
             <!-- actions -->
-            <div class="actions">
+            <!--<div class="actions">-->
                 <button type="submit">Save Changes</button>
                 <a th:href="@{/users/{id}(id=${user.id})}" class="btn">
                     Cancel
                 </a>
-            </div>
+            <!--</div>-->
         </div>
     </form>
+</div>
 
     <!--<div th:if="${!editing}">
         <a th:href="@{/users/{id}/edit(id=${user.id})}">

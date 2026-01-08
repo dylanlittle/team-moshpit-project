@@ -147,12 +147,27 @@
                 <button id="post-submit" type="submit" onclick="console.log('SUBMIT CLICKED')">Post</button>
             </form>
         </div>
-
+<!-- Artist page post formatting stuff -->
         <div class="box">
-            <ul>
-                <li th:each="post : ${posts}" class="mb-3">
-                    <p style="white-space: pre-wrap;" th:text="${post.content} + ' – Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></p>
-                    <div th:if="${post.mediaUrl != null}">
+            <h2>Updates</h2>
+
+            <!-- empty state (must be outside the loop) -->
+            <div class="feed-post box" th:if="${posts == null or #lists.isEmpty(posts)}">
+                <p>No updates yet.</p>
+            </div>
+
+            <div class="feed-post box" th:each="post : ${posts}">
+                <div class="post-header">
+                    <h3 th:text="${artist.name}">Artist Name</h3>
+
+                    <span class="post-time"
+                          th:text="${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}">
+      </span>
+                </div>
+
+                <p style="white-space: pre-wrap;" th:text="${post.content}"></p>
+
+                <div th:if="${post.mediaUrl != null}">
 
                         <img th:if="${post.mediaType == 'image'}"
                              th:src="${post.mediaUrl}"

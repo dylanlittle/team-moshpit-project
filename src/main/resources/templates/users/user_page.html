@@ -279,9 +279,6 @@
             <label for="tab-followed">Followed Artists</label>
             <label for="tab-shows">My Shows</label>
             <label for="tab-posts">Posts</label>
-            <label onclick="document.getElementById('myArtists').showModal()">
-                My Artists
-            </label>
         </nav>
 
         <section class="tab-content" id="content-followed">
@@ -320,18 +317,42 @@
             </div>
         </section>
 
-        <section class="tab-content" id="content-posts">
-            <div class="box">
-                <ul th:if="${posts != null and !#lists.isEmpty(posts)}"
-                    th:each="post : ${posts}">
-                    <li th:text="${post.content}"></li>
-                </ul>
+        <!--- Post formatted section -->
 
-                <p th:if="${posts == null or #lists.isEmpty(posts)}">
-                    No posts yet.
-                </p>
-            </div>
+        <section class="tab-content" id="content-posts">
+            <section id="user-posts" class="box user-posts">
+                <h2>Posts</h2>
+
+                <!-- Empty state -->
+                <div class="feed-post box" th:if="${posts == null or #lists.isEmpty(posts)}">
+                    <p>No posts yet.</p>
+                </div>
+
+                <!-- Posts -->
+                <div class="feed-post box" th:if="${posts != null and !#lists.isEmpty(posts)}"
+                     th:each="post : ${posts}">
+                    <div class="post-header">
+                        <h3 th:text="${user.username}">SUNNY</h3>
+                        <span class="post-time"
+                              th:text="${#temporals.format(post.timestamp,'yyyy-MM-dd HH:mm:ss', userTimezone)}"></span>
+                    </div>
+
+                    <!-- NOT a link -->
+                    <p class="post-body" style="white-space: pre-wrap;" th:text="${post.content}"></p>
+
+                    <!-- ONLY this line is clickable -->
+                    <a class="post-source"
+                       th:if="${post.concert != null}"
+                       th:href="@{/concerts/{id}(id=${post.concert.id})}">
+                        <span th:text="${post.concert.artist.name}">Artist</span>
+                        <span aria-hidden="true"> • </span>
+                        <span th:text="${post.concert.venue.venueName}">Venue</span>
+                    </a>
+                </div>
+
+            </section>
         </section>
+
 
         <div th:replace="~{fragments/action-dialogue :: dialog(
         title='My Artists',

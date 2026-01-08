@@ -51,11 +51,11 @@
             <h2>Upcoming Concerts</h2>
             <div class="feed-post box" th:each="concert:${concerts}">
                 <div>
-                    <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
+                    <a th:href="@{/concerts/{id}(id=${concert.id})}">
                         <h2 th:text="${concert.artist.name}"></h2>
+                        <h3 th:text="${concert.venue.venueName}"></h3>
+                        <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
                     </a>
-                    <h3 th:text="${concert.venue.venueName}"></h3>
-                    <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
                 </div>
             </div>
             <button>View all dates</button>

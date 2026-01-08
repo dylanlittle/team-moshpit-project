@@ -310,11 +310,11 @@
                 <div class="concerts-column" th:if="${!#lists.isEmpty(upcomingConcerts)}">
                     <div class="feed-post box" th:each="concert : ${upcomingConcerts}">
                         <div>
-                            <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
+                            <a th:href="@{/concerts/{id}(id=${concert.id})}">
                                 <h2 th:text="${concert.artist.name}"></h2>
+                                <h3 th:text="${concert.venue.venueName}"></h3>
+                                <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
                             </a>
-                            <h3 th:text="${concert.venue.venueName}"></h3>
-                            <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
                         </div>
                     </div>
                 </div>
@@ -337,11 +337,11 @@
                     <div class="concerts-column">
                         <div class="feed-post box" th:each="concert : ${pastConcerts}">
                             <div>
-                                <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
+                                <a th:href="@{/concerts/{id}(id=${concert.id})}">
                                     <h2 th:text="${concert.artist.name}"></h2>
+                                    <h3 th:text="${concert.venue.venueName}"></h3>
+                                    <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
                                 </a>
-                                <h3 th:text="${concert.venue.venueName}"></h3>
-                                <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
                             </div>
                         </div>
                     </div>

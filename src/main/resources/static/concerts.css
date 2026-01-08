@@ -171,8 +171,8 @@
 }
 
 #concert-lineup {
-    display: flex;      /* Forces items to sit side-by-side */
-    align-items: center; /* Vertically centers the text and links */
-    gap: 8px;           /* Adds a small space between "Lineup:" and the first name */
-    flex-wrap: wrap;    /* Allows it to wrap only if the list is very long */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
 }

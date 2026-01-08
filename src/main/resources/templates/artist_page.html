@@ -258,7 +258,7 @@
 
 
             <div class="box concerts-column" id="upcoming-dates">
-                <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}"><button>Add new date</button></a>
+                <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}"><button style="margin-top: 28px;margin-bottom: 14px">Add new date</button></a>
                 <div class="feed-post box" th:each="concert:${futureConcerts}">
                     <div>
                         <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
@@ -272,7 +272,7 @@
             </div>
 
             <div class="box concerts-column" id="previous-dates" hidden>
-                <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>
+                <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button style="margin-top: 28px;margin-bottom: 14px">Add new date</button></a>
                 <div class="feed-post box" th:each="concert:${pastConcerts}">
                     <div>
                         <a th:href="@{/artists/{id}(id=${concert.artist.id})}">

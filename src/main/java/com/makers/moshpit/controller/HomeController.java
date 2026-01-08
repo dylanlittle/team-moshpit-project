@@ -32,7 +32,7 @@ public class HomeController {
         User user = authService.getCurrentUser();
         Iterable<Post> posts = postRepository.findPostsByFollowedArtists(user);
 
-        Iterable<Concert> concerts = concertRepository.findConcertsByFollowedArtists(user);
+        Iterable<Concert> concerts = concertRepository.findUpcomingConcertsByFollowedArtists(user);
 
         model.addAttribute("user", user);
         model.addAttribute("posts", posts);

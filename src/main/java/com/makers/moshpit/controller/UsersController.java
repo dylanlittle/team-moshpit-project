@@ -4,10 +4,7 @@ import com.makers.moshpit.model.Artist;
 import com.makers.moshpit.model.Concert;
 import com.makers.moshpit.model.Post;
 import com.makers.moshpit.model.User;
-import com.makers.moshpit.repository.ArtistRepository;
-import com.makers.moshpit.repository.ConcertGoerRepository;
-import com.makers.moshpit.repository.PostRepository;
-import com.makers.moshpit.repository.UserRepository;
+import com.makers.moshpit.repository.*;
 import com.makers.moshpit.service.AuthService;
 import com.makers.moshpit.service.MediaService;
 import com.makers.moshpit.spotify.SpotifyApiService;
@@ -212,8 +209,11 @@ public class UsersController {
 
         Iterable<Artist> artists = artistRepository.findAllArtistsFollowedByUser(user);
 
+        Iterable<Concert> concerts = concertGoerRepository.findConcertsByUserId(id);
+
         model.addAttribute("user", user);
         model.addAttribute("posts", posts);
+        model.addAttribute("concerts", concerts);
         model.addAttribute("followedArtists", artists);
         model.addAttribute("editing", false);
         model.addAttribute("isOwner", false);

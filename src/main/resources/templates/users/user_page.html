@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="/two-column-pages.css" />
     <link rel="stylesheet" href="/navbar.css"/>
     <link rel="stylesheet" href="/user-profile.css"/>
+    <link rel="stylesheet" href="/theme.css"/>
+    <link rel="stylesheet" href="/index.css"/>
+    <th:block th:replace="~{fragments/timezone-script :: timezone-detector}"></th:block>
 </head>
 <header class="page-header">
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
@@ -271,13 +274,13 @@
     <main class="right-column" id="fan-feed">
 
         <input type="radio" name="profile-tabs" id="tab-followed" checked>
-        <input type="radio" name="profile-tabs" id="tab-myshows">
+        <input type="radio" name="profile-tabs" id="tab-shows">
         <input type="radio" name="profile-tabs" id="tab-posts">
         <input type="radio" name="profile-tabs" id="tab-myartists">
 
         <nav class="nav-bar">
             <label for="tab-followed">Followed Artists</label>
-            <label for="tab-myshows">My Shows</label>
+            <label for="tab-shows">My Shows</label>
             <label for="tab-posts">Posts</label>
             <label onclick="document.getElementById('myArtists').showModal()">
                 My Artists
@@ -286,11 +289,15 @@
 
         <section class="tab-content" id="content-followed">
             <div class="box">
-                <h3>Followed Artists</h3>
-
-                <ul th:if="${not #lists.isEmpty(followedArtists)}">
+                <ul style="display: flex;" th:class="artist-list" th:if="${not #lists.isEmpty(followedArtists)}">
                     <li th:each="artist : ${followedArtists}">
-                        <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}"></a>
+                        <div th:replace="~{fragments/display-card :: displayCard(
+                            ${artist.name},
+                            '/artists/' + ${artist.id},
+                            ${artist.avatar != null ? artist.avatar : 'https://placehold.co/128'},
+                            'Picture of ' + ${artist.name}
+                            )}">
+                        </div>
                     </li>
                 </ul>
 
@@ -300,22 +307,24 @@
 
         <section class="tab-content" id="content-shows">
             <div class="box">
-                <h3>My Shows</h3>
-                <ul>
-                    <li th:each="concert : ${concerts}">
-                        <a th:href="@{/concerts/{id}(id=${concert.id})}">
-                            <p th:text="${concert.artist.name} + ' at ' + ${concert.venue.venueName}"></p>
-                        </a>
-                    </li>
-                </ul>
+                <div th:class="concerts-column">
+                    <div class="feed-post box" th:each="concert:${concerts}">
+                        <div>
+                            <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
+                                <h2 th:text="${concert.artist.name}"></h2>
+                            </a>
+                            <h3 th:text="${concert.venue.venueName}"></h3>
+                            <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
+                        </div>
+                    </div>
+                </div>
+
                 <p th:if="${#lists.isEmpty(concerts)}">No shows yet!</p>
             </div>
         </section>
 
         <section class="tab-content" id="content-posts">
             <div class="box">
-                <h3>Posts</h3>
-
                 <ul th:if="${posts != null and !#lists.isEmpty(posts)}"
                     th:each="post : ${posts}">
                     <li th:text="${post.content}"></li>
@@ -353,8 +362,6 @@
     </main>
 
 </div>
-
-</form>
 
 </body>
 </html>

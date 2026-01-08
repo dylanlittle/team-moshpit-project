@@ -54,7 +54,9 @@
                     <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
                         <h2 th:text="${concert.artist.name}"></h2>
                     </a>
-                    <h3 th:text="${concert.venue.venueName}"></h3>
+                    <a th:href="@{/concerts/{id}(id=${concert.id})}">
+                        <h3 th:text="${concert.venue.venueName}"></h3>
+                    </a>
                     <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
                 </div>
             </div>

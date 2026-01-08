@@ -241,7 +241,6 @@ body{
   border-radius: 0;
 }
 
-/* Keep the Upcoming Concerts header visible like a sign */
 .concerts-column > .box > h2{
   margin: 0 0 10px 0;
   border-radius: 14px;

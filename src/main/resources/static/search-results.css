@@ -21,7 +21,8 @@ body{
     border-bottom: 1px solid rgba(243, 239, 232, 0.2);
     margin-bottom: 24px;
     padding-bottom: 16px;
-    align-items: flex-end;
+    flex-direction: row;
+    align-items: center;
 }
 
 /* The result headers (Artists, Users) */

@@ -1,0 +1,27 @@
+server:
+  address: 127.0.0.1
+  port: 8080
+  config:
+    import: optional:file:.env[.properties]
+
+okta:
+  oauth2:
+    issuer: ${auth-issuer}
+    client-id: ${auth-client-id}
+    client-secret: ${auth-client-secret}
+
+  cloudinary:
+    cloud-name: ${cloudinary-cloud-name}
+    api-key: ${cloudinary-api-key}
+    api-secret: ${cloudinary-api-secret}
+
+spotify:
+  client-id: ${spotify-client-id}
+  client-secret: ${spotify-client-secret}
+  authorize-url: ${spotify-authorize-url}
+  token-url: ${spotify-token-url}
+  api-base-url: ${spotify-api-base-url}
+  redirect-uri: ${spotify-redirect-uri}
+
+
+

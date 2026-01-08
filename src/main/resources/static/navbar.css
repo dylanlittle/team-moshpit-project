@@ -151,7 +151,7 @@
   height:100%;
 }
 
-/* Profile dropdown wrapper (keep your hover behavior) */
+/* Profile dropdown wrapper (keep hover behavior) */
 .profile-dropdown{
   position:relative;
   display:flex;
@@ -186,19 +186,16 @@
   position:absolute;
   top:100%;
   right:0;
-
   min-width:180px;
   list-style:none;
   margin:0;
   padding:8px 0;
-
   /* flyer panel */
   background: linear-gradient(180deg, rgba(24,23,21,.98), rgba(24,23,21,.92));
   border:1px solid rgba(243,239,232,.14);
   border-radius:12px;
   box-shadow: 0 16px 40px rgba(0,0,0,.55);
   z-index:1000;
-
   /* keep your “hover bridge” */
   border-top: 12px solid transparent;
   margin-top:-6px;
@@ -209,26 +206,39 @@
 }
 
 /* Dropdown items */
-.dropdown-content li{
-  width:100%;
+.dropdown-btn {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    margin: 0;
 }
 
-.dropdown-btn {
-    border-radius: 0;
-    background: none;
-    border: none;
-    margin: 0;
-    padding: 0;
+/* Hover effect - same as links */
+.dropdown-btn:hover {
+    background: rgba(244,196,48,.14);
+}
+
+/* Ensure no overflow */
+.dropdown-content li {
+    width: 100%;
+    overflow: hidden; /* Prevents any overflow */
 }
 
 /* Style both anchors and the logout button */
-.dropdown-a{
-    padding: 0;
-    margin: 0;
-}
 
-.dropdown-content li a,
-.dropdown-content li a button{
+.dropdown-content li a{
   display:block;
   width:100%;
   padding:10px 16px;
@@ -248,18 +258,6 @@
 /* Hover = ticket yellow highlight */
 .dropdown-content li a:hover{
   background: rgba(244,196,48,.14);
-}
-
-.dropdown-content li a button:hover{
-    background: none;
-    border: none;
-}
-
-.dropdown-btn:hover{
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
 }
 
 /* Make the hr match theme */

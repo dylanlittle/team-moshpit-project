@@ -8,6 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriUtils;
+import java.time.Instant;
+import java.util.concurrent.locks.ReentrantLock;
+
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -19,6 +22,50 @@ public class SpotifyTokenService {
     private final SpotifyProperties props;
     private final UserRepository userRepository;
     private final RestClient restClient = RestClient.create();
+    private volatile String appAccessToken;
+    private volatile Instant appTokenExpiresAt;
+    private final ReentrantLock appTokenLock = new ReentrantLock();
+
+    public String getAppAccessToken() {
+        if (appAccessToken != null && appTokenExpiresAt != null && Instant.now().isBefore(appTokenExpiresAt.minusSeconds(30))) {
+            return appAccessToken;
+        }
+
+        appTokenLock.lock();
+        try {
+            // double-check after acquiring lock
+            if (appAccessToken != null && appTokenExpiresAt != null && Instant.now().isBefore(appTokenExpiresAt.minusSeconds(30))) {
+                return appAccessToken;
+            }
+
+            String basic = Base64.getEncoder().encodeToString(
+                    (props.getClientId() + ":" + props.getClientSecret()).getBytes(StandardCharsets.UTF_8)
+            );
+
+            String body = "grant_type=client_credentials";
+
+            SpotifyTokenResponse res = restClient.post()
+                    .uri(props.getTokenUrl())
+                    .header(HttpHeaders.AUTHORIZATION, "Basic " + basic)
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .body(body)
+                    .retrieve()
+                    .body(SpotifyTokenResponse.class);
+
+            if (res == null || res.accessToken() == null || res.accessToken().isBlank()) {
+                throw new RuntimeException("Failed to obtain Spotify app access token");
+            }
+
+            appAccessToken = res.accessToken();
+            appTokenExpiresAt = Instant.now().plusSeconds(res.expiresIn());
+            return appAccessToken;
+
+        } finally {
+            appTokenLock.unlock();
+        }
+    }
+
+
 
     public SpotifyTokenService(SpotifyProperties props, UserRepository userRepository) {
         this.props = props;

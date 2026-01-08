@@ -2,16 +2,11 @@ package com.makers.moshpit.controller;
 
 import com.makers.moshpit.model.*;
 import com.makers.moshpit.repository.ArtistRepository;
-import com.makers.moshpit.repository.ConcertRepository;
 import com.makers.moshpit.repository.FollowRepository;
-import com.makers.moshpit.repository.PostRepository;
 import com.makers.moshpit.service.AuthService;
-import com.makers.moshpit.spotify.CurrentUserService;
 import com.makers.moshpit.spotify.SpotifyApiService;
 import com.makers.moshpit.spotify.dto.SpotifyArtist;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,7 +24,7 @@ public class DiscoverController {
     ArtistRepository artistRepository;
 
     @Autowired
-    CurrentUserService currentUserService;
+    AuthService authService;
 
     @Autowired
     FollowRepository followRepository;
@@ -38,21 +32,20 @@ public class DiscoverController {
     @Autowired
     SpotifyApiService spotifyApiService;
 
-    public DiscoverController(CurrentUserService currentUserService,
+    public DiscoverController(AuthService authService,
                               ArtistRepository artistRepository,
                               FollowRepository followRepository,
                               SpotifyApiService spotifyApiService) {
-        this.currentUserService = currentUserService;
+        this.authService = authService;
         this.artistRepository = artistRepository;
         this.followRepository = followRepository;
         this.spotifyApiService = spotifyApiService;
     }
 
     @GetMapping("/discover")
-    public String discover(Model model,
-                           @AuthenticationPrincipal OAuth2User principal) {
+    public String discover(Model model) {
 
-        User user = currentUserService.getOrCreateFromPrincipal(principal);
+        User user = authService.getCurrentUser();
 
         List<Artist> all = artistRepository.findAllByOrderByNameAsc();
 
@@ -98,9 +91,8 @@ public class DiscoverController {
     }
 
     @PostMapping("/discover/artists/{artistId}/follow")
-    public RedirectView followFromDiscover(@PathVariable Long artistId,
-                                           @AuthenticationPrincipal OAuth2User principal) {
-        User user = currentUserService.getOrCreateFromPrincipal(principal);
+    public RedirectView followFromDiscover(@PathVariable Long artistId) {
+        User user = authService.getCurrentUser();
         Artist artist = artistRepository.getById(artistId);
 
         if (followRepository.findByUserAndArtist(user, artist).isEmpty()) {

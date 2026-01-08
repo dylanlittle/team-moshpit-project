@@ -10,15 +10,12 @@ import com.makers.moshpit.repository.PostRepository;
 import com.makers.moshpit.repository.UserRepository;
 import com.makers.moshpit.service.AuthService;
 import com.makers.moshpit.service.MediaService;
-import com.makers.moshpit.spotify.CurrentUserService;
 import com.makers.moshpit.spotify.SpotifyApiService;
 import com.makers.moshpit.spotify.dto.SpotifyArtist;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +32,6 @@ import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import java.util.List;
 
 @Controller
 public class UsersController {
@@ -55,40 +50,29 @@ public class UsersController {
     private MediaService mediaService;
 
     @Autowired
-    private CurrentUserService currentUserService;
-
-    @Autowired
     SpotifyApiService spotifyApiService;
 
     @Autowired
     private ConcertGoerRepository concertGoerRepository;
 
     public void SpotifyTopArtistsController(SpotifyApiService spotifyApi,
-                                            CurrentUserService currentUserService,
+                                            AuthService authService,
                                             ArtistRepository artistRepository) {
         this.spotifyApiService = spotifyApi;
-        this.currentUserService = currentUserService;
+        this.authService = authService;
         this.artistRepository = artistRepository;
     }
 
     @GetMapping("/users/after-login")
     public String afterLogin() {
-        String email = authService.getAuthenticatedUserEmail();
+        User user = authService.getCurrentUser(); // find-or-create
 
-        User user = userRepository.findUserByEmail(email)
-                .orElseGet(() -> userRepository.save(new User(email)));
-
-        if (user.getUsername() == null
-                || user.getUsername().equals("null")
-                || user.getUsername().isEmpty()
-                || user.getName() == null
-                || user.getName().equals("null")
-                || user.getName().isEmpty()) {
-
+        if (!user.isProfileComplete()) {
             return "redirect:/users/create";
         }
         return "redirect:/";
     }
+
 
     @Data
     public static class CompleteProfileRequest {
@@ -142,15 +126,15 @@ public class UsersController {
                 e.printStackTrace();
             }
         }
+        currentUser.setProfileComplete(true);
         userRepository.save(currentUser);
         return "redirect:/user";
     }
 
     @GetMapping("/user")
     public String userAccount(Model model,
-                              @AuthenticationPrincipal OAuth2User principal,
                               @RequestParam(defaultValue = "short_term") String timeRange) {
-        User currentUser = currentUserService.getOrCreateFromPrincipal(principal);
+        User currentUser = authService.getCurrentUser();
         Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(currentUser.getId());
         List<Artist> myArtists =  artistRepository.findArtistsByUserId(currentUser.getId());
         model.addAttribute("user", currentUser);
@@ -187,10 +171,9 @@ public class UsersController {
     }
 
     @PostMapping("/user/spotify/privacy")
-    public String updateSpotifyPrivacy(@AuthenticationPrincipal OAuth2User principal,
-                                       @RequestParam(required = false) String shareTopArtists) {
+    public String updateSpotifyPrivacy(@RequestParam(required = false) String shareTopArtists) {
 
-        User currentUser = currentUserService.getOrCreateFromPrincipal(principal);
+        User currentUser = authService.getCurrentUser();
         currentUser.setShareSpotifyTopArtists(shareTopArtists != null);
         userRepository.save(currentUser);
 

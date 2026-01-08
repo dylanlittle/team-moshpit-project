@@ -1,8 +1,7 @@
 package com.makers.moshpit.spotify;
 
 import com.makers.moshpit.model.User;
-import com.makers.moshpit.spotify.dto.SpotifyArtist;
-import com.makers.moshpit.spotify.dto.SpotifyTopArtistsResponse;
+import com.makers.moshpit.spotify.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -42,4 +41,53 @@ public class SpotifyApiService {
 
         return res == null ? List.of() : res.items();
     }
+
+    public List<SpotifyTrack> getTopTracks(User user, String timeRange, int limit) {
+        String token = tokenService.getValidAccessToken(user);
+
+        SpotifyTopTracksResponse res = client.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/me/top/tracks")
+                        .queryParam("time_range", timeRange)
+                        .queryParam("limit", limit)
+                        .build())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .retrieve()
+                .body(SpotifyTopTracksResponse.class);
+
+        return res == null ? List.of() : res.items();
+    }
+
+    public SpotifySavedTracksResponse getSavedTracksPage(User user, int limit, int offset) {
+        String token = tokenService.getValidAccessToken(user);
+
+        return client.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/me/tracks")
+                        .queryParam("limit", limit)
+                        .queryParam("offset", offset)
+                        .build())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .retrieve()
+                .body(SpotifySavedTracksResponse.class);
+    }
+
+    public List<SpotifySearchArtistsResponse.Item> searchArtistsApp(String query, int limit) {
+        String token = tokenService.getAppAccessToken();
+
+        SpotifySearchArtistsResponse res = client.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/search")
+                        .queryParam("q", query)
+                        .queryParam("type", "artist")
+                        .queryParam("limit", limit)
+                        .build())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .retrieve()
+                .body(SpotifySearchArtistsResponse.class);
+
+        if (res == null || res.artists() == null || res.artists().items() == null) return List.of();
+        return res.artists().items();
+    }
+
 }

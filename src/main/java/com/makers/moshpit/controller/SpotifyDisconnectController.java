@@ -3,10 +3,7 @@ package com.makers.moshpit.controller;
 import com.makers.moshpit.model.User;
 import com.makers.moshpit.repository.UserRepository;
 import com.makers.moshpit.service.AuthService;
-import com.makers.moshpit.spotify.CurrentUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
@@ -15,19 +12,19 @@ import org.springframework.web.servlet.view.RedirectView;
 public class SpotifyDisconnectController {
 
     @Autowired
-    CurrentUserService currentUserService;
+    AuthService authService;
 
     @Autowired
     private UserRepository userRepository;
 
-    public SpotifyDisconnectController(CurrentUserService currentUserService, UserRepository userRepository) {
-        this.currentUserService = currentUserService;
+    public SpotifyDisconnectController(AuthService authService, UserRepository userRepository) {
+        this.authService = authService;
         this.userRepository = userRepository;
     }
 
     @PostMapping("/spotify/disconnect")
-    public RedirectView disconnect(@AuthenticationPrincipal OAuth2User principal) {
-        User user = currentUserService.getOrCreateFromPrincipal(principal);
+    public RedirectView disconnect() {
+        User user = authService.getCurrentUser();
 
         user.setSpotifyUserId(null);
         user.setSpotifyAccessToken(null);

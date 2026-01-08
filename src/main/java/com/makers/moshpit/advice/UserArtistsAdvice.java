@@ -21,15 +21,11 @@ public class UserArtistsAdvice {
     ArtistRepository artistRepository;
 
     @ModelAttribute("myArtists")
-    public void addUserArtists(Model model) {
-        User currentUser = authService.getCurrentUser();
-        if (currentUser == null) {
-            model.addAttribute("myArtists", List.of());
-            return;
-        }
-        List<Artist> myArtists =  artistRepository.findArtistsByUserId(currentUser.getId());
-
-        model.addAttribute("myArtists", myArtists);
+    public List<Artist> addUserArtists() {
+        User currentUser = authService.getCurrentUserOrNull();
+        if (currentUser == null) return List.of();
+        return artistRepository.findArtistsByUserId(currentUser.getId());
     }
+
 
 }

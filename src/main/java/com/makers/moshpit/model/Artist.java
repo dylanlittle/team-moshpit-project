@@ -28,6 +28,8 @@ public class Artist {
     @Column(name = "created_by", nullable = false)
     private Long createdBy;
 
+    private String spotifyArtistId;
+  
     @Column
     private String avatar;
 

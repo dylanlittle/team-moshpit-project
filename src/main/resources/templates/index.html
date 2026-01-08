@@ -27,7 +27,8 @@
     <main class="feed-column" id="artist-updates-home">
         <div class="box">
             <h2>Artist Updates</h2>
-            <div class="feed-post box" th:each="post:${posts}">
+
+            <div class="feed-post box" th:each="post : ${posts}">
                 <div class="post-header">
                     <a th:href="@{/artists/{id}(id=${post.artist.id})}">
                         <h3 th:text="${post.artist != null ? post.artist.name : post.user.name}"> Artist Name </h3>
@@ -35,13 +36,12 @@
                     <span class="post-time" th:text="${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></span>
                 </div>
                 <p style="white-space: pre-wrap;" th:text="${post.content}"></p>
+            </div>
 
-                <div class="box" th:if="${posts == null or #lists.isEmpty(posts)}">
-                    <p>No updates yet. Follow some artists to see their posts!</p>
-                </div>
+            <div class="feed-post box" th:if="${#lists.isEmpty(posts)}">
+                <p>No updates yet. Follow some artists to see their posts!</p>
             </div>
         </div>
-
     </main>
 
     <!-- Right column -->
@@ -57,8 +57,7 @@
                         <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
                     </a>
                 </div>
-            </div>
-            <button>View all dates</button>
+          </div>
         </div>
     </aside>
 </div>

@@ -1,12 +1,38 @@
 /* consistent home theme */
 
 /* --- Page background / base text --- */
-body{
+/*body{
   background:
     radial-gradient(1200px 700px at 20% -10%, rgba(196,58,47,.18), transparent 55%),
     radial-gradient(900px 600px at 90% 0%, rgba(30,127,122,.14), transparent 55%),
     #0F0E0C;
   color: #F3EFE8;
+}*/
+
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    radial-gradient(900px 500px at 50% 20%, rgba(0,0,0,.15), rgba(0,0,0,.55)),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.06) 0px,
+      rgba(255,255,255,.06) 3px,
+      transparent 3px,
+      transparent 44px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 90px,
+      rgba(255,255,255,.05) 90px,
+      rgba(255,255,255,.05) 93px
+    ),
+    linear-gradient(180deg, #3a2a22, #2a1d18);
 }
 
 /* --- Header area (Welcome...) --- */
@@ -31,8 +57,8 @@ body{
   padding: 14px 18px 40px;
 
   display: grid;
-  grid-template-columns: 1fr 360px;
-  gap: 18px;
+  grid-template-columns: 1fr 400px;
+  gap: 52px;
   align-items: start;
 }
 
@@ -199,7 +225,7 @@ body{
 .concerts-column::before{
   content:"";
   position:absolute;
-  inset: -18px -18px -18px -18px; /* extends behind the panel spacing */
+  inset: -18px; /* extends behind the panel spacing */
   border-radius: 18px;
 
 
@@ -234,20 +260,33 @@ body{
   z-index: 1;
 }
 
-.concerts-column > .box{
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  border-radius: 0;
+.concerts-column::before {
+  display: none;
 }
 
-/* Keep the Upcoming Concerts header visible like a sign */
-.concerts-column > .box > h2{
-  margin: 0 0 10px 0;
-  border-radius: 14px;
-  border: 1px solid rgba(243,239,232,.18);
-  background: rgba(15,14,12,.65);
-  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+.concerts-column > .box {
+  background: linear-gradient(180deg, rgba(24,23,21,.96), rgba(24,23,21,.90));
+  border: 1px solid rgba(243,239,232,.16);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.40);
+  position: relative;
+  z-index: 1;
+}
+
+.concerts-column > .box > h2 {
+  margin: 0;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+
+  border-bottom: 2px solid rgba(243,239,232,.10);
+  border-radius: 0;
+  background:
+    linear-gradient(90deg, rgba(196,58,47,.22), transparent 60%),
+    rgba(15,14,12,.45);
+  box-shadow: none;
 }
 
 .concerts-column .feed-post.box{
@@ -276,7 +315,7 @@ body{
 
   background: radial-gradient(circle at 35% 35%, #6fe7e0, #1b8f88);
   box-shadow:
-    0 6px 0 rgba(0,0,0,.20),  /* pin shadow on paper */
+    0 6px 0 rgba(0,0,0,.20),
     0 10px 18px rgba(0,0,0,.35);
   border: 1px solid rgba(255,255,255,.18);
 }

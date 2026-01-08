@@ -37,9 +37,6 @@
             <p th:text="'@' + ${user.username}"></p>
             <!-- Bio -->
             <p th:text="${user.bio}"></p>
-            <div th:if="${editing}">
-                <textarea name="bio" rows="4" th:text="${user.bio}"></textarea>
-            </div>
             <!-- Location -->
             <div th:if="${user.location != null}">
                 <p th:text="'📍 ' + ${user.location}"></p>

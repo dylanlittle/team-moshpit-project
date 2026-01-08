@@ -41,8 +41,13 @@
                            th:text="${artist.name}"
                            class="artist-link">
                         </a>
-
                         <span th:if="${!iterStat.last}" class="separator"> | </span>
+                    </span>
+                    <span th:if="${#lists.isEmpty(lineup)}">
+                        <a th:href="@{/artists/{id}(id=${concert.artist.id})}"
+                           th:text="${concert.artist.name}"
+                           class="artist-link">
+                        </a>
                     </span>
                 </div>
             </div>
@@ -64,16 +69,6 @@
 
 <!-- Main -->
 <div class="page-layout concert-page-layout">
-
-<!--     Left column-->
-<!--    <aside class="left-column">-->
-
-<!--        <div class="box">-->
-<!--            <h3>Lineup</h3>-->
-<!--            <p>Artists go here</p>-->
-<!--        </div>-->
-
-<!--    </aside>-->
 
     <!-- middle column-->
     <main class="right-column" id="concert_tabs">

@@ -305,8 +305,8 @@
         <section class="tab-content" id="content-shows">
             <div class="box">
 
-                <!-- Upcoming -->
                 <h3 class="section-title">Upcoming (confirmed)</h3>
+
                 <div class="concerts-column" th:if="${!#lists.isEmpty(upcomingConcerts)}">
                     <div class="feed-post box" th:each="concert : ${upcomingConcerts}">
                         <div>
@@ -320,29 +320,41 @@
                 </div>
                 <p th:if="${#lists.isEmpty(upcomingConcerts)}">No upcoming confirmed shows.</p>
 
-                <hr class="divider"/>
+                <button type="button"
+                        class="btn btn-secondary mt-3"
+                        th:if="${!#lists.isEmpty(pastConcerts)}"
+                        id="togglePastConcertsBtn"
+                        aria-expanded="false"
+                        aria-controls="pastConcertsSection">
+                    Show past concerts
+                </button>
 
-                <!-- Past -->
-                <h3 class="section-title">Past (confirmed)</h3>
-                <div class="concerts-column" th:if="${!#lists.isEmpty(pastConcerts)}">
-                    <div class="feed-post box" th:each="concert : ${pastConcerts}">
-                        <div>
-                            <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
-                                <h2 th:text="${concert.artist.name}"></h2>
-                            </a>
-                            <h3 th:text="${concert.venue.venueName}"></h3>
-                            <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
+                <div id="pastConcertsSection" style="display:none; margin-top: 1rem;"
+                     th:if="${!#lists.isEmpty(pastConcerts)}">
+
+                    <h3 class="section-title">Past (confirmed)</h3>
+
+                    <div class="concerts-column">
+                        <div class="feed-post box" th:each="concert : ${pastConcerts}">
+                            <div>
+                                <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
+                                    <h2 th:text="${concert.artist.name}"></h2>
+                                </a>
+                                <h3 th:text="${concert.venue.venueName}"></h3>
+                                <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <p th:if="${#lists.isEmpty(pastConcerts)}">No past confirmed shows.</p>
 
+                <!-- If BOTH empty -->
                 <p th:if="${#lists.isEmpty(upcomingConcerts) and #lists.isEmpty(pastConcerts)}">
                     No shows yet!
                 </p>
 
             </div>
         </section>
+
 
 
         <section class="tab-content" id="content-posts">
@@ -384,6 +396,21 @@
     </main>
 
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("togglePastConcertsBtn");
+      const section = document.getElementById("pastConcertsSection");
+
+      if (!btn || !section) return;
+
+      btn.addEventListener("click", () => {
+        const isHidden = section.style.display === "none" || section.style.display === "";
+        section.style.display = isHidden ? "block" : "none";
+        btn.textContent = isHidden ? "Hide past concerts" : "Show past concerts";
+        btn.setAttribute("aria-expanded", String(isHidden));
+      });
+    });
+</script>
 
 </body>
 </html>

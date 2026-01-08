@@ -80,7 +80,7 @@ public class ArtistAdminController {
             model.addAttribute("artistResults", java.util.Collections.emptyList());
             model.addAttribute("userResults", java.util.Collections.emptyList());
             model.addAttribute("suggestedResults", java.util.Collections.emptyList());
-            return "admin/add_artist_admin";
+            return "admin/manage_artist_admin";
         }
 
         String trimmedQuery = query.trim();
@@ -96,7 +96,7 @@ public class ArtistAdminController {
 
         model.addAttribute("query", query);
         model.addAttribute("userResults", userResults);
-        return "admin/add_artist_admin";
+        return "admin/manage_artist_admin";
     }
 
     @PostMapping("/artists/{id}/newAdmin")
@@ -133,7 +133,7 @@ public class ArtistAdminController {
             model.addAttribute("artistResults", java.util.Collections.emptyList());
             model.addAttribute("userResults", java.util.Collections.emptyList());
             model.addAttribute("suggestedResults", java.util.Collections.emptyList());
-            return "admin/add_artist_admin";
+            return "admin/manage_artist_admin";
         }
 
         String trimmedQuery = query.trim();
@@ -145,7 +145,7 @@ public class ArtistAdminController {
         userResults.removeIf(user -> adminUserIds.contains(user.getId()));
         model.addAttribute("query", query);
         model.addAttribute("userResults", userResults);
-        return "admin/add_artist_admin";
+        return "admin/manage_artist_admin";
     }
 
     @PostMapping("/artists/{artistId}/admin/{adminId}")

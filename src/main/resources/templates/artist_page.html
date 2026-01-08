@@ -185,8 +185,6 @@
       cta='Add new admin',
       content=(~{::adminList})
     )}">
-        <div th:if="${success}" class="alert alert-success mb-3" th:text="${success}"></div>
-        <div th:if="${error}" class="alert alert-danger mb-3" th:text="${error}"></div>
         <div th:fragment="adminList">
             <ul style="display: flex; margin: 12px 0; flex-wrap: wrap; gap: 10px;">
                 <li th:each="admin : ${admins}">

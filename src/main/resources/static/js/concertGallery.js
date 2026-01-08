@@ -24,7 +24,7 @@ function openModal(element) {
     }
 
     // Set Text
-    document.getElementById("modalAuthor").innerText = "Posted by: " + element.getAttribute("data-author");
+    document.getElementById("modalAuthor").innerText = "Posted by " + element.getAttribute("data-author");
     document.getElementById("modalCaption").innerText = element.getAttribute("data-caption");
 
     modal.style.display = "flex";

@@ -104,9 +104,9 @@
 </div>
 </div>
 
-<div class="page-layout">
+<div th:class="${!isOwner and !canShowPublicTopArtists ? 'page-layout extended-page-layout' : 'page-layout'}">
     <!-- left column -->
-    <aside class="left-column">
+    <aside th:unless="${!isOwner and !canShowPublicTopArtists}" class="left-column">
 
         <!-- Spotify box -->
         <div th:if="${isOwner}">
@@ -354,7 +354,6 @@
 
         <section class="tab-content" id="content-posts">
             <section id="user-posts" class="box user-posts">
-                <h2>Posts</h2>
 
                 <!-- Empty state -->
                 <div class="feed-post box" th:if="${posts == null or #lists.isEmpty(posts)}">

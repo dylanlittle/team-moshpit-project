@@ -31,8 +31,8 @@ body{
   padding: 14px 18px 40px;
 
   display: grid;
-  grid-template-columns: 1fr 360px;
-  gap: 18px;
+  grid-template-columns: 1fr 400px;
+  gap: 52px;
   align-items: start;
 }
 
@@ -199,7 +199,7 @@ body{
 .concerts-column::before{
   content:"";
   position:absolute;
-  inset: -18px -18px -18px -18px; /* extends behind the panel spacing */
+  inset: -18px; /* extends behind the panel spacing */
   border-radius: 18px;
 
 

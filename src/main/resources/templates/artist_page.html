@@ -50,54 +50,54 @@
                         th:class="${isFollowing} ? 'btn-secondary' : 'btn-secondary'">
                 </button>
             </form>
-        </div>
-    </div>
-<!-- Admin mode on -->
-    <button th:if="${isAdminMode and activeAdminArtist.id == artist.id}" onclick="document.getElementById('adminPanel').showModal()">Admins</button>
-    <div th:if="${isAdminMode and activeAdminArtist.id == artist.id}">
-        <a th:href="@{/artists/{id}/update(id=${artist.id})}">
-            <button>Edit artist profile</button>
-        </a>
-    </div>
-    <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}"
-       th:href="@{/artists/{id}/spotify/link(id=${artist.id})}"
-       class="btn btn-outline-secondary"
-       th:text="${artist.spotifyArtistId != null} ? 'Spotify linked ✓' : 'Link Spotify'">
-        Link Spotify
-    </a>
-    <div th:replace="~{fragments/action-dialogue :: dialog(
-      title='Admins',
-      id='adminPanel',
-      cta_link=@{/artists/{id}/newAdmin(id=${artist.id})},
-      cta='Add new admin',
-      content=(~{::adminList})
-    )}">
-        <div th:fragment="adminList">
-            <ul style="display: flex; margin: 12px 0; flex-wrap: wrap; gap: 10px;">
-                <li th:each="admin : ${admins}">
-                    <div style="position: relative;">
-                        <div th:replace="~{fragments/display-card :: displayCard(
-                        ${admin.user.name},
-                         '/users/' + ${admin.user.id},
-                          ${admin.user.avatar} ?: '/uploads/default_profile.png',
-                          'Picture of admin'
-                          )}">
-                        </div>
+            <!-- Admin mode buttons -->
+            <div th:if="${isAdminMode and activeAdminArtist.id == artist.id}">
+                <button th:if="${activeAdminArtist.id == artist.id}" onclick="document.getElementById('adminPanel').showModal()">Admins</button>
+                <div th:if="${activeAdminArtist.id == artist.id}">
+                    <a th:href="@{/artists/{id}/update(id=${artist.id})}">
+                        <button>Edit artist profile</button>
+                    </a>
+                </div>
+                <a th:if="${activeAdminArtist.id == artist.id}"
+                   th:href="@{/artists/{id}/spotify/link(id=${artist.id})}">
+                    <button th:text="${artist.spotifyArtistId != null} ? 'Spotify linked ✓' : 'Link Spotify'">Link Spotify</button>
+                </a>
+                <div th:replace="~{fragments/action-dialogue :: dialog(
+          title='Admins',
+          id='adminPanel',
+          cta_link=@{/artists/{id}/newAdmin(id=${artist.id})},
+          cta='Add new admin',
+          content=(~{::adminList})
+        )}">
+                    <div th:fragment="adminList">
+                        <ul style="display: flex; margin: 12px 0; flex-wrap: wrap; gap: 10px;">
+                            <li th:each="admin : ${admins}">
+                                <div style="position: relative;">
+                                    <div th:replace="~{fragments/display-card :: displayCard(
+                            ${admin.user.name},
+                             '/users/' + ${admin.user.id},
+                              ${admin.user.avatar} ?: '/uploads/default_profile.png',
+                              'Picture of admin'
+                              )}">
+                                    </div>
 
-                        <form th:if="${admin.role.toString() == 'ADMIN'}"
-                              th:action="@{/artists/{artistId}/admin/{adminId}(artistId=${artist.id}, adminId=${admin.id})}"
-                              method="post"
-                              style="position: absolute; top: 5px; right: 5px; margin: 0;"
-                              class="remove-admin-form">
-                            <input type="hidden" name="_method" value="DELETE"/>
-                            <button type="submit"
-                                    th:attr="onclick=|return confirm('Remove ${admin.user.name} as admin?')|"                                    class="btn btn-sm btn-danger"
-                                    style="font-size: 10px; padding: 2px 6px;"
-                                    title="Remove admin">×</button>
-                        </form>
+                                    <form th:if="${admin.role.toString() == 'ADMIN'}"
+                                          th:action="@{/artists/{artistId}/admin/{adminId}(artistId=${artist.id}, adminId=${admin.id})}"
+                                          method="post"
+                                          style="position: absolute; top: 5px; right: 5px; margin: 0;"
+                                          class="remove-admin-form">
+                                        <input type="hidden" name="_method" value="DELETE"/>
+                                        <button type="submit"
+                                                th:attr="onclick=|return confirm('Remove ${admin.user.name} as admin?')|"                                    class="btn btn-sm btn-danger"
+                                                style="font-size: 10px; padding: 2px 6px;"
+                                                title="Remove admin">×</button>
+                                    </form>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>

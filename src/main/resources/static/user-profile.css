@@ -22,7 +22,8 @@
 
 
 .user-header,
-.page-layout{
+.page-layout,
+.header-layout{
   max-width: 1100px;
   margin: 0 auto;
   padding: 18px;
@@ -34,6 +35,48 @@
 }
 
 /* Header */
+.user-header {
+    display: flex;
+    align-items: flex-start;
+}
+
+/* div containing the form */
+.form-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 18px;
+}
+
+/* edit form */
+form.user-header.edit-mode {
+    padding: none;
+}
+
+/* divs inside edit form */
+form.user-header.edit-mode > * {
+    flex: 1;
+}
+
+/* edit form action buttons */
+form.user-header.edit-mode > div:last-child {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* div containing edit profile button */
+.user-header > :last-child {
+    margin-left: auto;
+    align-items: right;
+}
+
+.header-box {
+    padding: 12px;
+    border: none;
+    background: none;
+}
+
 .user-header h1{
   margin: 10px 0 4px;
   font-weight: 900;
@@ -41,6 +84,20 @@
   text-transform: uppercase;
   text-shadow: 0 2px 0 rgba(0,0,0,.75);
 }
+
+/* Edit profile information header */
+.header-layout {
+    padding-top: 14px;
+}
+
+.form-container h2{
+  margin: 10px 0 4px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 0 rgba(0,0,0,.75);
+}
+
 .user-header h3{
   margin: 0 0 6px;
   color: var(--muted);
@@ -182,6 +239,13 @@ input:focus, textarea:focus, select:focus{
   cursor: pointer;
 }
 
+.edit-profile-picture {
+    height: 180px;
+    display: flex;
+    align-items: top;
+    justify-content: center;
+}
+
 /* Tabs */
 #fan-feed input[type="radio"]{
   position:absolute;
@@ -243,7 +307,7 @@ input:focus, textarea:focus, select:focus{
 
 /* Makes site adapatable for smaller screens, phones for example */
 @media (max-width: 900px){
-  .user-header, .page-layout{ padding-left: 14px; padding-right: 14px; }
+  .user-header, .page-layout, .header-layout{ padding-left: 14px; padding-right: 14px; }
   #fan-feed .nav-bar{ flex-wrap: wrap; }
 }
 /* Myartist pop up text is readable */

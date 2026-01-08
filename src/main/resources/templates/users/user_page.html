@@ -15,80 +15,115 @@
 </header>
 <body>
 
-<div class="user-header">
-
-    <h1 th:text="${user.name}"></h1>
-    <h3 th:text="'@' + ${user.username}"></h3>
-    <div th:if="${isOwner}">
-        <h4>Fan account</h4>
-        <div th:if="${user.spotifyRefreshToken == null}">
-            <a th:href="@{/spotify/connect}" class="btn btn-success">Connect Spotify</a>
-        </div>
-        <div th:unless="${user.spotifyRefreshToken == null}">
-            <form th:action="@{/spotify/disconnect}" method="post">
-                <button class="btn btn-outline-danger" type="submit">Disconnect Spotify</button>
-            </form>
-            <p></p>
-        </div>
-        <div th:if="${!editing}">
-            <a th:href="@{/users/{id}/edit(id=${user.id})}">
-                <button>Edit Profile</button>
-            </a>
-        </div>
-    </div>
-    <form th:if="${editing}"
-          th:action="@{/users/{id}(id=${user.id})}"
-          method="post"
-          enctype="multipart/form-data">
-
-        <label>Username</label>
-        <input type="text"
-               name="username"
-               th:value="${user.username}"
-               required/>
-
-        <label>Change profile image</label>
-        <input type="file" name="image" accept="image/*"/>
-
-        <div class="actions">
-            <button type="submit">Save Changes</button>
-            <a th:href="@{/users/{id}(id=${user.id})}">
-                <button type="button">Cancel</button>
-            </a>
-        </div>
-    </form>
-</div>
-
-
-<div class="page-layout">
-
-    <aside class="left-column">
-
-
-        <div class="box profile-picture">
-
+<!-- header box -->
+<div class="header-layout">
+<div th:if="${!editing}" class="box user-header">
+        <!-- profile picture -->
+        <div class="header-box profile-picture">
             <!-- Hides old image when changing profile picture -->
-            <img th:if="${!editing}"
-                 th:src="${user.avatar} ?: '/uploads/default_profile.png'"
+            <img th:src="${user.avatar} ?: '/uploads/default_profile.png'"
                  alt="Profile picture"
                  style="width:160px;height:160px;object-fit:cover;"/>
         </div>
-
-
-        <div class="box">
-            <h3>About Me</h3>
-            <p th:if="${!editing}" th:text="${user.bio}"></p>
-            <textarea th:if="${editing}"
-                      name="bio"
-                      rows="4"
-                      th:text="${user.bio}"></textarea>
-
-            <div th:if="${user.location}">
+        <!-- account type, name, username, bio and location -->
+        <div class="header-box">
+            <!-- Account type-->
+            <h4>Fan account</h4>
+            <!-- Name -->
+            <h1 th:text="${user.name}"></h1>
+            <!-- Username -->
+            <p th:text="'@' + ${user.username}"></p>
+            <!-- Bio -->
+            <p th:text="${user.bio}"></p>
+            <div th:if="${editing}">
+                <textarea name="bio" rows="4" th:text="${user.bio}"></textarea>
+            </div>
+            <!-- Location -->
+            <div th:if="${user.location != null}">
                 <p th:text="'📍 ' + ${user.location}"></p>
             </div>
         </div>
+    <div>
+        <a th:href="@{/users/{id}/edit(id=${user.id})}">
+            <button>Edit Profile</button>
+        </a>
+    </div>
+</div>
 
-        <div th:if="${!editing and (isOwner or (!isOwner and canShowPublicTopArtists))}">
+<!-- header box when in EDITING MODE-->
+<div th:if="${editing}" class="box form-container">
+    <h2>Edit Profile Information</h2>
+    <form th:action="@{/users/{id}(id=${user.id})}"
+            method="post"
+            enctype="multipart/form-data"
+            class="user-header edit-mode">
+        <!-- profile picture -->
+        <div class="header-box">
+            <div>
+                <label>Change profile image</label>
+                <input type="file" name="image" accept="image/*"/>
+            </div>
+            <!-- Name -->
+            <div>
+                <label for="edit-username">Name</label>
+                <input type="text"
+                       name="name"
+                       id="edit-name"
+                       th:value="${user.name}"/>
+            </div>
+            <!-- Username -->
+            <div>
+                <label for="edit-username">Username</label>
+                <input type="text"
+                       name="username"
+                       id="edit-username"
+                       th:value="${user.username}"/>
+            </div>
+        </div>
+        <!-- Bio, location -->
+        <div class="header-box">
+            <!-- Bio -->
+            <div>
+                <label for="edit-bio">Bio</label>
+                <textarea name="bio"
+                          rows="4"
+                          id="edit-bio"
+                          th:text="${user.bio}"></textarea>
+            </div>
+            <!-- Location -->
+            <div>
+                <label for="edit-location">Change location</label>
+                <input type="text" name="location" id="edit-location" th:value="${user.location}"/>
+            </div>
+        </div>
+        <!-- Action buttons -->
+        <div>
+                <button type="submit">Save Changes</button>
+                <button th:href="@{/users/{id}(id=${user.id})}" class="btn">
+                    Cancel
+                </button>
+        </div>
+    </form>
+</div>
+</div>
+
+<div class="page-layout">
+    <!-- left column -->
+    <aside class="left-column">
+
+        <!-- Spotify box -->
+        <div th:if="${isOwner}">
+            <div th:if="${user.spotifyRefreshToken == null}">
+                <a th:href="@{/spotify/connect}" class="btn btn-success">Connect Spotify</a>
+            </div>
+            <div th:unless="${user.spotifyRefreshToken == null}">
+                <form th:action="@{/spotify/disconnect}" method="post">
+                    <button class="btn btn-outline-danger" type="submit">Disconnect Spotify</button>
+                </form>
+                <p></p>
+            </div>
+        </div>
+        <div th:if="${isOwner or (!isOwner and canShowPublicTopArtists)}">
             <div class="box">
                 <h3 th:text="${isOwner} ? 'Your Top Artists' : 'Top Artists'">Top Artists</h3>
 

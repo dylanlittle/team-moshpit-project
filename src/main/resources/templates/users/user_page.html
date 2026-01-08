@@ -304,8 +304,11 @@
 
         <section class="tab-content" id="content-shows">
             <div class="box">
-                <div th:class="concerts-column">
-                    <div class="feed-post box" th:each="concert:${concerts}">
+
+                <!-- Upcoming -->
+                <h3 class="section-title">Upcoming (confirmed)</h3>
+                <div class="concerts-column" th:if="${!#lists.isEmpty(upcomingConcerts)}">
+                    <div class="feed-post box" th:each="concert : ${upcomingConcerts}">
                         <div>
                             <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
                                 <h2 th:text="${concert.artist.name}"></h2>
@@ -315,10 +318,32 @@
                         </div>
                     </div>
                 </div>
+                <p th:if="${#lists.isEmpty(upcomingConcerts)}">No upcoming confirmed shows.</p>
 
-                <p th:if="${#lists.isEmpty(concerts)}">No shows yet!</p>
+                <hr class="divider"/>
+
+                <!-- Past -->
+                <h3 class="section-title">Past (confirmed)</h3>
+                <div class="concerts-column" th:if="${!#lists.isEmpty(pastConcerts)}">
+                    <div class="feed-post box" th:each="concert : ${pastConcerts}">
+                        <div>
+                            <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
+                                <h2 th:text="${concert.artist.name}"></h2>
+                            </a>
+                            <h3 th:text="${concert.venue.venueName}"></h3>
+                            <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
+                        </div>
+                    </div>
+                </div>
+                <p th:if="${#lists.isEmpty(pastConcerts)}">No past confirmed shows.</p>
+
+                <p th:if="${#lists.isEmpty(upcomingConcerts) and #lists.isEmpty(pastConcerts)}">
+                    No shows yet!
+                </p>
+
             </div>
         </section>
+
 
         <section class="tab-content" id="content-posts">
             <div class="box">

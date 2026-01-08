@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>
-        Add artist admin
+        Manage artist admin
     </title>
     <link rel="stylesheet" href="/main.css">
     <link rel="stylesheet" href="/navbar.css" />
@@ -13,9 +13,16 @@
 <body>
     <header class="page-header">
         <div th:insert="~{fragments/navbar :: headerNav}"></div>
-        <h1>Add artist admins</h1>
+        <h1>Manage artist admins</h1>
     </header>
     <main>
+        <div th:if="${success}" class="alert alert-success" style="margin-bottom: 20px;" th:text="${success}">
+            Admin removed successfully
+        </div>
+        <div th:if="${error}" class="alert alert-danger" style="margin-bottom: 20px;" th:text="${error}">
+            Cannot remove artist owner
+        </div>
+
         <form th:action="@{/artists/{id}/newAdmin(id=${id})}" method="get"
             style="display: flex; gap: 16px; border-bottom: solid; margin-bottom: 24px; padding-bottom: 8px;">
             <div>
@@ -38,7 +45,7 @@
                     <div style="display: flex; flex-direction: column; margin: 8px; cursor: pointer;"
                         onclick="this.querySelector('form').submit()">
 
-                        <img height="128" width="128" src="https://placehold.co/128" alt="Picture of user">
+                        <img height="128" width="128" th:src="${user.avatar} ?: '/uploads/default_profile.png'" alt="Picture of user">
                         <div style="margin-top: 8px" th:text="${user.username}"></div>
 
                         <form th:action="@{/artists/{id}/newAdmin(id=${id})}" method="post" style="display: none;">
@@ -58,6 +65,11 @@
                 </li>
             </ul>
         </section>
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #eee; text-align: center;">
+            <a th:href="@{/artists/{id}(id=${id})}" class="btn btn-outline-secondary" style="font-weight: 500;">
+                ← Back to Artist Page
+            </a>
+        </div>
     </main>
 </body>
 

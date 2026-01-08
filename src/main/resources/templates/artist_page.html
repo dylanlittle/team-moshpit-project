@@ -185,13 +185,36 @@
       cta='Add new admin',
       content=(~{::adminList})
     )}">
+        <div th:if="${success}" class="alert alert-success mb-3" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-danger mb-3" th:text="${error}"></div>
         <div th:fragment="adminList">
-            <ul style="display: flex; margin: 12px 0;">
+            <ul style="display: flex; margin: 12px 0; flex-wrap: wrap; gap: 10px;">
                 <li th:each="admin : ${admins}">
-                    <div th:replace="~{fragments/display-card :: displayCard(${admin.user.name}, '/users/' + ${admin.user.id}, 'https://placehold.co/128', 'Picture of admin')}"></div>
+                    <div style="position: relative;">
+                        <div th:replace="~{fragments/display-card :: displayCard(
+                        ${admin.user.name},
+                         '/users/' + ${admin.user.id},
+                          ${admin.user.avatar} ?: '/uploads/default_profile.png',
+                          'Picture of admin'
+                          )}">
+                        </div>
+
+                        <form th:if="${admin.role.toString() == 'ADMIN'}"
+                              th:action="@{/artists/{artistId}/admin/{adminId}(artistId=${artist.id}, adminId=${admin.id})}"
+                              method="post"
+                              style="position: absolute; top: 5px; right: 5px; margin: 0;"
+                              class="remove-admin-form">
+                            <input type="hidden" name="_method" value="DELETE"/>
+                            <button type="submit"
+                                    th:attr="onclick=|return confirm('Remove ${admin.user.name} as admin?')|"                                    class="btn btn-sm btn-danger"
+                                    style="font-size: 10px; padding: 2px 6px;"
+                                    title="Remove admin">×</button>
+                        </form>
+                    </div>
                 </li>
             </ul>
         </div>
+
     </div>
 
     <!-- right column

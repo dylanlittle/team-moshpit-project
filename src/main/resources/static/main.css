@@ -122,3 +122,120 @@ button {
     white-space: nowrap;
     border: 0;
 }
+
+/* ---  Manage Artists Dialogue --- */
+.artist-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  list-style: none;
+  padding: 20px;
+  margin: 0;
+}
+
+.artist-item .btn {
+  margin: 10px 10px 16px;
+  width: calc(100% - 20px);
+  border-radius: 14px;
+  border: 1px solid rgba(244,196,48,.70);
+  background: rgba(244,196,48,.95);
+  color: #14120E;
+  box-shadow: 0 16px 30px rgba(0,0,0,.45);
+
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.btn-admin-active {
+  opacity: 1;
+}
+
+.artist-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.artist-item a {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+dialog {
+  background: var(--panel) !important;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--glow);
+  color: var(--ink);
+  padding: 20px;
+}
+
+dialog::backdrop { /* Blurs background when dialogue is open */
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.artist-item a {
+  color: var(--ink) !important;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 8px;
+  display: inline-block;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+dialog h3 {
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+
+.artist-item img {
+  border-radius: 14px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+}
+
+.artist-item img:hover {
+  border-color: rgba(244,196,48,.5);
+  transition: border-color 0.2s ease;
+}
+
+.artist-item .btn-admin-active {
+  background: #181715;
+  border: 1px solid rgba(243, 239, 232, 0.3);
+  color: #F3EFE8;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+
+.artist-item .btn-admin-active:hover {
+  background: #211f1d;
+  border-color: rgba(243, 239, 232, 0.5);
+  box-shadow: 0 0 0 3px rgba(243, 239, 232, 0.05);
+}
+
+.cta-button {
+    float: right;
+    display: inline-block;
+    margin: 20px 0;
+    text-align: center;
+    min-width: 150px;
+
+    text-decoration: none;
+    line-height: normal;
+}
+
+dialog::after {
+    content: "";
+    display: table;
+    clear: both;
+}

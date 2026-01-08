@@ -1,3 +1,6 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
 okta:
   oauth2:
     issuer: ${AUTH_ISSUER}

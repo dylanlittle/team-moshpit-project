@@ -32,6 +32,11 @@
 .page-layout{
   padding-top: 14px;
   padding-bottom: 44px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 /* Header */
@@ -379,3 +384,27 @@ input:focus, textarea:focus, select:focus{
 
 
 
+
+
+/* Ensure on mobile it stacks back to one column */
+@media (max-width: 900px) {
+  .page-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feed-post {
+    min-width: 220px;
+    flex: 1 0 20%;
+    max-width: 450px;
+    box-sizing: border-box;
+}
+
+.concerts-column {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    width: 100%;
+}

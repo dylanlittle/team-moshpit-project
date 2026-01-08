@@ -1,4 +1,6 @@
+/* Artist and Home matching themes */
 
+/* Header */
 .artist-header h1{
   letter-spacing:.06em;
 }
@@ -18,6 +20,9 @@
 }
 
 /* Concert card*/
+/* ============================
+   COLUMN BOXES (artist page look)
+   ============================ */
 
 .left-column .box,
 .middle-column .box,
@@ -32,7 +37,10 @@
     0 18px 42px rgba(0,0,0,.8);
 }
 
-/* Upcoming dates/concerts */
+/* ============================
+   UPCOMING DATES / CONCERTS
+   (with HOMEPAGE pin design)
+   ============================ */
 
 .concerts-column {
     background: none;
@@ -70,59 +78,76 @@
 }*/
 
 #dates-selector {
-    border: none;
-    background: none;
-    font-size: 1rem;
-    letter-spacing:.18em;
-    font-weight: 900;
-    letter-spacing: .10em;
-    text-transform: uppercase;
-    cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
 #dates-selector:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(100, 150, 250, 0.5);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(100, 150, 250, 0.5);
 }
 
-/* Concert card*/
-
+/* Concert card (paper note vibe) */
 .concert-card{
   position:relative;
-  background: radial-gradient(circle at top left, rgba(120,40,40,.45), rgba(12,12,12,.95));
-  border:1px solid rgba(255,255,255,.08);
   border-radius:16px;
   padding:14px 16px 14px 22px;
   margin-bottom:14px;
+
+  background: rgba(15,14,12,.55);
+  border:1px solid rgba(243,239,232,.16);
+
   box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.04),
-    0 14px 32px rgba(0,0,0,.7);
+    0 18px 30px rgba(0,0,0,.55),
+    0 0 0 1px rgba(0,0,0,.25) inset;
+
   transition:.25s ease;
 }
 
 .concert-card:hover{
   transform:translateY(-3px);
-  box-shadow:0 22px 48px rgba(0,0,0,.85);
+  box-shadow:
+    0 22px 48px rgba(0,0,0,.85),
+    0 0 0 1px rgba(0,0,0,.25) inset;
 }
 
-/* Pin design */
-
+/* ✅ HOMEPAGE pin design */
 .concert-card::before{
   content:"";
   position:absolute;
-  left:-9px;
-  top:18px;
-  width:12px;
-  height:12px;
+  width:14px;
+  height:14px;
   border-radius:50%;
-  background:#4ef0e0;
+  top:-7px;
+  left:18px;
+
+  background: radial-gradient(circle at 35% 35%, #6fe7e0, #1b8f88);
   box-shadow:
-    0 0 0 4px rgba(78,240,224,.15),
-    0 0 16px rgba(78,240,224,.7);
+    0 6px 0 rgba(0,0,0,.20),
+    0 10px 18px rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+/* Pin shadow effect */
+.concert-card::after{
+  content:"";
+  position:absolute;
+  width:22px;
+  height:10px;
+  top:-2px;
+  left:14px;
+  border-radius:50%;
+  background: rgba(0,0,0,.25);
+  filter: blur(1px);
+  opacity: 0.45;
 }
 
 /* Artist Name */
-
 .concert-card h4{
   margin:0 0 4px;
   font-size:13px;
@@ -138,7 +163,6 @@
 }
 
 /* Venue & Date */
-
 .concert-card h5{
   margin:0;
   font-size:14px;
@@ -157,7 +181,6 @@
 }
 
 /* Stops purple text from theme.css */
-
 .upcoming-dates .concert-card,
 .upcoming-dates .concert-card a,
 .upcoming-dates .concert-card a *,
@@ -174,99 +197,251 @@
   text-shadow:0 0 16px rgba(244,196,48,.7);
 }
 
-/* Form Group Spacing */
+/* ============================
+   ADMIN/UPDATE FORM STYLES
+   ============================ */
+
 .form-group {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Label Styles (Gold Glow) */
 .form-group label {
-    font-size: 12px;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    color: #f4c430;
-    margin-bottom: 8px;
-    text-shadow: 0 0 8px rgba(244,196,48,0.3);
+  font-size: 12px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: #f4c430;
+  margin-bottom: 8px;
+  text-shadow: 0 0 8px rgba(244,196,48,0.3);
 }
 
-/* Input & Textarea Styling */
 #update-artist-form input[type="text"],
 #update-artist-form textarea,
 #update-artist-form input[type="file"] {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    color: #fff;
-    padding: 12px;
-    transition: all 0.3s ease;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #fff;
+  padding: 12px;
+  transition: all 0.3s ease;
 }
 
 #update-artist-form input:focus,
 #update-artist-form textarea:focus {
-    outline: none;
-    border-color: #4ef0e0;
-    box-shadow: 0 0 15px rgba(78, 240, 224, 0.2);
-    background: rgba(20, 20, 20, 0.6);
+  outline: none;
+  border-color: #4ef0e0;
+  box-shadow: 0 0 15px rgba(78, 240, 224, 0.2);
+  background: rgba(20, 20, 20, 0.6);
 }
 
 /* Error Messages */
 .error-msg {
-    color: #ff4444;
-    font-size: 11px;
-    margin-top: 5px;
-    letter-spacing: 0.05em;
+  color: #ff4444;
+  font-size: 11px;
+  margin-top: 5px;
+  letter-spacing: 0.05em;
 }
 
 .form-actions {
-    display: flex;
-    gap: 16px;
-    margin-top: 24px;
-    width: 100%;
-    align-items: center;
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+  width: 100%;
+  align-items: center;
 }
 
 .btn-cancel, .btn-primary {
-    flex: 1;
-    height: 48px;
-    line-height: 48px; /* Forces vertical centering */
-    text-align: center;
-    display: block;
-    border-radius: 12px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: 13px;
-    cursor: pointer;
-    text-decoration: none;
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-    transition: all 0.3s ease; /* Restored transition */
+  flex: 1;
+  height: 48px;
+  line-height: 48px;
+  text-align: center;
+  display: block;
+  border-radius: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  transition: all 0.3s ease;
 }
 
 .btn-primary {
-    background: #f4c430;
-    color: #000;
-    border: none;
-    box-shadow: 0 0 15px rgba(244,196,48,0.4);
+  background: #f4c430;
+  color: #000;
+  border: none;
+  box-shadow: 0 0 15px rgba(244,196,48,0.4);
 }
 
 .btn-primary:hover {
-    background: #ffd966;
-    box-shadow: 0 0 25px rgba(244,196,48,0.6);
-    transform: translateY(-2px);
+  background: #ffd966;
+  box-shadow: 0 0 25px rgba(244,196,48,0.6);
+  transform: translateY(-2px);
 }
 
 .btn-cancel {
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-cancel:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transform: translateY(-2px);
 }
+
+/* ============================
+   HOME-MATCHING UPDATES SECTION
+   Scoped so it only affects Updates feed area
+   ============================ */
+
+/* The outer Updates panel box on the artist page:
+   Wrap your updates in <div class="box"><h2>Artist Updates</h2>...</div>
+   inside <main id="fan-feed" ...>
+*/
+#fan-feed > .box{
+  background: linear-gradient(180deg, rgba(24,23,21,.96), rgba(24,23,21,.90));
+  border: 1px solid rgba(243,239,232,.16);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.40);
+}
+
+#fan-feed > .box > h2{
+  margin: 0;
+  padding: 12px 14px;
+
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+
+  border-bottom: 2px solid rgba(243,239,232,.10);
+  background:
+    linear-gradient(90deg, rgba(196,58,47,.22), transparent 60%),
+    rgba(15,14,12,.45);
+
+  text-shadow: 0 1px 0 rgba(0,0,0,.75);
+}
+
+/* Each update card inside the Updates panel */
+#fan-feed > .box .feed-post.box{
+  margin: 14px;
+  border-radius: 14px;
+
+  background: rgba(15,14,12,.35);
+  border: 1px solid rgba(243,239,232,.14);
+  box-shadow: none;
+}
+
+#fan-feed > .box .post-header{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px 6px;
+}
+
+#fan-feed > .box .post-header h3{
+  margin: 0;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  color: rgba(244,196,48, 1);
+}
+
+#fan-feed > .box .post-time{
+  font-size: 12px;
+  color: rgba(243,239,232,.65);
+  white-space: nowrap;
+}
+
+/* Base post paragraph */
+#fan-feed > .box .feed-post.box p{
+  margin: 0;
+  padding: 0 12px 12px;
+  color: rgba(243,239,232,.92);
+  line-height: 1.45;
+}
+
+/* Dashed message bubble inside each post (Home vibe) */
+#fan-feed > .box .feed-post.box > p{
+  padding: 12px 14px;
+  margin: 0 12px 12px;
+  border: 1px dashed rgba(243,239,232,.18);
+  border-radius: 14px;
+  background: rgba(15,14,12,.25);
+  color: rgba(243,239,232,.75);
+}
+
+/* Media inside posts (optional tidy) */
+#fan-feed > .box .feed-post.box img,
+#fan-feed > .box .feed-post.box video{
+  border-radius: 14px;
+  border: 1px solid rgba(243,239,232,.12);
+  display: block;
+  margin: 0 12px 12px;
+  max-width: calc(100% - 24px);
+}
+
+#fan-feed > .box .feed-post.box audio{
+  width: calc(100% - 24px);
+  margin: 0 12px 12px;
+}
+
+/* Kill any old pin element styling */
+.concert-card .concert-pin{
+  display:none !important;
+}
+
+/* Make sure the card allows the pin to sit outside the top edge */
+.upcoming-dates .concert-card{
+  position: relative;
+  overflow: visible;
+}
+
+/* HOMEPAGE tack pin */
+.upcoming-dates .concert-card::before{
+  content:"" !important;
+  position:absolute !important;
+  width:14px !important;
+  height:14px !important;
+  border-radius:50% !important;
+
+  top:-7px !important;
+  left:18px !important;
+
+  background: radial-gradient(circle at 35% 35%, #6fe7e0, #1b8f88) !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+
+  box-shadow:
+    0 6px 0 rgba(0,0,0,.20),
+    0 10px 18px rgba(0,0,0,.35) !important;
+
+  z-index: 2 !important;
+}
+
+/* Pin shadow */
+.upcoming-dates .concert-card::after{
+  content:"" !important;
+  position:absolute !important;
+
+  width:22px !important;
+  height:10px !important;
+
+  top:-2px !important;
+  left:14px !important;
+
+  border-radius:50% !important;
+  background: rgba(0,0,0,.25) !important;
+  filter: blur(1px) !important;
+  opacity: .45 !important;
+
+  z-index: 1 !important;
+}
+

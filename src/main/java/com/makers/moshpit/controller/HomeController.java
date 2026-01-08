@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 public class HomeController {
@@ -31,8 +32,7 @@ public class HomeController {
         User user = authService.getCurrentUser();
         Iterable<Post> posts = postRepository.findPostsByFollowedArtists(user);
 
-        LocalDate dateToday = LocalDate.now();
-        Iterable<Concert> concerts = concertRepository.findByConcertDateAfterOrderByConcertDateAsc(dateToday);
+        Iterable<Concert> concerts = concertRepository.findUpcomingConcertsByFollowedArtists(user);
 
         model.addAttribute("user", user);
         model.addAttribute("posts", posts);

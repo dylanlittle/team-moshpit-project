@@ -214,25 +214,20 @@ body::before{
   }
 }
 
-/* Upcoming concerts */
-
+/* Concerts column */
 .concerts-column{
   position: relative;
   padding: 0;
 }
 
 /* Brick wall effect */
-.concerts-column::before{
+/*.concerts-column::before{
   content:"";
   position:absolute;
-  inset: -18px; /* extends behind the panel spacing */
+  inset: -18px -18px -18px -18px; *//* extends behind the panel spacing *//*
   border-radius: 18px;
-
-
-  background:
-
+  *//*background:
     radial-gradient(900px 500px at 50% 20%, rgba(0,0,0,.15), rgba(0,0,0,.55)),
-
     repeating-linear-gradient(
       0deg,
       rgba(255,255,255,.06) 0px,
@@ -247,13 +242,11 @@ body::before{
       rgba(255,255,255,.05) 90px,
       rgba(255,255,255,.05) 93px
     ),
-
-    linear-gradient(180deg, #3a2a22, #2a1d18);
-
+    linear-gradient(180deg, #3a2a22, #2a1d18);*//*
   opacity: 0.95;
   z-index: 0;
   box-shadow: 0 14px 40px rgba(0,0,0,.35);
-}
+}*/
 
 .concerts-column > *{
   position: relative;

@@ -394,6 +394,220 @@ input:focus, textarea:focus, select:focus{
     justify-content: center;
     width: 100%;
 }
+/* Post section design matching artist updates and updates on artist page */
+
+#user-posts{
+  background: linear-gradient(180deg, rgba(24,23,21,.96), rgba(24,23,21,.90));
+  border: 1px solid rgba(243,239,232,.16);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.40);
+  overflow: hidden;
+}
+
+/* Header strip */
+#user-posts > h2{
+  margin: 0;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+
+  border-bottom: 2px solid rgba(243,239,232,.10);
+  background:
+    linear-gradient(90deg, rgba(196,58,47,.22), transparent 60%),
+    rgba(15,14,12,.45);
+
+  text-shadow: 0 1px 0 rgba(0,0,0,.75);
+}
+
+/* Each post card */
+#user-posts .feed-post.box{
+  margin: 14px;
+  border-radius: 14px;
+  background: rgba(15,14,12,.35);
+  border: 1px solid rgba(243,239,232,.14);
+  box-shadow: none;
+}
+
+/* Post header row */
+#user-posts .post-header{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px 6px;
+}
+
+/* Username */
+#user-posts .post-header h3{
+  margin: 0;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  color: rgba(244,196,48,1);
+}
+
+/* Timestamp */
+#user-posts .post-time{
+  font-size: 12px;
+  color: rgba(243,239,232,.65);
+  white-space: nowrap;
+}
+
+/* Main text bubble */
+#user-posts .post-bubble{
+  padding: 12px 14px;
+  margin: 0 12px 12px;
+
+  border: 1px dashed rgba(243,239,232,.18);
+  border-radius: 14px;
+  background: rgba(15,14,12,.25);
+
+  color: rgba(243,239,232,.75);
+  line-height: 1.45;
+}
+
+/* Media attachments */
+#user-posts .post-media img,
+#user-posts .post-media video{
+  display: block;
+  margin: 0 12px 12px;
+  max-width: calc(100% - 24px);
+  border-radius: 14px;
+  border: 1px solid rgba(243,239,232,.12);
+}
+
+#user-posts .post-media audio{
+  width: calc(100% - 24px);
+  margin: 0 12px 12px;
+}
+
+/* Prevent purple link styling */
+#user-posts a,
+#user-posts a:visited,
+#user-posts a:hover,
+#user-posts a:active{
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+#user-posts .post-source{
+  display: inline-block;
+  margin: -4px 12px 12px; /* sits right under the bubble */
+  font-size: 12px;
+  color: rgba(243,239,232,.55) !important;
+  text-decoration: none !important;
+}
+
+#user-posts .post-source:hover{
+  color: rgba(243,239,232,.75) !important;
+  text-decoration: underline !important;
+}
+/* link to concert on post */
+
+#content-posts .post-meta{
+  padding: 0 12px 8px;
+  font-size: 12px;
+  opacity: .75;
+}
+
+#content-posts .concert-link{
+  text-decoration: none;
+  color: rgba(243,239,232,.85);
+}
+
+#content-posts .concert-link:hover{
+  opacity: 1;
+  text-decoration: underline;
+}
+.post-body{
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.post-meta{
+  margin-top: 8px;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(243,239,232,.55);
+}
+
+.post-meta-sep{
+  margin: 0 6px;
+}
+.post-concert-link{
+  display:block;
+  margin: 8px 12px 12px;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(243,239,232,.65);
+  text-decoration: none;
+  transition: .2s ease;
+}
+
+.post-concert-link:hover{
+  color:#f4c430;
+  text-shadow:0 0 10px rgba(244,196,48,.35);
+}
+
+.post-concert-link .dot{
+  margin: 0 6px;
+}
+
+/* Make Posts panel full width */
+#content-posts .user-posts {
+    grid-column: 1 / -1;
+    width: 100%;
+}
+#content-posts .feed-post.box {
+    width: 100%;
+    max-width: none;
+}
+
+/* Ensures space between post box and outer post box*/
+#content-posts .user-posts {
+    padding: 18px;
+}
+
+#content-posts .feed-post.box {
+    margin: 0 0 14px 0;
+    border-radius: 14px;
+}
+
+#content-posts .user-posts {
+    padding: 18px;
+}
+
+/* Space between outer box and first post */
+#content-posts .user-posts > .feed-post:first-of-type {
+    margin-top: 14px;
+}
+
+/* Space between each post */
+#content-posts .feed-post {
+    margin-bottom: 14px;
+}
+/* dotted line around the post text on user profile */
+#user-posts .feed-post.box > p.post-body,
+.user-posts .feed-post.box > p.post-body {
+  padding: 12px 14px;
+  margin: 0 12px 12px;
+  border: 1px dashed rgba(243,239,232,.18);
+  border-radius: 14px;
+  background: rgba(15,14,12,.25);
+  color: rgba(243,239,232,.75);
+}
+
+
+
+
+
+
+
 
 /* Navbar overrides */
 .nav-bar {

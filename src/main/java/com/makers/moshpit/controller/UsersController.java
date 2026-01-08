@@ -156,14 +156,17 @@ public class UsersController {
         }
 
         Iterable<Artist> artists = artistRepository.findAllArtistsFollowedByUser(currentUser);
-        Iterable<Concert> concerts = concertGoerRepository.findConcertsByUserId(currentUser.getId());
+        List<Concert> upcomingConcerts =
+                concertGoerRepository.findUpcomingConcertsByUserId(currentUser.getId());
+
+        List<Concert> pastConcerts =
+                concertGoerRepository.findPastConcertsByUserId(currentUser.getId());
 
         model.addAttribute("timeRange", timeRange);
-        model.addAttribute("user", currentUser);
-        model.addAttribute("posts", posts);
         model.addAttribute("followedArtists", artists);
         model.addAttribute("editing", false);
-        model.addAttribute("concerts", concerts);
+        model.addAttribute("upcomingConcerts", upcomingConcerts);
+        model.addAttribute("pastConcerts", pastConcerts);
         return "users/user_page";
     }
 
@@ -223,7 +226,6 @@ public class UsersController {
     @PostMapping("/users/{id}")
     public String updateProfile(
             @PathVariable Long id,
-            /*@RequestParam String username,*/
             @RequestParam(required = false) String bio, MultipartFile image, String name, String username, String location) {
 
 
@@ -270,7 +272,7 @@ public class UsersController {
 
 
     @GetMapping("/users/{id}/edit")
-    public String editProfile(@PathVariable Long id, Model model, Principal principal) {
+    public String editProfile(@PathVariable Long id, Model model, Principal principal, @RequestParam(defaultValue = "short_term") String timeRange) {
 
         if (principal == null) {
             return "redirect:/login";
@@ -285,17 +287,36 @@ public class UsersController {
             return "redirect:/users/" + id;
         }
 
+        Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(currentUser.getId());
+        List<Artist> myArtists =  artistRepository.findArtistsByUserId(currentUser.getId());
+
+        if (!timeRange.equals("short_term") && !timeRange.equals("medium_term") && !timeRange.equals("long_term")) {
+            timeRange = "short_term";
+        }
+
+        if (currentUser.getSpotifyRefreshToken() != null && !currentUser.getSpotifyRefreshToken().isBlank()) {
+            List<SpotifyArtist> topArtists = spotifyApiService.getTopArtists(currentUser, timeRange, 10);
+            model.addAttribute("spotifyTopArtists", topArtists);
+
+            Map<String, Artist> suggestions = new LinkedHashMap<>();
+            for (SpotifyArtist a : topArtists) {
+                artistRepository.findFirstByNameIgnoreCase(a.name())
+                        .ifPresent(match -> suggestions.put(a.id(), match));
+            }
+            model.addAttribute("spotifySuggestions", suggestions);
+        }
+
+        Iterable<Artist> artists = artistRepository.findAllArtistsFollowedByUser(currentUser);
+        Iterable<Concert> concerts = concertGoerRepository.findConcertsByUserId(currentUser.getId());
+
+        model.addAttribute("posts", posts);
+        model.addAttribute("myArtists", myArtists);
+        model.addAttribute("followedArtists", artists);
+        model.addAttribute("concerts", concerts);
         model.addAttribute("user", user);
         model.addAttribute("editing", true);
         model.addAttribute("isOwner", true);
         return "users/user_page";
     }
-
-   /* @GetMapping("/users/edit")
-    public String editProfile(Model model) {
-        User user = authService.getCurrentUser();
-        model.addAttribute("user", user);
-        return "users/edit_profile";
-    }*/
 
 }

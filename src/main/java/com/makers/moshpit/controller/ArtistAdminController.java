@@ -7,15 +7,14 @@ import com.makers.moshpit.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 import com.makers.moshpit.model.Artist;
 import com.makers.moshpit.model.ArtistAdmin;
 import com.makers.moshpit.repository.ArtistRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Set;
@@ -81,7 +80,7 @@ public class ArtistAdminController {
             model.addAttribute("artistResults", java.util.Collections.emptyList());
             model.addAttribute("userResults", java.util.Collections.emptyList());
             model.addAttribute("suggestedResults", java.util.Collections.emptyList());
-            return "admin/add_artist_admin";
+            return "admin/manage_artist_admin";
         }
 
         String trimmedQuery = query.trim();
@@ -97,7 +96,7 @@ public class ArtistAdminController {
 
         model.addAttribute("query", query);
         model.addAttribute("userResults", userResults);
-        return "admin/add_artist_admin";
+        return "admin/manage_artist_admin";
     }
 
     @PostMapping("/artists/{id}/newAdmin")
@@ -134,7 +133,7 @@ public class ArtistAdminController {
             model.addAttribute("artistResults", java.util.Collections.emptyList());
             model.addAttribute("userResults", java.util.Collections.emptyList());
             model.addAttribute("suggestedResults", java.util.Collections.emptyList());
-            return "admin/add_artist_admin";
+            return "admin/manage_artist_admin";
         }
 
         String trimmedQuery = query.trim();
@@ -146,6 +145,35 @@ public class ArtistAdminController {
         userResults.removeIf(user -> adminUserIds.contains(user.getId()));
         model.addAttribute("query", query);
         model.addAttribute("userResults", userResults);
-        return "admin/add_artist_admin";
+        return "admin/manage_artist_admin";
+    }
+
+    @PostMapping("/artists/{artistId}/admin/{adminId}")
+    @Transactional
+    public String deleteAdmin(
+            @PathVariable Long artistId,
+            @PathVariable Long adminId,
+            RedirectAttributes redirectAttributes) {
+
+        User currentUser = authService.getCurrentUser();
+
+        boolean canEdit = currentUser != null &&
+                artistAdminRepository.existsByArtistIdAndUserId(artistId, currentUser.getId());
+        if (!canEdit) {
+            redirectAttributes.addFlashAttribute("error", "Access denied");
+            return "redirect:/artists/" + artistId + "/newAdmin";
+        }
+
+        ArtistAdmin targetAdmin = artistAdminRepository.findById(adminId)
+                .orElseThrow(() -> new EntityNotFoundException("Admin not found"));
+
+        if (targetAdmin.getRole() == ArtistAdmin.Role.OWNER) {
+            redirectAttributes.addFlashAttribute("error", "Cannot remove artist owner");
+            return "redirect:/artists/" + artistId + "/newAdmin";
+        }
+
+        artistAdminRepository.deleteById(adminId);
+        redirectAttributes.addFlashAttribute("success", "Admin removed successfully");
+        return "redirect:/artists/" + artistId + "/newAdmin";
     }
 }

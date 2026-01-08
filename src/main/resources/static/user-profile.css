@@ -58,7 +58,7 @@ body::before{
 .user-header,
 .page-layout,
 .header-layout{
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 18px;
 }
@@ -71,6 +71,10 @@ body::before{
     gap: 32px;
     max-width: 1200px;
     margin: 0 auto;
+}
+
+.page-layout.concert-page-layout {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 /* Header */
@@ -286,12 +290,14 @@ input:focus, textarea:focus, select:focus{
 }
 
 /* Tabs */
-#fan-feed input[type="radio"]{
+#fan-feed input[type="radio"],
+#concert_tabs input[type="radio"]{
   position:absolute;
   left:-9999px;
 }
 
-#fan-feed .nav-bar{
+#fan-feed .nav-bar,
+#concert_tabs .nav-bar{
   display:flex;
   gap:12px;
   padding:10px 12px;
@@ -302,7 +308,9 @@ input:focus, textarea:focus, select:focus{
 }
 
 #fan-feed .nav-bar label,
-#fan-feed .nav-bar a{
+#fan-feed .nav-bar a,
+#concert_tabs .nav-bar label,
+#concert_tabs .nav-bar a{
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -321,15 +329,20 @@ input:focus, textarea:focus, select:focus{
 }
 
 #fan-feed .nav-bar label:hover,
-#fan-feed .nav-bar a:hover{
+#fan-feed .nav-bar a:hover,
+#concert-tabs .nav-bar label:hover,
+#concert-tabs .nav-bar a:hover{
   color: rgba(243,239,232,.92) !important;
   background: rgba(0,0,0,.28);
   border-color: rgba(244,196,48,.35);
 }
 
 #tab-followed:checked ~ .nav-bar label[for="tab-followed"],
-#tab-myshows:checked  ~ .nav-bar label[for="tab-myshows"],
+#tab-shows:checked  ~ .nav-bar label[for="tab-shows"],
 #tab-posts:checked    ~ .nav-bar label[for="tab-posts"],
+#tab-concert-posts:checked ~ .nav-bar label[for="tab-concert-posts"],
+#tab-concert-crowd:checked ~ .nav-bar label[for="tab-concert-crowd"],
+#tab-concert-gallery:checked ~ .nav-bar label[for="tab-concert-gallery"],
 #tab-myartists:checked    ~ .nav-bar label[for="tab-myartists"]{
   background: rgba(244,196,48,.14);
   border-color: rgba(244,196,48,.55);
@@ -338,8 +351,11 @@ input:focus, textarea:focus, select:focus{
 
 .tab-content{ display:none; }
 #tab-followed:checked ~ #content-followed{ display:block; }
-#tab-myshows:checked  ~ #content-myshows{ display:block; }
+#tab-shows:checked  ~ #content-shows{ display:block; }
 #tab-posts:checked    ~ #content-posts{ display:block; }
+#tab-concert-posts:checked ~ #content-concert-posts{ display:block; }
+#tab-concert-crowd:checked  ~ #content-concert-crowd{ display:block; }
+#tab-concert-gallery:checked    ~ #content-concert-gallery{ display:block; }
 #tab-myartists:checked    ~ #content-myartists{ display:block; }
 
 
@@ -378,3 +394,14 @@ input:focus, textarea:focus, select:focus{
     justify-content: center;
     width: 100%;
 }
+
+/* Navbar overrides */
+.nav-bar {
+    margin-top: 0;
+    padding: 8px 0;
+    border-top: none;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    gap: 16px;
+}
+

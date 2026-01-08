@@ -153,3 +153,26 @@
     justify-content: center;
     background: #000;
 }
+
+.artist-link {
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.artist-link:hover {
+    color: var(--yellow);
+    text-decoration: underline;
+}
+
+.separator {
+    color: var(--muted);
+    margin: 0 4px;
+}
+
+#concert-lineup {
+    display: flex;      /* Forces items to sit side-by-side */
+    align-items: center; /* Vertically centers the text and links */
+    gap: 8px;           /* Adds a small space between "Lineup:" and the first name */
+    flex-wrap: wrap;    /* Allows it to wrap only if the list is very long */
+}

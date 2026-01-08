@@ -53,17 +53,17 @@
                 <ul class="dropdown-content">
                     <li><a href="/user">View Profile</a></li>
                     <li>
-                        <button type="button"
+                        <a class="dropdown-a"><button type="button"
                                 class="dropdown-btn"
                                 data-dialog-open="myArtists"
                                 onclick="document.getElementById('myArtists').showModal()">
                             Manage My Artists
-                        </button>
+                        </button></a>
                     </li>
                     <li>
                         <hr>
                         <form th:action="@{/logout}" method="post">
-                            <button type="submit" class="logout-btn">Logout</button>
+                            <a class="dropdown-a"><button type="submit" class="dropdown-btn">Logout</button></a>
                         </form>
                     </li>
                 </ul>

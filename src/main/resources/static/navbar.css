@@ -213,21 +213,32 @@
   width:100%;
 }
 
+.dropdown-btn {
+    border-radius: 0;
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
 /* Style both anchors and the logout button */
+.dropdown-a{
+    padding: 0;
+    margin: 0;
+}
+
 .dropdown-content li a,
-.dropdown-content li button{
+.dropdown-content li a button{
   display:block;
   width:100%;
   padding:10px 16px;
   box-sizing:border-box;
   text-decoration:none;
-
   color:var(--ink);
   font-size:13px;
   font-weight:800;
   letter-spacing:.08em;
   text-transform:uppercase;
-
   border:none;
   background:transparent;
   text-align:left;
@@ -235,9 +246,20 @@
 }
 
 /* Hover = ticket yellow highlight */
-.dropdown-content li a:hover,
-.dropdown-content li button:hover{
+.dropdown-content li a:hover{
   background: rgba(244,196,48,.14);
+}
+
+.dropdown-content li a button:hover{
+    background: none;
+    border: none;
+}
+
+.dropdown-btn:hover{
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
 }
 
 /* Make the hr match theme */

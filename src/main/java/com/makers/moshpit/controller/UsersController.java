@@ -4,10 +4,7 @@ import com.makers.moshpit.model.Artist;
 import com.makers.moshpit.model.Concert;
 import com.makers.moshpit.model.Post;
 import com.makers.moshpit.model.User;
-import com.makers.moshpit.repository.ArtistRepository;
-import com.makers.moshpit.repository.ConcertGoerRepository;
-import com.makers.moshpit.repository.PostRepository;
-import com.makers.moshpit.repository.UserRepository;
+import com.makers.moshpit.repository.*;
 import com.makers.moshpit.service.AuthService;
 import com.makers.moshpit.service.MediaService;
 import com.makers.moshpit.spotify.SpotifyApiService;
@@ -162,8 +159,6 @@ public class UsersController {
         Iterable<Concert> concerts = concertGoerRepository.findConcertsByUserId(currentUser.getId());
 
         model.addAttribute("timeRange", timeRange);
-        model.addAttribute("user", currentUser);
-        model.addAttribute("posts", posts);
         model.addAttribute("followedArtists", artists);
         model.addAttribute("editing", false);
         model.addAttribute("concerts", concerts);
@@ -212,8 +207,11 @@ public class UsersController {
 
         Iterable<Artist> artists = artistRepository.findAllArtistsFollowedByUser(user);
 
+        Iterable<Concert> concerts = concertGoerRepository.findConcertsByUserId(id);
+
         model.addAttribute("user", user);
         model.addAttribute("posts", posts);
+        model.addAttribute("concerts", concerts);
         model.addAttribute("followedArtists", artists);
         model.addAttribute("editing", false);
         model.addAttribute("isOwner", false);
@@ -223,8 +221,7 @@ public class UsersController {
     @PostMapping("/users/{id}")
     public String updateProfile(
             @PathVariable Long id,
-            @RequestParam String username,
-            @RequestParam(required = false) String bio, MultipartFile image) {
+            @RequestParam(required = false) String bio, MultipartFile image, String name, String username, String location) {
 
 
         User user = userRepository.findById(id)
@@ -236,9 +233,18 @@ public class UsersController {
             return "redirect:/users/" + id;
         }
 
-        user.setUsername(username);
-        user.setBio(bio);
-
+        if (name != null && !name.isEmpty()) {
+            user.setName(name);
+        }
+        if (username != null && !username.isEmpty()) {
+            user.setUsername(username);
+        }
+        if (bio != null && !bio.isEmpty()) {
+            user.setBio(bio);
+        }
+        if (location != null && !location.isEmpty()) {
+            user.setLocation(location);
+        }
 
         if (image != null && !image.isEmpty()) {
 
@@ -254,8 +260,6 @@ public class UsersController {
             }
         }
 
-
-
         userRepository.save(user);
 
         return "redirect:/users/" + id;
@@ -263,7 +267,7 @@ public class UsersController {
 
 
     @GetMapping("/users/{id}/edit")
-    public String editProfile(@PathVariable Long id, Model model, Principal principal) {
+    public String editProfile(@PathVariable Long id, Model model, Principal principal, @RequestParam(defaultValue = "short_term") String timeRange) {
 
         if (principal == null) {
             return "redirect:/login";
@@ -278,46 +282,36 @@ public class UsersController {
             return "redirect:/users/" + id;
         }
 
+        Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(currentUser.getId());
+        List<Artist> myArtists =  artistRepository.findArtistsByUserId(currentUser.getId());
+
+        if (!timeRange.equals("short_term") && !timeRange.equals("medium_term") && !timeRange.equals("long_term")) {
+            timeRange = "short_term";
+        }
+
+        if (currentUser.getSpotifyRefreshToken() != null && !currentUser.getSpotifyRefreshToken().isBlank()) {
+            List<SpotifyArtist> topArtists = spotifyApiService.getTopArtists(currentUser, timeRange, 10);
+            model.addAttribute("spotifyTopArtists", topArtists);
+
+            Map<String, Artist> suggestions = new LinkedHashMap<>();
+            for (SpotifyArtist a : topArtists) {
+                artistRepository.findFirstByNameIgnoreCase(a.name())
+                        .ifPresent(match -> suggestions.put(a.id(), match));
+            }
+            model.addAttribute("spotifySuggestions", suggestions);
+        }
+
+        Iterable<Artist> artists = artistRepository.findAllArtistsFollowedByUser(currentUser);
+        Iterable<Concert> concerts = concertGoerRepository.findConcertsByUserId(currentUser.getId());
+
+        model.addAttribute("posts", posts);
+        model.addAttribute("myArtists", myArtists);
+        model.addAttribute("followedArtists", artists);
+        model.addAttribute("concerts", concerts);
         model.addAttribute("user", user);
         model.addAttribute("editing", true);
         model.addAttribute("isOwner", true);
         return "users/user_page";
-    }
-
-    @GetMapping("/users/edit")
-    public String editProfile(Model model) {
-        User user = authService.getCurrentUser();
-        model.addAttribute("user", user);
-        return "users/edit_profile";
-    }
-
-    @PostMapping("/users/edit")
-    public String updateProfile(
-            @RequestParam String username,
-            @RequestParam(required = false) String bio,
-            Model model) {
-
-        User user = authService.getCurrentUser();
-
-        if (username == null || username.trim().length() < 4) {
-            model.addAttribute("user", user);
-            model.addAttribute("error", "Username must be at least 4 characters");
-            return "users/edit_profile";
-        }
-
-        if (userRepository.existsByUsername(username)
-                && !username.equals(user.getUsername())) {
-            model.addAttribute("user", user);
-            model.addAttribute("error", "Username already taken");
-            return "users/edit_profile";
-        }
-
-        user.setUsername(username);
-        user.setBio(bio);
-
-        userRepository.save(user);
-
-        return "redirect:/user";
     }
 
 }

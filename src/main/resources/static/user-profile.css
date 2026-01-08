@@ -331,6 +331,16 @@ input:focus, textarea:focus, select:focus{
   border: 1px solid rgba(243,239,232,.14);
   box-shadow: none;
 }
+/* Center the post box */
+#content-posts .feed-post.box{
+  padding: 12px 14px 14px;
+}
+
+#content-posts .feed-post{
+  max-width: none;
+  width: 100%;
+  flex: none;
+}
 
 #content-posts .post-header{
   display:flex;
@@ -407,4 +417,9 @@ input:focus, textarea:focus, select:focus{
     gap: 16px;
     justify-content: center;
     width: 100%;
+}
+
+/* center posts in post box */
+#content-posts .user-posts{
+  padding: 14px;
 }

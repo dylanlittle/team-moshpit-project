@@ -16,6 +16,10 @@ public interface ConcertGoerRepository extends JpaRepository<ConcertGoer, Long> 
     List<User> findUsersByConcertId(@Param("concertId") Long concertId);
     @Query("SELECT cg.concert FROM ConcertGoer cg WHERE cg.user.id = :userId")
     List<Concert> findConcertsByUserId(@Param("userId") Long userId);
+    @Query("SELECT cg.concert FROM ConcertGoer cg WHERE cg.user.id = :userId AND cg.concert.concertDate >= CURRENT_DATE ORDER BY cg.concert.concertDate ASC, cg.concert.startTime ASC")
+    List<Concert> findUpcomingConcertsByUserId(@Param("userId") Long userId);
+    @Query("SELECT cg.concert FROM ConcertGoer cg WHERE cg.user.id = :userId AND cg.concert.concertDate < CURRENT_DATE ORDER BY cg.concert.concertDate DESC, cg.concert.startTime DESC")
+    List<Concert> findPastConcertsByUserId(@Param("userId") Long userId);
     boolean existsByUserAndConcert(User user, Concert concert);
     @Transactional
     @Modifying

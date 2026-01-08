@@ -132,7 +132,7 @@ public class UsersController {
     public String userAccount(Model model,
                               @RequestParam(defaultValue = "short_term") String timeRange) {
         User currentUser = authService.getCurrentUser();
-        Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(currentUser.getId());
+        Iterable<Post> posts = postRepository.findAllByUserIdAndArtistIdIsNullOrderByTimestampDesc(currentUser.getId());
         List<Artist> myArtists =  artistRepository.findArtistsByUserId(currentUser.getId());
         model.addAttribute("user", currentUser);
         model.addAttribute("posts", posts);
@@ -156,12 +156,17 @@ public class UsersController {
         }
 
         Iterable<Artist> artists = artistRepository.findAllArtistsFollowedByUser(currentUser);
-        Iterable<Concert> concerts = concertGoerRepository.findConcertsByUserId(currentUser.getId());
+        List<Concert> upcomingConcerts =
+                concertGoerRepository.findUpcomingConcertsByUserId(currentUser.getId());
+
+        List<Concert> pastConcerts =
+                concertGoerRepository.findPastConcertsByUserId(currentUser.getId());
 
         model.addAttribute("timeRange", timeRange);
         model.addAttribute("followedArtists", artists);
         model.addAttribute("editing", false);
-        model.addAttribute("concerts", concerts);
+        model.addAttribute("upcomingConcerts", upcomingConcerts);
+        model.addAttribute("pastConcerts", pastConcerts);
         return "users/user_page";
     }
 
@@ -203,7 +208,7 @@ public class UsersController {
             model.addAttribute("timeRange", timeRange);
         }
 
-        Iterable<Post> posts = postRepository.findAllByUserIdOrderByTimestampDesc(id);
+        Iterable<Post> posts = postRepository.findAllByUserIdAndArtistIdIsNullOrderByTimestampDesc(id);
 
         Iterable<Artist> artists = artistRepository.findAllArtistsFollowedByUser(user);
 

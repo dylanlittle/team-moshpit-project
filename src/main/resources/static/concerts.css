@@ -153,3 +153,26 @@
     justify-content: center;
     background: #000;
 }
+
+.artist-link {
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.artist-link:hover {
+    color: var(--yellow);
+    text-decoration: underline;
+}
+
+.separator {
+    color: var(--muted);
+    margin: 0 4px;
+}
+
+#concert-lineup {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}

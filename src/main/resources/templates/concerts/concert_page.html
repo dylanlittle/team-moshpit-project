@@ -5,10 +5,10 @@
     <title>Concert</title>
 
     <link rel="stylesheet" href="/main.css" />
-    <link rel="stylesheet" href="/two-column-pages.css" />
     <link rel="stylesheet" href="/concerts.css" />
     <link rel="stylesheet" href="/navbar.css"/>
     <link rel="stylesheet" href="/theme.css"/>
+    <link rel="stylesheet" href="/user-profile.css"/>
     <th:block th:replace="~{fragments/timezone-script :: timezone-detector}"></th:block>
     <meta name="_csrf" th:content="${_csrf?.token}"/>
     <script src="/js/rsvp.js" defer></script>
@@ -21,49 +21,59 @@
 <body>
 
 <!-- Header -->
-<div class="concert-header">
-    <h1 th:text="${concert.concertName} ? ${concert.concertName} : ${concert.artist.name} + ' at ' + ${venue.venueName}"></h1>
-    <h3 th:text="${concert.concertDate}"></h3>
-    <button th:id="rsvp-btn"
-            th:data-concert-id="${concert.id}"
-            th:class="${isGoing} ? 'active' : ''">
-        <span class="custom-checkbox">
-            <span class="tick-mark"></span>
-        </span>
-        <span th:id="rsvp-btn-text"
-              th:text="RSVP">
-        </span>
-    </button>
+<div class="header-layout">
+    <div class="box user-header">
+        <div class="header-box profile-picture">
+            <img th:src="${concert.image} ?: '/uploads/default_profile.png'"
+                 alt="Concert display picture"
+                 style="width:160px;height:160px;object-fit:cover;"/>
+        </div>
+        <div class="header-box">
+            <h4 th:text="${concert.concertDate}"></h4>
+            <h1 th:text="${concert.concertName} ? ${concert.concertName} : ${concert.artist.name} + ' at ' + ${venue.venueName}"></h1>
+            <h4 th:text="'📍 ' + ${venue.venueName} + ': ' + ${venue.address} + ', ' + ${venue.city} + ', ' + ${venue.country}"></h4>
+            <h4 th:text="${concert.startTime} ? '🕕 ' + ${concert.startTime} : ''"></h4>
+            <div id="concert-lineup">
+                <span style="font-weight: 800;">LINEUP →</span>
+                <div class="artist-tags">
+                    <span th:each="artist, iterStat : ${lineup}">
+                        <a th:href="@{/artists/{id}(id=${artist.id})}"
+                           th:text="${artist.name}"
+                           class="artist-link">
+                        </a>
+
+                        <span th:if="${!iterStat.last}" class="separator"> | </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button th:id="rsvp-btn"
+                    th:data-concert-id="${concert.id}"
+                    th:class="${isGoing} ? 'active' : ''">
+            <span class="custom-checkbox">
+                <span class="tick-mark"></span>
+            </span>
+                <span th:id="rsvp-btn-text"
+                      th:text="RSVP">
+            </span>
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- Main -->
-<div class="page-layout">
+<div class="page-layout concert-page-layout">
 
-    <!-- Left column -->
-    <aside class="left-column">
+<!--     Left column-->
+<!--    <aside class="left-column">-->
 
-        <div class="box profile-picture">
-            <img
-                 class="rounded-circle border border-3 border-white shadow-sm"
-                 style="width: 160px; height: 160px; object-fit: cover;">
-        </div>
+<!--        <div class="box">-->
+<!--            <h3>Lineup</h3>-->
+<!--            <p>Artists go here</p>-->
+<!--        </div>-->
 
-        <div class="box">
-            <h3>Key Information</h3>
-            <h4 th:text="'Venue: ' + ${venue.venueName}"></h4>
-            <h4 th:text="${concert.startTime} ? 'Start time: ' + ${concert.startTime} : ''"></h4>
-            <h4>Address:</h4>
-            <p th:text="${venue.address}"></p>
-            <p th:text="${venue.city}"></p>
-            <p th:text="${venue.country}"></p>
-        </div>
-
-        <div class="box">
-            <h3>Lineup</h3>
-            <p>Artists go here</p>
-        </div>
-
-    </aside>
+<!--    </aside>-->
 
     <!-- middle column-->
     <main class="right-column" id="concert_tabs">
@@ -80,7 +90,6 @@
 
         <section class="tab-content" id="content-concert-posts">
             <div class="box">
-                <h3>Feed</h3>
                 <div class="box">
                     <form id="new-post-form" th:action="@{/concerts/{id}/posts(id=${concert.id})}" th:object="${post}" method="post" enctype="multipart/form-data">
                         <label class="label" for="post-content" aria-hidden="false">Content</label>
@@ -150,7 +159,6 @@
 
         <section class="tab-content" id="content-concert-crowd">
             <div class="box">
-                <h3>Crowd</h3>
                 <ul style="display: flex;" th:class="user-list">
                     <li th:id="attendee-current-user"
                         th:class="${isGoing} ? 'active' : 'hidden'">
@@ -179,7 +187,6 @@
 
         <section class="tab-content" id="content-concert-gallery">
             <div class="box">
-                <h3>Gallery</h3>
                 <div class="gallery-grid">
                     <div th:each="post : ${posts}"
                          th:if="${post.mediaType == 'image' || post.mediaType == 'video'}"

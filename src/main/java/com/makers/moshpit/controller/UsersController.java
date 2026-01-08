@@ -241,7 +241,7 @@ public class UsersController {
     public String updateProfile(
             @PathVariable Long id,
             /*@RequestParam String username,*/
-            @RequestParam(required = false) String bio, MultipartFile image, String username, String location) {
+            @RequestParam(required = false) String bio, MultipartFile image, String name, String username, String location) {
 
 
         User user = userRepository.findById(id)
@@ -253,6 +253,9 @@ public class UsersController {
             return "redirect:/users/" + id;
         }
 
+        if (name != null && !name.isEmpty()) {
+            user.setName(name);
+        }
         if (username != null && !username.isEmpty()) {
             user.setUsername(username);
         }
@@ -307,11 +310,11 @@ public class UsersController {
         return "users/user_page";
     }
 
-    @GetMapping("/users/edit")
+   /* @GetMapping("/users/edit")
     public String editProfile(Model model) {
         User user = authService.getCurrentUser();
         model.addAttribute("user", user);
         return "users/edit_profile";
-    }
+    }*/
 
 }

@@ -14,7 +14,7 @@
 </header>
 <body>
 
-<!-- header box when not in editing mode -->
+<!-- header box -->
 <div th:if="${!editing}" class="box user-header">
         <!-- profile picture -->
         <div class="header-box profile-picture">
@@ -52,54 +52,55 @@
     </div>
 </div>
 
-<!-- header box when in edit mode-->
+<!-- header box when in EDITING MODE-->
 <!--<div class="box" th:if="${editing}">-->
     <form th:if="${editing}"
             th:action="@{/users/{id}(id=${user.id})}"
             method="post"
             enctype="multipart/form-data"
-            class="box user-header">
+            class="box user-header edit-mode">
         <!-- profile picture -->
-        <div class="header-box profile-picture">
-            <!-- Hides old image when changing profile picture -->
-            <div class="header-box profile-picture">
-                <div>
-                    <label>Change profile image</label>
-                    <input type="file" name="image" accept="image/*"/>
-                </div>
+        <div class="header-box"><!--edit-profile-picture-->
+            <h2>Edit Profile Information</h2>
+            <div>
+                <label>Change profile image</label>
+                <input type="file" name="image" accept="image/*"/>
             </div>
-        </div>
-
-        <!-- account type, name, username, bio and location -->
-        <div class="header-box">
-            <!-- Account type-->
-            <h4>Fan account</h4>
             <!-- Name -->
-            <h1 th:text="${user.name}"></h1>
+            <div>
+                <label for="edit-username">Name</label>
+                <input type="text"
+                       name="name"
+                       id="edit-name"
+                       th:value="${user.name}"/>
+            </div>
             <!-- Username -->
-            <p th:text="'@' + ${user.username}"></p>
             <div>
                 <label for="edit-username">Username</label>
                 <input type="text"
                        name="username"
                        id="edit-username"
-                       th:value="${user.username}"
-                       required/>
+                       th:value="${user.username}"/>
             </div>
+        </div>
+
+        <!-- bio -->
+        <div class="header-box">
+
 
             <!-- Bio -->
             <div>
-                    <textarea name="bio"
-                              rows="4"
-                              th:text="${user.bio}"></textarea>
+                <label for="edit-bio">Bio</label>
+                <textarea name="bio"
+                          rows="4"
+                          id="edit-bio"
+                          th:text="${user.bio}"></textarea>
             </div>
 
             <!-- Location -->
-            <div th:if="${user.location != null}">
-                <div>
-                    <label for="edit-location">Change location</label>
-                    <input type="text" name="location" id="edit-location" th:value="${user.location}"/>
-                </div>
+            <div>
+                <label for="edit-location">Change location</label>
+                <input type="text" name="location" id="edit-location" th:value="${user.location}"/>
             </div>
         </div>
 

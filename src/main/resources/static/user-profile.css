@@ -73,12 +73,19 @@ body::before{
     align-items: flex-start;
 }
 
+form.user-header.edit-mode > * {
+    flex: 1;
+}
+
+form.user-header.edit-mode > :nth-child(2) {
+    align-items: bottom;
+}
+
 .user-header > :last-child {
     margin-left: auto;
 }
 
 .header-box {
-    border: 1px solid #ccc;
     padding: 12px;
     border: none;
     background: none;
@@ -91,6 +98,15 @@ body::before{
   text-transform: uppercase;
   text-shadow: 0 2px 0 rgba(0,0,0,.75);
 }
+
+.user-header.edit-mode h2{
+  margin: 10px 0 4px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 0 rgba(0,0,0,.75);
+}
+
 .user-header h3{
   margin: 0 0 6px;
   color: var(--muted);
@@ -230,6 +246,13 @@ input:focus, textarea:focus, select:focus{
   letter-spacing: .08em;
   text-transform: uppercase;
   cursor: pointer;
+}
+
+.edit-profile-picture {
+    height: 180px;
+    display: flex;
+    align-items: top;
+    justify-content: center;
 }
 
 /* Tabs */

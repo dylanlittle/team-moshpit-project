@@ -87,7 +87,7 @@
             <div class="box">
                 <div class="box">
                     <form id="new-post-form" th:action="@{/concerts/{id}/posts(id=${concert.id})}" th:object="${post}" method="post" enctype="multipart/form-data">
-                        <label class="label" for="post-content" aria-hidden="false">Content</label>
+                        <label class="label" for="post-content" aria-hidden="false"></label>
                         <textarea
                                 id="post-content"
                                 rows="3"

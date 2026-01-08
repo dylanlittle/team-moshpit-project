@@ -331,7 +331,7 @@
                 <div class="feed-post box" th:if="${posts != null and !#lists.isEmpty(posts)}"
                      th:each="post : ${posts}">
                     <div class="post-header">
-                        <h3 th:text="${user.username}">SUNNY</h3>
+                        <h3 th:text="${user.username}"></h3>
                         <span class="post-time"
                               th:text="${#temporals.format(post.timestamp,'yyyy-MM-dd HH:mm:ss', userTimezone)}"></span>
                     </div>

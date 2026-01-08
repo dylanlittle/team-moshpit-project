@@ -154,14 +154,13 @@
         </div>
         <!-- Admin make new post-->
         <div class="box" th:if="${isAdminMode and activeAdminArtist.id == artist.id}">
+            <h2>Share an Update</h2>
             <form id="new-post-form" th:action="@{/artists/{id}/posts(id=${artist.id})}" th:object="${post}" method="post" enctype="multipart/form-data">
-                <label class="label" for="post-content" aria-hidden="true">Create a Post</label>
-                <textarea
+                <label class="label" for="post-content" aria-hidden="true"><textarea
                         id="post-content"
                         rows="3"
                         th:field="*{content}"
-                        th:placeholder="'Share an update with your fans...'"></textarea>
-
+                        th:placeholder="'Share an update with your fans...'"></textarea></label>
                 <input type="hidden" th:field="*{mediaUrl}" id="mediaUrl">
                 <input type="hidden" th:field="*{mediaType}" id="mediaType">
 
@@ -196,7 +195,6 @@
     <!-- middle column-->
     <main class="middle-column" id="fan-feed">
         <!-- Posts -->
-<!-- Artist page post formatting stuff -->
         <div class="box">
             <h2>Updates</h2>
 
@@ -208,10 +206,9 @@
             <div class="feed-post box" th:each="post : ${posts}">
                 <div class="post-header">
                     <h3 th:text="${artist.name}">Artist Name</h3>
-
                     <span class="post-time"
                           th:text="${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}">
-      </span>
+                    </span>
                 </div>
 
                 <p style="white-space: pre-wrap;" th:text="${post.content}"></p>
@@ -233,10 +230,17 @@
                                th:src="${post.mediaUrl}"
                                controls>
                         </audio>
+                </div>
 
-                    </div>
-                </li>
-            </ul>
+                <!-- References concert page-->
+                <a class="post-source"
+                   th:if="${post.concert != null}"
+                   th:href="@{/concerts/{id}(id=${post.concert.id})}">
+                    <span th:text="${post.concert.artist.name}">Artist</span>
+                    <span aria-hidden="true"> • </span>
+                    <span th:text="${post.concert.venue.venueName}">Venue</span>
+                </a>
+            </div>
         </div>
     </main>
 
@@ -254,7 +258,7 @@
 
 
             <div class="box concerts-column" id="upcoming-dates">
-                <!--<div th:class="concerts-column">-->
+                <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}"><button>Add new date</button></a>
                 <div class="feed-post box" th:each="concert:${futureConcerts}">
                     <div>
                         <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
@@ -264,13 +268,11 @@
                         <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
                     </div>
                 </div>
-                <!--</div>-->
                 <p th:if="${#lists.isEmpty(futureConcerts)}">No upcoming shows.</p>
-                <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>
             </div>
 
             <div class="box concerts-column" id="previous-dates" hidden>
-                <!--<div th:class="concerts-column">-->
+                <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>
                 <div class="feed-post box" th:each="concert:${pastConcerts}">
                     <div>
                         <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
@@ -281,24 +283,8 @@
                     </div>
                 </div>
                 <p th:if="${#lists.isEmpty(pastConcerts)}">No previous shows.</p>
-                <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>
             </div>
         </aside>
     </div>
 </body>
 </html>
-                    <!--<div class="box upcoming-dates" id="previous-dates" hidden>
-                    <div class="concert-card" th:each="concert : ${pastConcerts}">
-                        <span class="concert-pin"></span>
-
-                        <a th:href="@{/concerts/{id}(id=${concert.id})}">
-                            <h4 th:text="${artist.name}"></h4>
-                            <h5 th:text="${concert.venue.venueName}"></h5>
-                            <p th:text="${#temporals.format(concert.concertDate,'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}">
-                            </p>
-                        </a>
-                    </div>
-
-                    <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>-->
-
-

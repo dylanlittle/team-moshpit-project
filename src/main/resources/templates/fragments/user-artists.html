@@ -1,6 +1,6 @@
 <div th:fragment="artistList">
-    <ul style="display: flex; margin: 12px 0;">
-        <li th:each="artist : ${myArtists}">
+    <ul class="artist-grid">
+        <li th:each="artist : ${myArtists}" class="artist-item">
             <div th:replace="~{fragments/display-card :: displayCard(
                 ${artist.name},
                 '/artists/' + ${artist.id},
@@ -9,15 +9,15 @@
             )}"></div>
 
             <form th:if="${isAdminMode and activeAdminArtist.id == artist.id}"
-                  th:action="@{/switch-to-user}" method="post">
-                <button type="submit" style="margin-top: 5px;">
+                  th:action="@{/switch-to-user}" method="post" style="width: 100%;">
+                <button type="submit" class="btn btn-admin-active">
                     Exit admin mode
                 </button>
             </form>
 
             <form th:unless="${isAdminMode and activeAdminArtist.id == artist.id}"
-                  th:action="@{/artists/{artistId}/switch-to-admin(artistId=${artist.id})}" method="post">
-                <button type="submit" style="margin-top: 5px;">
+                  th:action="@{/artists/{artistId}/switch-to-admin(artistId=${artist.id})}" method="post" style="width: 100%;">
+                <button type="submit" class="btn btn-admin-switch">
                     Switch to admin mode
                 </button>
             </form>

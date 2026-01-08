@@ -1,0 +1,80 @@
+body{
+  background:
+    radial-gradient(1200px 700px at 20% -10%, rgba(196,58,47,.14), transparent 55%),
+    radial-gradient(900px 600px at 90% 0%, rgba(30,127,122,.10), transparent 55%),
+    var(--wall);
+  color:var(--ink);
+  font-family: system-ui, sans-serif;
+}
+
+/* Container for the whole search page */
+.search-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 18px 40px;
+}
+
+/* The search form at the top */
+.search-form {
+    display: flex;
+    gap: 16px;
+    border-bottom: 1px solid rgba(243, 239, 232, 0.2);
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* The result headers (Artists, Users) */
+.search-section h2 {
+    margin: 32px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* The grid/list of results */
+.results-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    list-style: none;
+    padding: 0;
+    margin: 16px 0;
+    justify-content: flex-start;
+}
+
+/* Individual list items */
+.results-list li {
+    display: flex;
+    justify-content: center;
+}
+
+/* Center the form and its contents */
+.search-form {
+    display: flex;
+    gap: 24px;
+    justify-content: flex-start
+    align-items: center;
+    border-bottom: 1px solid rgba(243, 239, 232, 0.2);
+    margin-bottom: 32px;
+    padding: 20px 0;
+}
+
+.search-form > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-form label {
+    margin: 0;
+    white-space: nowrap;
+}
+
+.search-form button {
+    margin: 0;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -9,15 +9,15 @@
     <link rel="stylesheet" href="/main.css">
     <link rel="stylesheet" href="/navbar.css"/>
     <link rel="stylesheet" href="/theme.css"/>
+    <link rel="stylesheet" href="/search-results.css"/>
 </head>
 
 <body>
 <header class="page-header">
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
 </header>
-    <main>
-        <form th:action="@{/search}" method="get"
-            style="display: flex; gap: 16px; border-bottom: solid; margin-bottom: 24px; padding-bottom: 8px;">
+    <main class="search-container">
+        <form th:action="@{/search}" method="get" class="search-form">
             <div>
                 <label for="query">Search term:</label>
                 <input type="text" id="query" name="query" placeholder="Enter name or username" th:value="${query}"
@@ -32,12 +32,12 @@
                 </select>
             </div>
             <div>
-                <button type="submit" style="margin: 0 0 0 8px;">Search</button>
+                <button type="submit" class="btn">Search</button>
             </div>
         </form>
 
         <!--    All results-->
-        <section th:if="${type == 'all'}">
+        <section th:if="${type == 'all'}" class="search-section">
             <div th:if="${#lists.isEmpty(userResults) and #lists.isEmpty(artistResults)}">
                 No results found.
             </div>
@@ -47,7 +47,7 @@
                 <span th:case="1">Found 1 artist.</span>
                 <span th:case="*" th:text="'Found ' + ${#lists.size(artistResults)} + ' artists.'"></span>
             </p>
-            <ol style="display: flex;">
+            <ol class="results-list">
                 <li th:each="artist : ${artistResults}">
                     <div
                         th:replace="~{fragments/display-card :: displayCard(${artist.name}, ' artists/' + ${artist.id}, ${artist.avatar} ?: 'https://placehold.co/128', 'Picture of artist')}">
@@ -60,10 +60,9 @@
                 <span th:case="1">Found 1 user.</span>
                 <span th:case="*" th:text="'Found ' + ${#lists.size(userResults)} + ' users.'"></span>
             </p>
-            <ol>
+            <ol class="results-list">
                 <li th:each="user: ${userResults}">
-                    <div
-                        th:replace="~{fragments/display-card :: displayCard(${user.username}, ' users/' + ${user.id},  ${user.avatar} ?: 'https://placehold.co/128', 'Picture of user')}">
+                    <div th:replace="~{fragments/display-card :: displayCard(${user.username}, ' users/' + ${user.id},  ${user.avatar} ?: 'https://placehold.co/128', 'Picture of user')}">
                     </div>
                 </li>
             </ol>
@@ -80,7 +79,7 @@
                 <span th:case="*" th:text="'Found ' + ${#lists.size(artistResults)} + ' artists.'"></span>
             </p>
 
-            <ol style="display: flex;">
+            <ol class="results-list">
                 <li th:each="artist : ${artistResults}">
                     <div
                         th:replace="~{fragments/display-card :: displayCard(${artist.name}, 'artists/' + ${artist.id}, ${artist.avatar} ?: 'https://placehold.co/128', 'Picture of artist')}">
@@ -100,8 +99,8 @@
                 <span th:case="*" th:text="'Found ' + ${#lists.size(userResults)} + ' users.'"></span>
             </p2>
 
-            <ol style="display: flex;">
-                <li th:each="user: ${userResults}">
+            <ol class="results-list">
+                <li th:each="user: ${userResults}" style="display: flex; justify-content: center;">
                     <div
                         th:replace="~{fragments/display-card :: displayCard(${user.username}, 'users/' + ${user.id}, ${user.avatar} ?: 'https://placehold.co/128', 'Picture of user')}">
                     </div>

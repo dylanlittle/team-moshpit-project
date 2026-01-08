@@ -1,6 +1,8 @@
 <a th:fragment="displayCard(title, path, imageSrc, imageAlt)" th:href="${path}"
-   style="display: flex; flex-direction: column; margin: 8px; text-decoration: none;"
+   style="display: flex; flex-direction: column; align-items: center; text-align: center; margin: 8px; text-decoration: none;"
    xmlns:th="http://www.w3.org/1999/xhtml">
     <img height="128" width="128" th:src="${imageSrc}" th:alt="${imageAlt}"></img>
-    <div style="margin-top: 8px" th:text="${title}"></div>
+    <div style="margin-top: 8px">
+        <h4 class="display-card-name" th:text="${title}"></h4>
+    </div>
 </a>

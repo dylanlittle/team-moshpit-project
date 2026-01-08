@@ -152,14 +152,10 @@
                 </div>
             </div>
         </div>
-    </aside>
-
-    <!-- middle column-->
-    <main class="middle-column" id="fan-feed">
-
+        <!-- Admin make new post-->
         <div class="box" th:if="${isAdminMode and activeAdminArtist.id == artist.id}">
             <form id="new-post-form" th:action="@{/artists/{id}/posts(id=${artist.id})}" th:object="${post}" method="post" enctype="multipart/form-data">
-                <label class="label" for="post-content" aria-hidden="false">Content</label>
+                <label class="label" for="post-content" aria-hidden="true">Create a Post</label>
                 <textarea
                         id="post-content"
                         rows="3"
@@ -195,6 +191,11 @@
             </form>
         </div>
 
+    </aside>
+
+    <!-- middle column-->
+    <main class="middle-column" id="fan-feed">
+        <!-- Posts -->
         <div class="box">
             <ul>
                 <li th:each="post : ${posts}" class="mb-3">

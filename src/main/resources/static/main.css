@@ -239,3 +239,8 @@ dialog::after {
     display: table;
     clear: both;
 }
+
+/* Hidden */
+[hidden] {
+    display: none !important;
+}

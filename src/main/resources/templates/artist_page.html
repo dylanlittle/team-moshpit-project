@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="/navbar.css"/>
     <link rel="stylesheet" href="/artist-profile.css"/>
+    <link rel="stylesheet" href="/user-profile.css"/>
     <link rel="stylesheet" href="/theme.css"/>
+    <link rel="stylesheet" href="/index.css"/>
     <th:block th:replace="~{fragments/timezone-script :: timezone-detector}"></th:block>
     <script src="/js/posts.js" defer></script>
     <script src="/js/dates_toggle.js" defer></script>
@@ -14,12 +16,44 @@
 
 <body>
   
-<!-- Header -->
+<!-- Navbar -->
 <header class="page-header">
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
 </header>
 
-<div class="artist-header">
+<!-- Artist header-->
+<!-- header box -->
+<div class="header-layout">
+    <div class="box user-header">
+        <!-- profile picture -->
+        <div class="header-box profile-picture">
+            <img th:src="${artist.avatar} ?: '/uploads/default_profile.png'"
+                 alt="Artist profile picture"
+                 style="width:160px;height:160px;object-fit:cover;"/>
+        </div>
+        <!-- account type, name, username, bio and location -->
+        <div class="header-box">
+            <!-- Account type-->
+            <h4>Artist account</h4>
+            <!-- Name -->
+            <h1 th:text="${artist.name}"></h1>
+            <!-- Genre -->
+            <div class="artist-genre" th:text="${artist.genre}"></div>
+            <!-- Bio -->
+            <p th:text="${artist.bio}"></p>
+        </div>
+        <!-- Follow button -->
+        <div>
+            <form th:if="${!isAdminMode}" th:action="${isFollowing} ? @{/artists/{id}/unfollow(id=${artist.id})} : @{/artists/{id}/follow(id=${artist.id})}" method="post">
+                <button type="submit"
+                        th:text="${isFollowing} ? 'Unfollow' : 'Follow'"
+                        th:class="${isFollowing} ? 'btn-secondary' : 'btn-secondary'">
+                </button>
+            </form>
+        </div>
+    </div>
+<!-- Artist header end -->
+<!--<div class="artist-header">
     <h1 th:text="${artist.name}"></h1>
     <div class="artist-genre" th:text="${artist.genre}"></div>
     <form th:if="${!isAdminMode}" th:action="${isFollowing} ? @{/artists/{id}/unfollow(id=${artist.id})} : @{/artists/{id}/follow(id=${artist.id})}" method="post">
@@ -27,7 +61,7 @@
                 th:text="${isFollowing} ? 'Unfollow' : 'Follow'"
                 th:class="${isFollowing} ? 'btn-secondary' : 'btn-primary'">
         </button>
-    </form>
+    </form>-->
     <button th:if="${isAdminMode and activeAdminArtist.id == artist.id}" onclick="document.getElementById('adminPanel').showModal()">Admins</button>
     <div th:if="${isAdminMode and activeAdminArtist.id == artist.id}">
         <a th:href="@{/artists/{id}/update(id=${artist.id})}">
@@ -48,11 +82,11 @@
     <!-- Left colum -->
     <aside class="left-column">
 
-        <div class="box profile-picture">
+        <!--<div class="box profile-picture">
             <img th:src="${artist.avatar} ?: '/uploads/default_profile.png'"
                  alt="Artist profile picture"
                  style="width:160px;height:160px;object-fit:cover;"/>
-        </div>
+        </div>-->
 
         <div class="box" th:if="${relationshipStats != null and !isAdminMode}">
             <h3>Your relationship with this artist</h3>
@@ -97,12 +131,6 @@
                     </ul>
                 </div>
             </div>
-        </div>
-
-
-        <div class="box">
-            <h3>Bio</h3>
-            <p th:text="${artist.bio}"></p>
         </div>
 
     </aside>
@@ -229,41 +257,55 @@
             </select>
         </div>
 
-        <div class="box upcoming-dates" id="upcoming-dates">
-            <div class="concert-card" th:each="concert : ${futureConcerts}">
-                <span class="concert-pin"></span>
 
-                <a th:href="@{/concerts/{id}(id=${concert.id})}">
-                    <h4 th:text="${artist.name}"></h4>
-                    <h5 th:text="${concert.venue.venueName}"></h5>
-                    <p th:text="${#temporals.format(concert.concertDate,'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}">
-                    </p>
-                </a>
-            </div>
-
+        <div class="box concerts-column" id="upcoming-dates">
+            <!--<div th:class="concerts-column">-->
+                <div class="feed-post box" th:each="concert:${futureConcerts}">
+                    <div>
+                        <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
+                            <h2 th:text="${artist.name}"></h2>
+                        </a>
+                        <h3 th:text="${concert.venue.venueName}"></h3>
+                        <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
+                    </div>
+                </div>
+            <!--</div>-->
+            <p th:if="${#lists.isEmpty(futureConcerts)}">No upcoming shows.</p>
             <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>
-
         </div>
 
-        <div class="box upcoming-dates" id="previous-dates" hidden>
-            <div class="concert-card" th:each="concert : ${pastConcerts}">
-                <span class="concert-pin"></span>
-
-                <a th:href="@{/concerts/{id}(id=${concert.id})}">
-                    <h4 th:text="${artist.name}"></h4>
-                    <h5 th:text="${concert.venue.venueName}"></h5>
-                    <p th:text="${#temporals.format(concert.concertDate,'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}">
-                    </p>
-                </a>
-            </div>
-
-            <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>
-
+        <div class="box concerts-column" id="previous-dates" hidden>
+            <!--<div th:class="concerts-column">-->
+                <div class="feed-post box" th:each="concert:${pastConcerts}">
+                    <div>
+                        <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
+                            <h2 th:text="${artist.name}"></h2>
+                        </a>
+                        <h3 th:text="${concert.venue.venueName}"></h3>
+                        <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
+                    </div>
+                </div>
+                <!--</div>-->
+                <p th:if="${#lists.isEmpty(pastConcerts)}">No previous shows.</p>
+                <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>
+           <!-- </div>-->
         </div>
-
     </aside>
-
-</div>
-
+    </div>
 </body>
 </html>
+                    <!--<div class="box upcoming-dates" id="previous-dates" hidden>
+                    <div class="concert-card" th:each="concert : ${pastConcerts}">
+                        <span class="concert-pin"></span>
+
+                        <a th:href="@{/concerts/{id}(id=${concert.id})}">
+                            <h4 th:text="${artist.name}"></h4>
+                            <h5 th:text="${concert.venue.venueName}"></h5>
+                            <p th:text="${#temporals.format(concert.concertDate,'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}">
+                            </p>
+                        </a>
+                    </div>
+
+                    <a th:if="${isAdminMode and activeAdminArtist.id == artist.id}" th:href="@{/artists/{id}/concerts/new(id=${artist.id})}" ><button>Add new date</button></a>-->
+
+

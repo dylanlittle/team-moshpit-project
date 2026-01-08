@@ -22,7 +22,6 @@
 <div th:if="${!editing}" class="box user-header">
         <!-- profile picture -->
         <div class="header-box profile-picture">
-            <!-- Hides old image when changing profile picture -->
             <img th:src="${user.avatar} ?: '/uploads/default_profile.png'"
                  alt="Profile picture"
                  style="width:160px;height:160px;object-fit:cover;"/>

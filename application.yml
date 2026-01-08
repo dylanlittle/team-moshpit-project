@@ -1,20 +1,16 @@
-
-spring:
-  config:
-  import: optional:file:.env[.properties]
+#spring:
+#  config:
+#    import: optional:file:.env[.properties]
 
 okta:
   oauth2:
     issuer: ${AUTH_ISSUER}
     client-id: ${AUTH_CLIENT_ID}
     client-secret: ${AUTH_CLIENT_SECRET}
-    redirect-uri: http://localhost:8080/login/oauth2/code/auth0
-
-
-cloudinary:
-  cloud-name: ${CLOUDINARY_CLOUD_NAME}
-  api-key: ${CLOUDINARY_API_KEY}
-  api-secret: ${CLOUDINARY_API_SECRET}
+  cloudinary:
+    cloud-name: ${CLOUDINARY_CLOUD_NAME}
+    api-key: ${CLOUDINARY_API_KEY}
+    api-secret: ${CLOUDINARY_API_SECRET}
 
 spotify:
   client-id: ${SPOTIFY_CLIENT_ID}
@@ -23,3 +19,5 @@ spotify:
   token-url: ${SPOTIFY_TOKEN_URL}
   api-base-url: ${SPOTIFY_API_BASE_URL}
   redirect-uri: ${SPOTIFY_REDIRECT_URL}
+
+

@@ -39,6 +39,11 @@
    (with HOMEPAGE pin design)
    ============================ */
 
+#previous-dates,
+#upcoming-dates{
+    gap:0;
+}
+
 .concerts-column {
     background: none;
     margin-top: 15px;

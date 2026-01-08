@@ -15,6 +15,7 @@
 <body>
 
 <!-- header box -->
+<div class="header-layout">
 <div th:if="${!editing}" class="box user-header">
         <!-- profile picture -->
         <div class="header-box profile-picture">
@@ -23,7 +24,6 @@
                  alt="Profile picture"
                  style="width:160px;height:160px;object-fit:cover;"/>
         </div>
-
         <!-- account type, name, username, bio and location -->
         <div class="header-box">
             <!-- Account type-->
@@ -32,18 +32,15 @@
             <h1 th:text="${user.name}"></h1>
             <!-- Username -->
             <p th:text="'@' + ${user.username}"></p>
-
             <!-- Bio -->
             <p th:text="${user.bio}"></p>
             <div th:if="${editing}">
                 <textarea name="bio" rows="4" th:text="${user.bio}"></textarea>
             </div>
-
             <!-- Location -->
             <div th:if="${user.location != null}">
                 <p th:text="'📍 ' + ${user.location}"></p>
             </div>
-
         </div>
     <div>
         <a th:href="@{/users/{id}/edit(id=${user.id})}">
@@ -53,7 +50,6 @@
 </div>
 
 <!-- header box when in EDITING MODE-->
-<!--<div class="box" th:if="${editing}">-->
 <div th:if="${editing}" class="box form-container">
     <h2>Edit Profile Information</h2>
     <form th:action="@{/users/{id}(id=${user.id})}"
@@ -61,7 +57,7 @@
             enctype="multipart/form-data"
             class="user-header edit-mode">
         <!-- profile picture -->
-        <div class="header-box"><!--edit-profile-picture-->
+        <div class="header-box">
             <div>
                 <label>Change profile image</label>
                 <input type="file" name="image" accept="image/*"/>
@@ -83,10 +79,8 @@
                        th:value="${user.username}"/>
             </div>
         </div>
-
         <!-- Bio, location -->
         <div class="header-box">
-
             <!-- Bio -->
             <div>
                 <label for="edit-bio">Bio</label>
@@ -95,41 +89,26 @@
                           id="edit-bio"
                           th:text="${user.bio}"></textarea>
             </div>
-
             <!-- Location -->
             <div>
                 <label for="edit-location">Change location</label>
                 <input type="text" name="location" id="edit-location" th:value="${user.location}"/>
             </div>
         </div>
-
+        <!-- Action buttons -->
         <div>
-            <!-- actions -->
-            <!--<div class="actions">-->
                 <button type="submit">Save Changes</button>
                 <button th:href="@{/users/{id}(id=${user.id})}" class="btn">
                     Cancel
                 </button>
-            <!--</div>-->
         </div>
     </form>
 </div>
-
-    <!--<div th:if="${!editing}">
-        <a th:href="@{/users/{id}/edit(id=${user.id})}">
-            <button>Edit Profile</button>
-        </a>
-    </div>-->
-    <!--</div>-->
-
+</div>
 
 <div class="page-layout">
-
     <!-- left column -->
     <aside class="left-column">
-
-        <!--<div class="box">
-        </div>-->
 
         <!-- Spotify box -->
         <div th:if="${isOwner}">

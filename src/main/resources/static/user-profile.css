@@ -56,7 +56,8 @@ body::before{
 
 
 .user-header,
-.page-layout{
+.page-layout,
+.header-layout{
   max-width: 1100px;
   margin: 0 auto;
   padding: 18px;
@@ -119,6 +120,10 @@ form.user-header.edit-mode > div:last-child {
 }
 
 /* Edit profile information header */
+.header-layout {
+    padding-top: 14px;
+}
+
 .form-container h2{
   margin: 10px 0 4px;
   font-weight: 900;
@@ -335,7 +340,7 @@ input:focus, textarea:focus, select:focus{
 
 /* Makes site adapatable for smaller screens, phones for example */
 @media (max-width: 900px){
-  .user-header, .page-layout{ padding-left: 14px; padding-right: 14px; }
+  .user-header, .page-layout, .header-layout{ padding-left: 14px; padding-right: 14px; }
   #fan-feed .nav-bar{ flex-wrap: wrap; }
 }
 /* Myartist pop up text is readable */

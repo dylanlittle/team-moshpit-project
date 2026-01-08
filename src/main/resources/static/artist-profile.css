@@ -7,6 +7,16 @@
   letter-spacing:.12em;
 }
 
+.main-layout{
+  padding-top: 14px;
+  padding-bottom: 44px;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 0.5fr;
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 /* Concert card*/
 
 .left-column .box,

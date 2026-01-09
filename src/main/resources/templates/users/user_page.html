@@ -195,7 +195,7 @@
             </div>
         </div>
 
-        <div th:if="${isOwner}">
+        <div th:if="${isOwner and user.spotifyRefreshToken != null}">
             <div class="box">
                 <h3>Currently Listening</h3>
                 <div id="now-playing" class="card shadow-sm mb-4">

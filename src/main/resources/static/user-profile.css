@@ -73,7 +73,7 @@ body::before{
     margin: 0 auto;
 }
 
-.page-layout.concert-page-layout {
+.page-layout.extended-page-layout {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 

@@ -68,7 +68,7 @@
 </div>
 
 <!-- Main -->
-<div class="page-layout concert-page-layout">
+<div class="page-layout extended-page-layout">
 
     <!-- middle column-->
     <main class="right-column" id="concert_tabs">
@@ -87,7 +87,7 @@
             <div class="box">
                 <div class="box">
                     <form id="new-post-form" th:action="@{/concerts/{id}/posts(id=${concert.id})}" th:object="${post}" method="post" enctype="multipart/form-data">
-                        <label class="label" for="post-content" aria-hidden="false">Content</label>
+                        <label class="label" for="post-content" aria-hidden="false"></label>
                         <textarea
                                 id="post-content"
                                 rows="3"
@@ -200,7 +200,7 @@
                             <video th:src="${post.mediaUrl}"
                                    controls
                                    class="gallery-media"
-                                   th:data-author="${post.artist} ? ${post.artist.name} : ${post.user.username}"
+                                   th:data-author="${post.artist} ? ${post.artist.name} : ${post.user.username} + ':'"
                                    th:data-caption="${post.content}"
                                    th:data-type="'video'">
                             </video>

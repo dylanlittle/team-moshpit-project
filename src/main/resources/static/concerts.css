@@ -136,7 +136,12 @@
 
 .modal-info {
     padding: 20px;
-    color: #333;
+}
+
+#modalAuthor, #modalCaption {
+    color: #333 !important;
+    text-shadow: none !important;
+    letter-spacing: 0.02em;
 }
 
 .close-btn {

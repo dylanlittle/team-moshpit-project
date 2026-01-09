@@ -19,4 +19,5 @@ spotify:
   api-base-url: ${SPOTIFY_API_BASE_URL}
   redirect-uri: ${SPOTIFY_REDIRECT_URL}
 
-
+server:
+  port: ${PORT:8080}

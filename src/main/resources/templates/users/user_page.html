@@ -275,7 +275,7 @@
 
         <nav class="nav-bar">
             <label for="tab-followed">Followed Artists</label>
-            <label for="tab-shows">My Shows</label>
+            <label for="tab-shows">Shows</label>
             <label for="tab-posts">Posts</label>
         </nav>
 
@@ -300,7 +300,7 @@
         <section class="tab-content" id="content-shows">
             <div class="box">
 
-                <h3 class="section-title">Upcoming (confirmed)</h3>
+                <h3 class="section-title">Upcoming</h3>
 
                 <div class="concerts-column" th:if="${!#lists.isEmpty(upcomingConcerts)}">
                     <div class="feed-post box" th:each="concert : ${upcomingConcerts}">
@@ -327,7 +327,7 @@
                 <div id="pastConcertsSection" style="display:none; margin-top: 1rem;"
                      th:if="${!#lists.isEmpty(pastConcerts)}">
 
-                    <h3 class="section-title">Past (confirmed)</h3>
+                    <h3 class="section-title">Past</h3>
 
                     <div class="concerts-column">
                         <div class="feed-post box" th:each="concert : ${pastConcerts}">

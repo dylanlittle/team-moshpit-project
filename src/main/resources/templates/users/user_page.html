@@ -125,12 +125,16 @@
                 <h3 th:text="${isOwner} ? 'Your Top Artists' : 'Top Artists'">Top Artists</h3>
 
                 <div th:if="${isOwner and user.spotifyRefreshToken != null}">
-                    <form method="post" action="/user/spotify/privacy">
+                    <form method="post" action="/user/spotify/privacy" id="spotifyPrivacyForm">
                         <label>
-                            <input type="checkbox" name="shareTopArtists" th:checked="${user.shareSpotifyTopArtists}">
+                            <input type="checkbox"
+                                   name="shareTopArtists"
+                                   id="shareTopArtistsCheckbox"
+                                   th:checked="${user.shareSpotifyTopArtists}"
+                                   th:attr="data-initial-state=${user.shareSpotifyTopArtists}">
                             Show my Top Artists on my public profile
                         </label>
-                        <button type="submit" class="btn btn-sm btn-outline-secondary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-outline-secondary" id="savePrivacyBtn" style="display: none;">Save</button>
                     </form>
                 </div>
 
@@ -166,7 +170,7 @@
                 </div>
 
                 <ul th:if="${spotifyTopArtists != null and !#lists.isEmpty(spotifyTopArtists)}">
-                    <li th:each="a : ${spotifyTopArtists}">
+                    <li class="spotify-top-artist" th:each="a : ${spotifyTopArtists}">
                         <div style="display:flex; gap:10px; align-items:center;">
                             <img th:if="${a.images != null and !#lists.isEmpty(a.images)}"
                                  th:src="${a.images.get(0).url}"
@@ -194,18 +198,18 @@
         <div th:if="${isOwner}">
             <div class="box">
                 <h3>Currently Listening</h3>
-                <div id="now-playing" class="card shadow-sm mb-4" style="display:none;">
-                    <div class="card-body d-flex align-items-center gap-3">
+                <div id="now-playing" class="card shadow-sm mb-4">
+                    <!--<div class="spotify-now-playing">-->
                         <img id="np-art" alt="Album art"
                              style="width:64px;height:64px;object-fit:cover;border-radius:8px;display:none;">
-                        <div style="flex:1;">
+                        <!--<div style="flex:1;">-->
                             <div class="text-muted" style="font-size:0.9rem;">Currently listening</div>
                             <div id="np-title" style="font-weight:600;"></div>
                             <div id="np-artist" class="text-muted"></div>
                             <div id="np-status" class="text-muted" style="font-size:0.9rem;"></div>
-                        </div>
+                        <!--</div>-->
                         <a id="np-link" target="_blank" class="btn btn-sm btn-outline-secondary" style="display:none;">Open</a>
-                    </div>
+                    <!--</div>-->
                 </div>
                 <script>
                     async function refreshNowPlaying() {
@@ -427,6 +431,27 @@
         btn.setAttribute("aria-expanded", String(isHidden));
       });
     });
+
+    document.addEventListener("DOMContentLoaded", () => {
+    const checkbox = document.getElementById("shareTopArtistsCheckbox");
+    const saveBtn = document.getElementById("savePrivacyBtn");
+
+    if (!checkbox || !saveBtn) return;
+
+    // Get initial state from data attribute
+    const initialState = checkbox.dataset.initialState === "true";
+
+    checkbox.addEventListener("change", () => {
+        // Compare current state with initial state
+        const hasChanged = checkbox.checked !== initialState;
+        saveBtn.style.display = hasChanged ? "inline-block" : "none";
+
+        // Debug logging (you can remove this later)
+        console.log('Checkbox checked:', checkbox.checked);
+        console.log('Initial state:', initialState);
+        console.log('Has changed:', hasChanged);
+    });
+});
 </script>
 
 </body>

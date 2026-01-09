@@ -260,3 +260,22 @@ dialog::after {
 [hidden] {
     display: none !important;
 }
+
+/*image control */
+.feed-post img.gallery-media,
+.feed-post video.gallery-media {
+  width: 100%;
+  max-width: 100%;
+  height: 360px;
+  object-fit: cover;
+  display: block;
+  margin-top: 12px;
+  border-radius: 14px;
+}
+
+/* Fix for giant images on artist updates*/
+#artist-updates-home .feed-post {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}

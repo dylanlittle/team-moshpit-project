@@ -70,12 +70,17 @@
     border-color: #075CE4;
 }
 
-.user-list li.hidden {
+.user-list li.hidden,
+ #no-rsvp-message.hidden {
     display: none;
 }
 
 .user-list li.active {
     display: flex;
+}
+
+#no-rsvp-button.active {
+    display: block;
 }
 
 .gallery-grid {

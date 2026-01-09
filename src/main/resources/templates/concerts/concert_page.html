@@ -127,7 +127,11 @@
 
                         <!-- Header row -->
                         <div class="post-header">
+                            <a th:href="${post.artist != null} ?
+            @{/artists/{id}(id=${post.artist.id})} :
+            @{/users/{id}(id=${post.user.id})}">
                             <h3 th:text="${post.artist != null ? post.artist.name : post.user.username}"></h3>
+                            </a>
                             <span class="post-time"
                                   th:text="${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}">
                             </span>
@@ -153,6 +157,7 @@
                             </audio>
                         </div>
                     </div>
+                    <p th:if="${#lists.isEmpty(posts)}">No posts yet. Say hello!</p>
                 </div>
             </div>
         </section>

@@ -52,7 +52,7 @@
                             <span th:if="${r.popularity != null}" th:text="' · popularity ' + ${r.popularity}"></span>
                         </div>
                         <a th:if="${r.externalUrls != null and r.externalUrls.get('spotify') != null}"
-                           th:href="${r.externalUrls.get('spotify')}" target="_blank" style="font-size:0.9em;">
+                           th:href="${r.externalUrls.get('spotify')}" target="_blank" style="font-size:0.9em;color: white">
                             View on Spotify
                         </a>
                     </div>

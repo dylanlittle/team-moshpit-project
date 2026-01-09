@@ -124,6 +124,19 @@ button {
 }
 
 /* ---  Manage Artists Dialogue --- */
+
+.display-card-name {
+  max-width: 128px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+
 .artist-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -156,6 +169,7 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   text-align: center;
 }
 
@@ -195,6 +209,8 @@ dialog h3 {
 }
 
 .artist-item img {
+  display: block;
+  margin: 0 auto;
   border-radius: 14px;
   object-fit: cover;
   border: 1px solid var(--border);
@@ -238,4 +254,9 @@ dialog::after {
     content: "";
     display: table;
     clear: both;
+}
+
+/* Hidden */
+[hidden] {
+    display: none !important;
 }

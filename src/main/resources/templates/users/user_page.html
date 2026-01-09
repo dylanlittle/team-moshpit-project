@@ -5,7 +5,6 @@
     <title th:text="${user.name}">User Profile</title>
 
     <link rel="stylesheet" href="/main.css" />
-    <link rel="stylesheet" href="/two-column-pages.css" />
     <link rel="stylesheet" href="/navbar.css"/>
     <link rel="stylesheet" href="/user-profile.css"/>
     <link rel="stylesheet" href="/theme.css"/>
@@ -22,7 +21,6 @@
 <div th:if="${!editing}" class="box user-header">
         <!-- profile picture -->
         <div class="header-box profile-picture">
-            <!-- Hides old image when changing profile picture -->
             <img th:src="${user.avatar} ?: '/uploads/default_profile.png'"
                  alt="Profile picture"
                  style="width:160px;height:160px;object-fit:cover;"/>
@@ -37,9 +35,6 @@
             <p th:text="'@' + ${user.username}"></p>
             <!-- Bio -->
             <p th:text="${user.bio}"></p>
-            <div th:if="${editing}">
-                <textarea name="bio" rows="4" th:text="${user.bio}"></textarea>
-            </div>
             <!-- Location -->
             <div th:if="${user.location != null}">
                 <p th:text="'📍 ' + ${user.location}"></p>
@@ -67,7 +62,7 @@
             </div>
             <!-- Name -->
             <div>
-                <label for="edit-username">Name</label>
+                <label for="edit-name">Name</label>
                 <input type="text"
                        name="name"
                        id="edit-name"
@@ -109,9 +104,9 @@
 </div>
 </div>
 
-<div class="page-layout">
+<div th:class="${!isOwner and !canShowPublicTopArtists ? 'page-layout extended-page-layout' : 'page-layout'}">
     <!-- left column -->
-    <aside class="left-column">
+    <aside th:unless="${!isOwner and !canShowPublicTopArtists}" class="left-column">
 
         <!-- Spotify box -->
         <div th:if="${isOwner}">
@@ -130,12 +125,16 @@
                 <h3 th:text="${isOwner} ? 'Your Top Artists' : 'Top Artists'">Top Artists</h3>
 
                 <div th:if="${isOwner and user.spotifyRefreshToken != null}">
-                    <form method="post" action="/user/spotify/privacy">
+                    <form method="post" action="/user/spotify/privacy" id="spotifyPrivacyForm">
                         <label>
-                            <input type="checkbox" name="shareTopArtists" th:checked="${user.shareSpotifyTopArtists}">
+                            <input type="checkbox"
+                                   name="shareTopArtists"
+                                   id="shareTopArtistsCheckbox"
+                                   th:checked="${user.shareSpotifyTopArtists}"
+                                   th:attr="data-initial-state=${user.shareSpotifyTopArtists}">
                             Show my Top Artists on my public profile
                         </label>
-                        <button type="submit" class="btn btn-sm btn-outline-secondary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-outline-secondary" id="savePrivacyBtn" style="display: none;">Save</button>
                     </form>
                 </div>
 
@@ -171,7 +170,7 @@
                 </div>
 
                 <ul th:if="${spotifyTopArtists != null and !#lists.isEmpty(spotifyTopArtists)}">
-                    <li th:each="a : ${spotifyTopArtists}">
+                    <li class="spotify-top-artist" th:each="a : ${spotifyTopArtists}">
                         <div style="display:flex; gap:10px; align-items:center;">
                             <img th:if="${a.images != null and !#lists.isEmpty(a.images)}"
                                  th:src="${a.images.get(0).url}"
@@ -199,18 +198,18 @@
         <div th:if="${isOwner}">
             <div class="box">
                 <h3>Currently Listening</h3>
-                <div id="now-playing" class="card shadow-sm mb-4" style="display:none;">
-                    <div class="card-body d-flex align-items-center gap-3">
+                <div id="now-playing" class="card shadow-sm mb-4">
+                    <!--<div class="spotify-now-playing">-->
                         <img id="np-art" alt="Album art"
                              style="width:64px;height:64px;object-fit:cover;border-radius:8px;display:none;">
-                        <div style="flex:1;">
+                        <!--<div style="flex:1;">-->
                             <div class="text-muted" style="font-size:0.9rem;">Currently listening</div>
                             <div id="np-title" style="font-weight:600;"></div>
                             <div id="np-artist" class="text-muted"></div>
                             <div id="np-status" class="text-muted" style="font-size:0.9rem;"></div>
-                        </div>
+                        <!--</div>-->
                         <a id="np-link" target="_blank" class="btn btn-sm btn-outline-secondary" style="display:none;">Open</a>
-                    </div>
+                    <!--</div>-->
                 </div>
                 <script>
                     async function refreshNowPlaying() {
@@ -282,9 +281,6 @@
             <label for="tab-followed">Followed Artists</label>
             <label for="tab-shows">My Shows</label>
             <label for="tab-posts">Posts</label>
-            <label onclick="document.getElementById('myArtists').showModal()">
-                My Artists
-            </label>
         </nav>
 
         <section class="tab-content" id="content-followed">
@@ -307,34 +303,92 @@
 
         <section class="tab-content" id="content-shows">
             <div class="box">
-                <div th:class="concerts-column">
-                    <div class="feed-post box" th:each="concert:${concerts}">
+
+                <h3 class="section-title">Upcoming (confirmed)</h3>
+
+                <div class="concerts-column" th:if="${!#lists.isEmpty(upcomingConcerts)}">
+                    <div class="feed-post box" th:each="concert : ${upcomingConcerts}">
                         <div>
-                            <a th:href="@{/artists/{id}(id=${concert.artist.id})}">
+                            <a th:href="@{/concerts/{id}(id=${concert.id})}">
                                 <h2 th:text="${concert.artist.name}"></h2>
+                                <h3 th:text="${concert.venue.venueName}"></h3>
+                                <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
                             </a>
-                            <h3 th:text="${concert.venue.venueName}"></h3>
-                            <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
+                        </div>
+                    </div>
+                </div>
+                <p th:if="${#lists.isEmpty(upcomingConcerts)}">No upcoming confirmed shows.</p>
+
+                <button type="button"
+                        class="btn btn-secondary mt-3"
+                        th:if="${!#lists.isEmpty(pastConcerts)}"
+                        id="togglePastConcertsBtn"
+                        aria-expanded="false"
+                        aria-controls="pastConcertsSection">
+                    Show past concerts
+                </button>
+
+                <div id="pastConcertsSection" style="display:none; margin-top: 1rem;"
+                     th:if="${!#lists.isEmpty(pastConcerts)}">
+
+                    <h3 class="section-title">Past (confirmed)</h3>
+
+                    <div class="concerts-column">
+                        <div class="feed-post box" th:each="concert : ${pastConcerts}">
+                            <div>
+                                <a th:href="@{/concerts/{id}(id=${concert.id})}">
+                                    <h2 th:text="${concert.artist.name}"></h2>
+                                    <h3 th:text="${concert.venue.venueName}"></h3>
+                                    <p th:text="${#temporals.format(concert.concertDate, 'dd MMM yyyy')} + ' - ' + ${concert.venue.city} + ', ' + ${concert.venue.country}"></p>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <p th:if="${#lists.isEmpty(concerts)}">No shows yet!</p>
+                <!-- If BOTH empty -->
+                <p th:if="${#lists.isEmpty(upcomingConcerts) and #lists.isEmpty(pastConcerts)}">
+                    No shows yet!
+                </p>
+
             </div>
         </section>
+
+        <!--- Post formatted section -->
 
         <section class="tab-content" id="content-posts">
-            <div class="box">
-                <ul th:if="${posts != null and !#lists.isEmpty(posts)}"
-                    th:each="post : ${posts}">
-                    <li th:text="${post.content}"></li>
-                </ul>
+            <section id="user-posts" class="box user-posts">
 
-                <p th:if="${posts == null or #lists.isEmpty(posts)}">
-                    No posts yet.
-                </p>
-            </div>
+                <!-- Empty state -->
+                <div class="feed-post box" th:if="${posts == null or #lists.isEmpty(posts)}">
+                    <p>No posts yet.</p>
+                </div>
+
+                <!-- Posts -->
+                <div class="feed-post box" th:if="${posts != null and !#lists.isEmpty(posts)}"
+                     th:each="post : ${posts}">
+                    <div class="post-header">
+                        <h3 th:text="${user.username}"></h3>
+                        <span class="post-time"
+                              th:text="${#temporals.format(post.timestamp,'yyyy-MM-dd HH:mm:ss', userTimezone)}"></span>
+                    </div>
+
+                    <!-- NOT a link -->
+                    <p class="post-body" style="white-space: pre-wrap;" th:text="${post.content}"></p>
+
+                    <!-- ONLY this line is clickable -->
+                    <a class="post-source"
+                       th:if="${post.concert != null}"
+                       th:href="@{/concerts/{id}(id=${post.concert.id})}">
+                        <span th:text="${post.concert.artist.name}">Artist</span>
+                        <span aria-hidden="true"> • </span>
+                        <span th:text="${post.concert.venue.venueName}">Venue</span>
+                    </a>
+                </div>
+
+            </section>
         </section>
+
 
         <div th:replace="~{fragments/action-dialogue :: dialog(
         title='My Artists',
@@ -362,6 +416,42 @@
     </main>
 
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("togglePastConcertsBtn");
+      const section = document.getElementById("pastConcertsSection");
+
+      if (!btn || !section) return;
+
+      btn.addEventListener("click", () => {
+        const isHidden = section.style.display === "none" || section.style.display === "";
+        section.style.display = isHidden ? "block" : "none";
+        btn.textContent = isHidden ? "Hide past concerts" : "Show past concerts";
+        btn.setAttribute("aria-expanded", String(isHidden));
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+    const checkbox = document.getElementById("shareTopArtistsCheckbox");
+    const saveBtn = document.getElementById("savePrivacyBtn");
+
+    if (!checkbox || !saveBtn) return;
+
+    // Get initial state from data attribute
+    const initialState = checkbox.dataset.initialState === "true";
+
+    checkbox.addEventListener("change", () => {
+        // Compare current state with initial state
+        const hasChanged = checkbox.checked !== initialState;
+        saveBtn.style.display = hasChanged ? "inline-block" : "none";
+
+        // Debug logging (you can remove this later)
+        console.log('Checkbox checked:', checkbox.checked);
+        console.log('Initial state:', initialState);
+        console.log('Has changed:', hasChanged);
+    });
+});
+</script>
 
 </body>
 </html>

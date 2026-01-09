@@ -56,12 +56,18 @@ public class ConcertController {
         List<Post> posts = postRepository.findAllByConcertIdOrderByTimestampDesc(concertId);
         List<User> crowd = concertGoerRepository.findUsersByConcertId(concertId);
         boolean isGoing = concertGoerRepository.existsByUserAndConcert(currentUser, concert);
+        List<Artist> lineup = lineupArtistRepository.findArtistsByConcertId(concertId);
+        List<Post> mediaPosts = posts.stream()
+                .filter(post -> "image".equals(post.getMediaType()) || "video".equals(post.getMediaType()))
+                .collect(Collectors.toList());
+        model.addAttribute("mediaPosts", mediaPosts);
         model.addAttribute("crowd", crowd);
         model.addAttribute("posts", posts);
         model.addAttribute("concert", concert);
         model.addAttribute("venue", venue);
         model.addAttribute("isGoing", isGoing);
         model.addAttribute("currentUser", currentUser);
+        model.addAttribute("lineup", lineup);
         if (!model.containsAttribute("post")) {
             model.addAttribute("post", new Post());
         }

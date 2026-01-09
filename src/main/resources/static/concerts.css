@@ -1,3 +1,7 @@
+.concert-posts {
+    margin-top: 14px;
+}
+
 #rsvp-btn {
     display: inline-flex;
     align-items: center;
@@ -136,7 +140,12 @@
 
 .modal-info {
     padding: 20px;
-    color: #333;
+}
+
+#modalAuthor, #modalCaption {
+    color: #333 !important;
+    text-shadow: none !important;
+    letter-spacing: 0.02em;
 }
 
 .close-btn {
@@ -152,4 +161,27 @@
     align-items: center;
     justify-content: center;
     background: #000;
+}
+
+.artist-link {
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.artist-link:hover {
+    color: var(--yellow);
+    text-decoration: underline;
+}
+
+.separator {
+    color: var(--muted);
+    margin: 0 4px;
+}
+
+#concert-lineup {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
 }

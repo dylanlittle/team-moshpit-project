@@ -462,5 +462,8 @@
     font-size: 1.1rem;
     text-transform: none;
     letter-spacing: normal;
+    color: var(--ink);
+    margin-top: 1rem;
+    opacity: 0.8;
 }
 

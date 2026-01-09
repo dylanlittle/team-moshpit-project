@@ -3,53 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <title>Complete Profile</title>
+
     <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="/navbar.css"/>
     <link rel="stylesheet" href="/theme.css"/>
+    <link rel="stylesheet" href="/artist-profile.css"/>
 </head>
+
+<body>
 <header class="page-header">
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
 </header>
-<body>
-<h1>Complete Your Profile</h1>
-<h5>Please fill in your details to finish completing your account!</h5>
-<div>
-    <form method="post" id="new-user-form" th:action="@{/users/create}" th:object="${newUser}" enctype="multipart/form-data">
-        <label for="username" class="required-label">Username:</label>
-        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red;"></div><br>
-        <input required type="text" id="username" th:field="*{username}"><br><br>
 
-        <label for="name" class="required-label">Name:</label>
-        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></div><br>
-        <input required type="text" id="name" th:field="*{name}"><br><br>
-
-        <label for="bio">Bio:</label>
-        <div th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}" style="color: red;"></div><br>
-        <input type="text" id="bio" th:field="*{bio}"><br><br>
-
-        <label for="location" class="required-label">Location:</label>
-        <div th:if="${#fields.hasErrors('location')}" th:errors="*{location}" style="color: red;"></div><br>
-        <input required type="text" id="location" th:field="*{location}"><br><br>
-
-        <div class="mb-3">
-            <label for="avatar">Profile Picture:</label><br>
-            <input type="file"
-                   class="form-control mb-3"
-                   id="avatar"
-                   name="image"
-                   accept="image/*">
-            <button type="button"
-                    id="clearMediaBtn"
-                    class="btn btn-outline-secondary btn-sm mt-2 d-none">
-                Remove selected file
-            </button>
+<div class="artist-header">
+    <div class="artist-header-content">
+        <h1 style="margin: 0;">Complete Your Profile</h1>
+        <div class="artist-genre">
+            Finish setting up your account
         </div>
-
-        <input id="submit" type="submit" value="Submit">
-    </form>
+    </div>
 </div>
+
+<div class="page-layout">
+    <div class="left-column"></div>
+
+    <main class="middle-column">
+        <div class="box">
+
+            <p>Please fill in your details to finish completing your account.</p>
+
+            <form method="post"
+                  id="new-user-form"
+                  th:action="@{/users/create}"
+                  th:object="${newUser}"
+                  enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label for="username" class="required-label">Username</label>
+                    <input required
+                           type="text"
+                           id="username"
+                           th:field="*{username}">
+                    <div th:if="${#fields.hasErrors('username')}"
+                         th:errors="*{username}"
+                         class="error-msg"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="required-label">Name</label>
+                    <input required
+                           type="text"
+                           id="name"
+                           th:field="*{name}">
+                    <div th:if="${#fields.hasErrors('name')}"
+                         th:errors="*{name}"
+                         class="error-msg"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio"
+                              th:field="*{bio}"
+                              rows="4"
+                              placeholder="Tell us a little about yourself...">
+                    </textarea>
+                    <div th:if="${#fields.hasErrors('bio')}"
+                         th:errors="*{bio}"
+                         class="error-msg"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="location" class="required-label">Location</label>
+                    <input required
+                           type="text"
+                           id="location"
+                           th:field="*{location}">
+                    <div th:if="${#fields.hasErrors('location')}"
+                         th:errors="*{location}"
+                         class="error-msg"></div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="avatar">Profile Picture</label>
+                    <input type="file"
+                           id="avatar"
+                           name="image"
+                           accept="image/*">
+                    <button type="button"
+                            id="clearMediaBtn"
+                            class="btn-secondary d-none">
+                        Remove selected file
+                    </button>
+                </div>
+
+                <div class="form-actions">
+                    <button id="submit"
+                            type="submit"
+                            class="btn-primary">
+                        Submit
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <div class="right-column"></div>
+</div>
+
 <script>
-    const mediaInput = document.getElementById("image");
+    const mediaInput = document.getElementById("avatar");
     const clearBtn = document.getElementById("clearMediaBtn");
 
     clearBtn.classList.add("d-none");
@@ -66,7 +129,7 @@
         mediaInput.value = "";
         clearBtn.classList.add("d-none");
     });
-
 </script>
+
 </body>
 </html>

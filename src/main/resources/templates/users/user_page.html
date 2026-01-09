@@ -15,7 +15,6 @@
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
 </header>
 <body>
-
 <!-- header box -->
 <div class="header-layout">
 <div th:if="${!editing}" class="box user-header">
@@ -353,7 +352,7 @@
         <!--- Post formatted section -->
 
         <section class="tab-content" id="content-posts">
-            <section id="user-posts" class="box user-posts">
+            <section id="user-posts" class="app-feed">
                 <h2>Posts</h2>
 
                 <!-- Empty state -->
@@ -370,10 +369,30 @@
                               th:text="${#temporals.format(post.timestamp,'yyyy-MM-dd HH:mm:ss', userTimezone)}"></span>
                     </div>
 
-                    <!-- NOT a link -->
                     <p class="post-body" style="white-space: pre-wrap;" th:text="${post.content}"></p>
 
-                    <!-- ONLY this line is clickable -->
+                    <img th:if="${post.mediaType == 'image'}"
+                         th:src="${post.mediaUrl}"
+                         alt="Concert image"
+                         class="gallery-media"
+                         onclick="openModal(this)"
+                         th:data-author="${post.artist} ? ${post.artist.name} + ':' : ${post.user.username} + ':'"
+                         th:data-caption="${post.content}"
+                         th:data-type="'image'"
+                         style="cursor: pointer;">
+
+                    <div th:if="${post.mediaType == 'video'}" class="video-container" style="position: relative; width: 100%; height: 100%;">
+                        <video th:src="${post.mediaUrl}"
+                               controls
+                               class="gallery-media"
+                               th:data-author="${post.artist} ? ${post.artist.name} : ${post.user.username}"
+                               th:data-caption="${post.content}"
+                               th:data-type="'video'">
+                        </video>
+
+
+
+
                     <a class="post-source"
                        th:if="${post.concert != null}"
                        th:href="@{/concerts/{id}(id=${post.concert.id})}">
@@ -381,6 +400,7 @@
                         <span aria-hidden="true"> • </span>
                         <span th:text="${post.concert.venue.venueName}">Venue</span>
                     </a>
+                </div>
                 </div>
 
             </section>

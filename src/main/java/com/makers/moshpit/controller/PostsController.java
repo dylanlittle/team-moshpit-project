@@ -117,6 +117,10 @@ public class PostsController {
             Artist activeArtist = artistRepository.findById(activeArtistId)
                     .orElseThrow(() -> new RuntimeException("Artist not found"));
             post.setArtist(activeArtist);
+            post.setUser(null);
+        } else {
+            post.setUser(currentUser);
+            post.setArtist(null);
         }
         postRepository.save(post);
 

@@ -43,9 +43,9 @@
         <div class="nav-right">
             <div class="profile-dropdown">
                 <a href="/user" class="profile-link">
-                    <img th:src="${user != null && user.avatar != null && !user.avatar.isEmpty()}
-            ? ${user.avatar}
-            : @{/uploads/profile_placeholder.png}"
+                    <img th:src="${currentUser != null && currentUser.avatar != null && !currentUser.avatar.isEmpty()}
+                ? ${currentUser.avatar}
+                : @{/uploads/profile_placeholder.png}"
                          alt="Profile"
                          class="profile-avatar" />
                 </a>

@@ -12,7 +12,7 @@ public class UserAttributeAdvice {
     @Autowired
     AuthService authService;
 
-    @ModelAttribute("user")
+    @ModelAttribute("currentUser")
     public User addGlobalUser() {
         try {
             return authService.getCurrentUser();

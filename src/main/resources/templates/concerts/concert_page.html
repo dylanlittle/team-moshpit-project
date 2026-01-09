@@ -178,7 +178,7 @@
                         </div>
                     </li>
                 </ul>
-                <p th:if="${#lists.isEmpty(crowd)}">No one's RSVP'd yet. Be the first to join!</p>
+                <p th:id="no-rsvp-message" th:class="${#lists.isEmpty(crowd)} ? 'active' : 'hidden'">No one's RSVP'd yet. Be the first to join!</p>
             </div>
         </section>
 

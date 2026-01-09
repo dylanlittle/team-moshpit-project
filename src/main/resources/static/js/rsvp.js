@@ -19,6 +19,8 @@ function handleRsvpClick(e) {
             .then(response => {
                     if (response.ok) {
                         const currentUserCard = document.getElementById("attendee-current-user");
+                        const noRsvpMessage = document.getElementById("no-rsvp-message");
+
                         btn.classList.toggle('active');
 
                         const isGoing = btn.classList.contains('active');
@@ -26,9 +28,20 @@ function handleRsvpClick(e) {
                         if (isGoing) {
                             currentUserCard.classList.remove('hidden');
                             currentUserCard.classList.add('active');
+                            if (noRsvpMessage) {
+                                noRsvpMessage.classList.add('hidden');
+                                noRsvpMessage.classList.remove('active');
+                            }
                         } else {
                             currentUserCard.classList.remove('active');
                             currentUserCard.classList.add('hidden');
+
+                            const remainingAttendees = document.querySelectorAll('.user-list li:not(.hidden)');
+
+                            if (remainingAttendees.length === 0) {
+                                noRsvpMessage.classList.remove('hidden');
+                                noRsvpMessage.classList.add('active');
+                            }
                         }
                     } else {
                         alert("Something went wrong. Please try again.");

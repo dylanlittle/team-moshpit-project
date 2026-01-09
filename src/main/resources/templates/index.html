@@ -48,7 +48,7 @@
     <aside class="concerts-column">
 
         <div class="box">
-            <h2>Upcoming Concerts</h2>
+            <h2>Upcoming Shows</h2>
             <div class="feed-post box" th:each="concert:${concerts}">
                 <div>
                     <a th:href="@{/concerts/{id}(id=${concert.id})}">
@@ -58,6 +58,7 @@
                     </a>
                 </div>
           </div>
+            <div style="padding: 10px" th:if="${#lists.isEmpty(concerts)}">Your shows feed is empty. Start following artists to discover their upcoming shows!</div>
         </div>
     </aside>
 </div>

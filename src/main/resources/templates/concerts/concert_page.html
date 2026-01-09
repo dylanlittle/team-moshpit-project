@@ -24,7 +24,7 @@
 <div class="header-layout">
     <div class="box user-header">
         <div class="header-box profile-picture">
-            <img th:src="${concert.image} ?: '/uploads/default_profile.png'"
+            <img th:src="${concert.image ?: concert.artist.avatar ?: '/uploads/default_profile.png'}"
                  alt="Concert display picture"
                  style="width:160px;height:160px;object-fit:cover;"/>
         </div>

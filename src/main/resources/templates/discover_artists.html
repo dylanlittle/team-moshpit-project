@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/index.css"/>
     <link rel="stylesheet" href="/theme.css"/>
     <link rel="stylesheet" href="/navbar.css"/>
+    <link rel="stylesheet" href="/discover-artists.css"/>
     <th:block th:replace="~{fragments/timezone-script :: timezone-detector}"></th:block>
 </head>
 
@@ -19,10 +20,10 @@
 <!-- Main -->
 <div class="home-layout">
 
-
-    <h1>Discover Artists</h1>
-    <p>Find artists on Mosh Pit and follow them.</p>
-
+    <div class="discover-hero">
+        <h1>Discover Artists</h1>
+        <p>Find artists on Mosh Pit and follow them.</p>
+    </div>
 
     <!-- Suggested (Spotify) -->
     <div th:if="${spotifyConnected}">
@@ -36,7 +37,9 @@
                 <ul>
                     <li th:each="artist : ${suggestedArtists}" style="display:flex; justify-content:space-between; align-items:center; padding:8px 0;">
                         <div>
-                            <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist Name</a>
+                            <a th:href="@{/artists/{id}(id=${artist.id})}">
+                                <h4 th:text="${artist.name}"></h4>
+                            </a>
                             <div style="opacity:0.7; font-size:0.9em;" th:text="${artist.genre}">Genre</div>
                         </div>
 
@@ -61,7 +64,9 @@
         <ul th:if="${allArtists != null and !#lists.isEmpty(allArtists)}">
             <li th:each="artist : ${allArtists}" style="display:flex; justify-content:space-between; align-items:center; padding:8px 0;">
                 <div>
-                    <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist Name</a>
+                    <a th:href="@{/artists/{id}(id=${artist.id})}">
+                        <h4 th:text="${artist.name}"></h4>
+                    </a>
                     <div style="opacity:0.7; font-size:0.9em;" th:text="${artist.genre}">Genre</div>
                 </div>
 

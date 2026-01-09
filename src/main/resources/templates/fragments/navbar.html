@@ -8,7 +8,7 @@
 
         <!-- Left: Logo + Navigation -->
         <div class="nav-left">
-            <a href="/" class="nav-logo">Home</a>
+            <a href="/" class="nav-logo">Mosh Pit</a>
 
             <ul class="nav-links">
                 <li><a href="/discover">Discover Artists</a></li>
@@ -43,9 +43,9 @@
         <div class="nav-right">
             <div class="profile-dropdown">
                 <a href="/user" class="profile-link">
-                    <img th:src="${user != null && user.avatar != null && !user.avatar.isEmpty()}
-            ? ${user.avatar}
-            : @{/uploads/profile_placeholder.png}"
+                    <img th:src="${currentUser != null && currentUser.avatar != null && !currentUser.avatar.isEmpty()}
+                ? ${currentUser.avatar}
+                : @{/uploads/profile_placeholder.png}"
                          alt="Profile"
                          class="profile-avatar" />
                 </a>
@@ -63,7 +63,7 @@
                     <li>
                         <hr>
                         <form th:action="@{/logout}" method="post">
-                            <button type="submit" class="logout-btn">Logout</button>
+                            <button type="submit" class="dropdown-btn">Logout</button>
                         </form>
                     </li>
                 </ul>

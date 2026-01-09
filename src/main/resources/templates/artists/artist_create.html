@@ -2,8 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Complete Profile</title>
-
+    <title>Create Artist Page</title>
     <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="/navbar.css"/>
     <link rel="stylesheet" href="/theme.css"/>
@@ -17,10 +16,8 @@
 
 <div class="artist-header">
     <div class="artist-header-content">
-        <h1 style="margin: 0;">Complete Your Profile</h1>
-        <div class="artist-genre">
-            Finish setting up your account
-        </div>
+        <h1 style="margin: 0;">Create Artist Page</h1>
+        <div class="artist-genre">Get connected with your fans</div>
     </div>
 </div>
 
@@ -29,63 +26,38 @@
 
     <main class="middle-column">
         <div class="box">
-
-            <p>Please fill in your details to finish completing your account.</p>
-
             <form method="post"
-                  id="new-user-form"
-                  th:action="@{/users/create}"
-                  th:object="${newUser}"
+                  th:action="@{/artists}"
                   enctype="multipart/form-data">
 
                 <div class="form-group">
-                    <label for="username" class="required-label">Username</label>
-                    <input required
-                           type="text"
-                           id="username"
-                           th:field="*{username}">
-                    <div th:if="${#fields.hasErrors('username')}"
-                         th:errors="*{username}"
-                         class="error-msg"></div>
+                    <label for="name" class="required-label">Artist Name</label>
+                    <input required type="text"
+                           id="name"
+                           name="name"
+                           placeholder="e.g. Cameron Winter">
                 </div>
 
                 <div class="form-group">
-                    <label for="name" class="required-label">Name</label>
-                    <input required
-                           type="text"
-                           id="name"
-                           th:field="*{name}">
-                    <div th:if="${#fields.hasErrors('name')}"
-                         th:errors="*{name}"
-                         class="error-msg"></div>
+                    <label for="genre" class="required-label">Genre</label>
+                    <input required type="text"
+                           id="genre"
+                           name="genre"
+                           placeholder="e.g. Folk / Alternative">
                 </div>
 
                 <div class="form-group">
                     <label for="bio">Bio</label>
                     <textarea id="bio"
-                              th:field="*{bio}"
-                              rows="4"
-                              placeholder="Tell us a little about yourself...">
-                    </textarea>
-                    <div th:if="${#fields.hasErrors('bio')}"
-                         th:errors="*{bio}"
-                         class="error-msg"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="location" class="required-label">Location</label>
-                    <input required
-                           type="text"
-                           id="location"
-                           th:field="*{location}">
-                    <div th:if="${#fields.hasErrors('location')}"
-                         th:errors="*{location}"
-                         class="error-msg"></div>
+                              name="bio"
+                              rows="5"
+                              placeholder="Tell your story..."></textarea>
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="avatar">Profile Picture</label>
                     <input type="file"
+                           class="form-control"
                            id="avatar"
                            name="image"
                            accept="image/*">
@@ -97,13 +69,14 @@
                 </div>
 
                 <div class="form-actions">
-                    <button id="submit"
-                            type="submit"
-                            class="btn-primary">
-                        Submit
+                    <button type="button" class="btn-cancel" onclick="history.back()">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="btn-primary">
+                        Create Artist Page
                     </button>
                 </div>
-
             </form>
         </div>
     </main>

@@ -44,7 +44,7 @@
                            class="artist-link">
                         </a>
                         <!-- Admin-only: edit concert details -->
-<div th:if="${canEditConcert}" class="admin-edit">
+<!-- <div th:if="${canEditConcert}" class="admin-edit">
   <details class="admin-edit__details">
     <summary class="admin-edit__btn">Edit concert</summary>
 
@@ -68,7 +68,7 @@
         <!-- If you want to edit venue details without changing shared Venue records,
              put these as override fields on Concert (recommended).
              If you DON'T have overrides yet, skip these 4 fields. -->
-      <label>Venue name</label>
+<!--       <label>Venue name</label>
       <input type="text" th:field="*{overrideVenueName}" />
 
       <label>Address</label>
@@ -83,10 +83,16 @@
       <button type="submit">Save</button>
     </form>
   </details>
-</div>
+</div> -->
 
 
                         <span th:if="${!iterStat.last}" class="separator"> | </span>
+                    </span>
+                    <span th:if="${#lists.isEmpty(lineup)}">
+                        <a th:href="@{/artists/{id}(id=${concert.artist.id})}"
+                           th:text="${concert.artist.name}"
+                           class="artist-link">
+                        </a>
                     </span>
                 </div>
             </div>
@@ -107,17 +113,7 @@
 </div>
 
 <!-- Main -->
-<div class="page-layout concert-page-layout">
-
-<!--     Left column-->
-<!--    <aside class="left-column">-->
-
-<!--        <div class="box">-->
-<!--            <h3>Lineup</h3>-->
-<!--            <p>Artists go here</p>-->
-<!--        </div>-->
-
-<!--    </aside>-->
+<div class="page-layout extended-page-layout">
 
     <!-- middle column-->
     <main class="right-column" id="concert_tabs">
@@ -174,6 +170,11 @@
                 <div class="box concert-posts">
 
                     <div class="feed-post box" th:each="post : ${posts}">
+                    <ul>
+                        <li th:each="post : ${posts}" class="mb-3">
+                            <p th:text="${post.artist} ? ${post.artist.name} + ':' : ${post.user.username} + ':'"></p>
+                            <p style="white-space: pre-wrap;" th:text="${post.content} + ' – Posted at ' + ${#temporals.format(post.timestamp, 'yyyy-MM-dd HH:mm:ss', userTimezone)}"></p>
+                            <div th:if="${post.mediaUrl != null}">
 
                         <!-- Header row -->
                         <div class="post-header">
@@ -206,6 +207,7 @@
                             </div>
                         </li>
                     </ul>
+                    <p th:if="${#lists.isEmpty(posts)}">No posts yet. Say hello!</p>
                 </div>
             </div>
         </section>
@@ -235,13 +237,15 @@
                         </div>
                     </li>
                 </ul>
+                <p th:id="no-rsvp-message" th:class="${#lists.isEmpty(crowd)} ? 'active' : 'hidden'">No one's RSVP'd yet. Be the first to join!</p>
             </div>
         </section>
 
         <section class="tab-content" id="content-concert-gallery">
             <div class="box">
-                <div class="gallery-grid">
-                    <div th:each="post : ${posts}"
+                <p th:if="${#lists.isEmpty(mediaPosts)}">No photos or videos yet. Capture and share your concert memories!</p>
+                <div class="gallery-grid" th:if="${!#lists.isEmpty(mediaPosts)}">
+                    <div th:each="post : ${mediaPosts}"
                          th:if="${post.mediaType == 'image' || post.mediaType == 'video'}"
                          th:class="gallery-item">
                         <img th:if="${post.mediaType == 'image'}"
@@ -258,7 +262,7 @@
                             <video th:src="${post.mediaUrl}"
                                    controls
                                    class="gallery-media"
-                                   th:data-author="${post.artist} ? ${post.artist.name} : ${post.user.username}"
+                                   th:data-author="${post.artist} ? ${post.artist.name} : ${post.user.username} + ':'"
                                    th:data-caption="${post.content}"
                                    th:data-type="'video'">
                             </video>
@@ -288,7 +292,8 @@
                         </div>
                     </div>
                 </div>
-                </div>
+              </div>
+            </div>
         </section>
 
     </main>

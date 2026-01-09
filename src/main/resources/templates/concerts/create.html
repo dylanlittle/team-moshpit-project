@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <title>Add New Concert Date</title>
+
     <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="/navbar.css"/>
-    <link rel="stylesheet" href="/create-concert.css"/>
     <link rel="stylesheet" href="/theme.css"/>
+    <link rel="stylesheet" href="/artist-profile.css"/>
+
     <script src="/js/concert_create.js" defer></script>
     <th:block th:replace="~{fragments/timezone-script :: timezone-detector}"></th:block>
 </head>
@@ -17,69 +18,152 @@
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
 </header>
 
-<!-- Show only if User is actively Artist Admin role -->
 <th:block th:if="${isAdminMode and activeAdminArtist.id == artist.id}">
-    <div class="box">
-        <p th:text="'Artist: ' + ${artist.name}"></p>
-        <form th:action="@{/artists/{id}/concerts(id=${artist.id})}" method="post" th:object="${concertForm}" enctype="multipart/form-data">
-            <div>
-                <label for="concert-name">Name (optional):</label>
-                <input type="text" th:field="*{concertName}" name="concert-name" id="concert-name"/>
-            </div>
 
-            <div>
-                <label for="date">Date:</label>
-                <input type="date" th:field="*{concertDate}" name="date" id="date" required/>
-            </div>
+    <div class="artist-header">
+        <div class="artist-header-content">
+            <h1 style="margin: 0;">Add New Concert</h1>
+            <div class="artist-genre" th:text="${artist.name}">Artist Name</div>
+        </div>
+    </div>
 
-            <div>
-                <label for="start-time">Start time:</label>
-                <input type="time" th:field="*{startTime}" name="start-time" id="start-time" required/>
-            </div>
+    <div class="page-layout">
+        <div class="left-column"></div>
 
-            <div>
-                <label for="country">Country:</label>
-                <input type="text" th:field="*{country}" name="country" id="country" list="countries-list" placeholder="Start typing country name..." autocomplete="off" required/>
-                <datalist id="countries-list">
-                    <option th:each="country : ${countries}" th:value="${country}"></option>
-                </datalist>
-            </div>
+        <main class="middle-column">
+            <div class="box">
+                <p th:text="'Artist: ' + ${artist.name}"></p>
 
-            <div>
-                <label for="city">City:</label>
-                <input type="text" th:field="*{city}" name="city" id="city" list="cities-list" placeholder="Start typing city name..." autocomplete="off" required/>
-                <datalist id="cities-list">
-                    <!-- Dynamically populated based on country (using JS) -->
-                </datalist>
-            </div>
+                <form th:action="@{/artists/{id}/concerts(id=${artist.id})}"
+                      method="post"
+                      th:object="${concertForm}"
+                      enctype="multipart/form-data">
 
-            <div>
-                <label for="venue-name">Venue Name:</label>
-                <input type="text" th:field="*{venueName}" name="venue-name" id="venue-name" list="venues-list" placeholder="Start typing venue name..." autocomplete="off" required/>
-                <datalist id="venues-list">
-                    <!-- Dynamically populated based on city (using JS) -->
-                </datalist>
-            </div>
+                    <div class="form-group">
+                        <label for="concert-name">Name (optional)</label>
+                        <input type="text"
+                               id="concert-name"
+                               th:field="*{concertName}"
+                               placeholder="e.g. Album Release Show">
+                    </div>
 
-            <div>
-                <label for="venue-address">Address:</label>
-                <input type="text" th:field="*{address}" name="address" id="venue-address" required />
-            </div>
+                    <div class="form-group">
+                        <label for="date" class="required-label">Date</label>
+                        <input type="date"
+                               id="date"
+                               th:field="*{concertDate}"
+                               required>
+                    </div>
 
-            <div class="mb-3">
-                <label for="concert-image">Image:</label><br>
-                <input type="file"
-                       id="concert-image"
-                       name="image"
-                       accept="image/*">
-                <button type="button"
-                        id="clearMediaBtn"
-                        class="btn btn-outline-secondary btn-sm mt-2 d-none">
-                    Remove selected file
-                </button>
-            </div>
+                    <div class="form-group">
+                        <label for="start-time" class="required-label">Start Time</label>
+                        <input type="time"
+                               id="start-time"
+                               th:field="*{startTime}"
+                               required>
+                    </div>
 
-        <button type="submit" id="new-concert-submit">Add New Concert</button>
-    </form>
+                    <div class="form-group">
+                        <label for="country" class="required-label">Country</label>
+                        <input type="text"
+                               id="country"
+                               th:field="*{country}"
+                               list="countries-list"
+                               placeholder="Start typing country name..."
+                               autocomplete="off"
+                               required>
+                        <datalist id="countries-list">
+                            <option th:each="country : ${countries}"
+                                    th:value="${country}">
+                            </option>
+                        </datalist>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city" class="required-label">City</label>
+                        <input type="text"
+                               id="city"
+                               th:field="*{city}"
+                               list="cities-list"
+                               placeholder="Start typing city name..."
+                               autocomplete="off"
+                               required>
+                        <datalist id="cities-list"></datalist>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="venue-name" class="required-label">Venue Name</label>
+                        <input type="text"
+                               id="venue-name"
+                               th:field="*{venueName}"
+                               list="venues-list"
+                               placeholder="Start typing venue name..."
+                               autocomplete="off"
+                               required>
+                        <datalist id="venues-list"></datalist>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="venue-address" class="required-label">Address</label>
+                        <input type="text"
+                               id="venue-address"
+                               th:field="*{address}"
+                               required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="concert-image">Image</label>
+                        <input type="file"
+                               id="concert-image"
+                               name="image"
+                               accept="image/*">
+                        <button type="button"
+                                id="clearMediaBtn"
+                                class="btn-secondary d-none">
+                            Remove selected file
+                        </button>
+                    </div>
+
+                    <div class="form-actions">
+                        <a th:href="@{/artists/{id}(id=${artist.id})}"
+                           class="btn-cancel">
+                            Cancel
+                        </a>
+
+                        <button type="submit"
+                                id="new-concert-submit"
+                                class="btn-primary">
+                            Add New Concert
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </main>
+
+        <div class="right-column"></div>
+    </div>
+</th:block>
+
+<script>
+    const mediaInput = document.getElementById("concert-image");
+    const clearBtn = document.getElementById("clearMediaBtn");
+
+    clearBtn.classList.add("d-none");
+
+    mediaInput.addEventListener("change", function () {
+        if (mediaInput.files && mediaInput.files.length > 0) {
+            clearBtn.classList.remove("d-none");
+        } else {
+            clearBtn.classList.add("d-none");
+        }
+    });
+
+    clearBtn.addEventListener("click", function () {
+        mediaInput.value = "";
+        clearBtn.classList.add("d-none");
+    });
+</script>
+
 </body>
 </html>

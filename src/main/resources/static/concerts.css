@@ -1,3 +1,7 @@
+.concert-posts {
+    margin-top: 14px;
+}
+
 #rsvp-btn {
     display: inline-flex;
     align-items: center;
@@ -66,12 +70,17 @@
     border-color: #075CE4;
 }
 
-.user-list li.hidden {
+.user-list li.hidden,
+ #no-rsvp-message.hidden {
     display: none;
 }
 
 .user-list li.active {
     display: flex;
+}
+
+#no-rsvp-button.active {
+    display: block;
 }
 
 .gallery-grid {
@@ -136,7 +145,12 @@
 
 .modal-info {
     padding: 20px;
-    color: #333;
+}
+
+#modalAuthor, #modalCaption {
+    color: #333 !important;
+    text-shadow: none !important;
+    letter-spacing: 0.02em;
 }
 
 .close-btn {

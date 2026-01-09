@@ -602,13 +602,6 @@ input:focus, textarea:focus, select:focus{
   color: rgba(243,239,232,.75);
 }
 
-
-
-
-
-
-
-
 /* Navbar overrides */
 .nav-bar {
     margin-top: 0;
@@ -617,5 +610,26 @@ input:focus, textarea:focus, select:focus{
     border-bottom: 1px solid #ccc;
     display: flex;
     gap: 16px;
+}
+
+/* Spotify top artist */
+.spotify-top-artist > *:last-child {
+margin: 0;
+}
+
+.spotify-top-artist{
+margin: 10px 0;
+}
+
+#timeRange {
+margin: 10px 0;}
+
+#now-playing {
+display: flex !important;
+flex-direction: column;
+gap: 5px;
+padding: 10px;
+border:none;
+align-items: center;
 }
 

@@ -9,17 +9,20 @@
     padding: 8px 16px;
     border: none;
     border-radius: 6px;
-    background-color: #E4E6EB; /* Facebook Gray */
-    color: #050505;
+    border: 1px solid rgba(243,239,232,.18);
     font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.1s;
 }
 
-#rsvp-btn:hover {
-    background-color: #D8DADF;
+.user-header button:hover,
+.actions button:hover,
+.btn:hover{
+  border-color: rgba(244,196,48,.45);
+  box-shadow: 0 0 0 3px rgba(244,196,48,.12);
 }
+
 
 #rsvp-btn:active {
     transform: scale(0.96);

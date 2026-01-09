@@ -15,7 +15,9 @@ import com.makers.moshpit.repository.ArtistRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -62,90 +64,75 @@ public class ArtistAdminController {
     }
 
     @GetMapping("/artists/{id}/newAdmin")
-    public String showArtistCreateForm(
+    public String manageArtistAdmins(
             @RequestParam(name = "query", required = false) String query,
             @PathVariable Long id,
-            Model model)  {
-        User currentUser = authService.getCurrentUser();
-        boolean canEdit = currentUser != null &&
-                artistAdminRepository.existsByArtistIdAndUserId(id, currentUser.getId());
-        if(!canEdit) {
-            return "redirect:/artists/" + id;
-        }
-        List<ArtistAdmin> admins = artistAdminRepository.findAdminsByArtistId(id);
-        model.addAttribute("admins", admins);
-        model.addAttribute("id", id);
-        if (query == null || query.trim().isEmpty()) {
-            model.addAttribute("query", "");
-            model.addAttribute("artistResults", java.util.Collections.emptyList());
-            model.addAttribute("userResults", java.util.Collections.emptyList());
-            model.addAttribute("suggestedResults", java.util.Collections.emptyList());
-            return "admin/manage_artist_admin";
-        }
-
-        String trimmedQuery = query.trim();
-        List<User> userResults = userRepository.findByUsernameContainingIgnoreCase(trimmedQuery);
-
-        Set<Long> adminUserIds = admins.stream()
-                .map(ArtistAdmin::getUser)
-                .map(User::getId)
-                .collect(Collectors.toSet());
-        userResults.removeIf(user -> adminUserIds.contains(user.getId()));
-
-
-
-        model.addAttribute("query", query);
-        model.addAttribute("userResults", userResults);
-        return "admin/manage_artist_admin";
-    }
-
-    @PostMapping("/artists/{id}/newAdmin")
-    public String showArtistCreateForm(
-            @RequestParam(name = "query", required = false) String query,
-            @RequestParam("userId") Long userId,
-            @PathVariable Long id,
-            Model model)  {
-        User currentUser = authService.getCurrentUser();
-        boolean canEdit = currentUser != null &&
-                artistAdminRepository.existsByArtistIdAndUserId(id, currentUser.getId());
-        if(!canEdit) {
-            return "redirect:/artists/" + id;
-        }
+            Model model
+    ) {
         Artist artist = artistRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Artist not found"));
 
-        User newAdminUser = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-        ArtistAdmin adminLink = new ArtistAdmin();
-        adminLink.setArtist(artist);
-        adminLink.setUser(newAdminUser);
-        adminLink.setRole(ArtistAdmin.Role.ADMIN);
-        artistAdminRepository.save(adminLink);
-
         List<ArtistAdmin> admins = artistAdminRepository.findAdminsByArtistId(id);
 
         model.addAttribute("id", id);
         model.addAttribute("admins", admins);
+        model.addAttribute("query", query == null ? "" : query);
 
-        if (query == null || query.trim().isEmpty()) {
-            model.addAttribute("query", "");
-            model.addAttribute("artistResults", java.util.Collections.emptyList());
-            model.addAttribute("userResults", java.util.Collections.emptyList());
-            model.addAttribute("suggestedResults", java.util.Collections.emptyList());
-            return "admin/manage_artist_admin";
+        if (query != null && !query.isBlank()) {
+            List<User> userResults = userRepository
+                    .findByUsernameContainingIgnoreCase(query.trim());
+
+            Set<Long> adminUserIds = admins.stream()
+                    .map(a -> a.getUser().getId())
+                    .collect(Collectors.toSet());
+
+            userResults.removeIf(u -> adminUserIds.contains(u.getId()));
+
+            model.addAttribute("userResults", userResults);
+        } else {
+            model.addAttribute("userResults", List.of());
         }
 
-        String trimmedQuery = query.trim();
-        List<User> userResults = userRepository.findByUsernameContainingIgnoreCase(trimmedQuery);
-        Set<Long> adminUserIds = admins.stream()
-                .map(ArtistAdmin::getUser)
-                .map(User::getId)
-                .collect(Collectors.toSet());
-        userResults.removeIf(user -> adminUserIds.contains(user.getId()));
-        model.addAttribute("query", query);
-        model.addAttribute("userResults", userResults);
         return "admin/manage_artist_admin";
+    }
+
+
+    @PostMapping("/artists/{id}/newAdmin")
+    public String addArtistAdmin(
+            @RequestParam(name = "query", required = false) String query,
+            @RequestParam("userId") Long userId,
+            @PathVariable Long id,
+            RedirectAttributes redirectAttributes
+    ) {
+        User currentUser = authService.getCurrentUser();
+        boolean canEdit = currentUser != null &&
+                artistAdminRepository.existsByArtistIdAndUserId(id, currentUser.getId());
+
+        if (!canEdit) {
+            return "redirect:/artists/" + id;
+        }
+
+        Artist artist = artistRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Artist not found"));
+
+        // prevent duplicates
+        if (!artistAdminRepository.existsByArtistIdAndUserId(id, userId)) {
+            User newAdminUser = userRepository.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+            ArtistAdmin adminLink = new ArtistAdmin();
+            adminLink.setArtist(artist);
+            adminLink.setUser(newAdminUser);
+            adminLink.setRole(ArtistAdmin.Role.ADMIN);
+            artistAdminRepository.save(adminLink);
+        }
+
+        if (query != null && !query.isBlank()) {
+            return "redirect:/artists/" + id + "/newAdmin?query=" +
+                    UriUtils.encode(query, StandardCharsets.UTF_8);
+        }
+
+        return "redirect:/artists/" + id + "/newAdmin";
     }
 
     @PostMapping("/artists/{artistId}/admin/{adminId}")

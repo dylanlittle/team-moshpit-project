@@ -16,9 +16,7 @@
     transition: background-color 0.2s, transform 0.1s;
 }
 
-.user-header button:hover,
-.actions button:hover,
-.btn:hover{
+#rsvp-btn:hover{
   border-color: rgba(244,196,48,.45);
   box-shadow: 0 0 0 3px rgba(244,196,48,.12);
 }

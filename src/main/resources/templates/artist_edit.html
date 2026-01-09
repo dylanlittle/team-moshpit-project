@@ -15,10 +15,10 @@
 </header>
 
 <div class="artist-header">
-    <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 10px;">
+    <div class="artist-header-content">
         <h1 style="margin: 0;">Edit Artist Page</h1>
+        <div class="artist-genre" th:text="${artist.name}">Artist Name</div>
     </div>
-    <div class="artist-genre" th:text="${artist.name}">Artist Name</div>
 </div>
 
     <div class="page-layout">

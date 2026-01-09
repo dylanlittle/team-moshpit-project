@@ -435,3 +435,36 @@
   z-index: 1 !important;
 }
 
+/* Artist Edit Page */
+
+/* 1. Make the header follow the same 3-column grid as the page-layout */
+.artist-header {
+    display: grid;
+    grid-template-columns: 280px 1fr 320px; /* Matches .page-layout exactly */
+    gap: 24px;                              /* Matches .page-layout gap */
+    padding: 40px 0 20px 0;                 /* Added top padding for better breathing room */
+}
+
+/* 2. Position the text container inside the middle column of that grid */
+.artist-header-content {
+    grid-column: 2;         /* Forces the text into the same vertical track as the main box */
+    display: flex;
+    flex-direction: column; /* Stacks Title and Artist Name */
+    gap: 4px;               /* Small gap between the two lines of text */
+}
+
+.artist-header h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    letter-spacing: .15em;
+    color: var(--ink);
+}
+
+.artist-genre {
+    margin: 0;
+    font-size: 1.1rem;
+    opacity: 0.6;           /* Dims the artist name slightly for better hierarchy */
+    text-transform: none;   /* Keeps the artist name looking natural */
+    letter-spacing: normal;
+}
+

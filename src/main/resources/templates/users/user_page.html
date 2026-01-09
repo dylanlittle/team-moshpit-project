@@ -303,9 +303,7 @@
 
         <section class="tab-content" id="content-shows">
             <div class="box">
-
-                <h3 class="section-title">Upcoming</h3>
-
+                <h3 th:if="${!#lists.isEmpty(upcomingConcerts)}" class="section-title">Upcoming</h3>
                 <div class="concerts-column" th:if="${!#lists.isEmpty(upcomingConcerts)}">
                     <div class="feed-post box" th:each="concert : ${upcomingConcerts}">
                         <div>
@@ -317,7 +315,6 @@
                         </div>
                     </div>
                 </div>
-                <p th:if="${#lists.isEmpty(upcomingConcerts)}">No upcoming confirmed shows.</p>
 
                 <button type="button"
                         class="btn btn-secondary mt-3"
@@ -346,10 +343,11 @@
                     </div>
                 </div>
 
-                <!-- If BOTH empty -->
+                <!-- If BOTH empty
                 <p th:if="${#lists.isEmpty(upcomingConcerts) and #lists.isEmpty(pastConcerts)}">
                     No shows yet!
-                </p>
+                </p>-->
+                <p th:if="${#lists.isEmpty(upcomingConcerts)}">No upcoming shows.</p>
 
             </div>
         </section>

@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Artist Page</title>
+    <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="/navbar.css"/>
     <link rel="stylesheet" href="/theme.css"/>
+    <link rel="stylesheet" href="/artist-profile.css"/>
 </head>
 
 <body>
@@ -12,42 +14,75 @@
     <div th:insert="~{fragments/navbar :: headerNav}"></div>
 </header>
 
-<h1>Create an Artist Page</h1>
-
-<form th:action="@{/artists}" method="post" enctype="multipart/form-data">
-
-    <div>
-        <label>Artist Name</label><br>
-        <input type="text" name="name" required>
+<div class="artist-header">
+    <div class="artist-header-content">
+        <h1 style="margin: 0;">Create Artist Page</h1>
+        <div class="artist-genre">Get connected with your fans</div>
     </div>
+</div>
 
-    <div>
-        <label>Genre</label><br>
-        <input type="text" name="genre" required>
-    </div>
+<div class="page-layout">
+    <div class="left-column"></div>
 
-    <div>
-        <label>Bio</label><br>
-        <textarea name="bio" rows="5"></textarea>
-    </div>
+    <main class="middle-column">
+        <div class="box">
+            <form method="post"
+                  th:action="@{/artists}"
+                  enctype="multipart/form-data">
 
-    <div class="mb-3">
-        <label for="avatar">Profile Picture:</label><br>
-        <input type="file"
-               class="form-control mb-3"
-               id="avatar"
-               name="image"
-               accept="image/*">
-        <button type="button"
-                id="clearMediaBtn"
-                class="btn btn-outline-secondary btn-sm mt-2 d-none">
-            Remove selected file
-        </button>
-    </div>
+                <div class="form-group">
+                    <label for="name" class="required-label">Artist Name</label>
+                    <input required type="text"
+                           id="name"
+                           name="name"
+                           placeholder="e.g. Cameron Winter">
+                </div>
 
-    <button type="submit">Create Artist Page</button>
+                <div class="form-group">
+                    <label for="genre" class="required-label">Genre</label>
+                    <input required type="text"
+                           id="genre"
+                           name="genre"
+                           placeholder="e.g. Folk / Alternative">
+                </div>
 
-</form>
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio"
+                              name="bio"
+                              rows="5"
+                              placeholder="Tell your story..."></textarea>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="avatar">Profile Picture</label>
+                    <input type="file"
+                           class="form-control"
+                           id="avatar"
+                           name="image"
+                           accept="image/*">
+                    <button type="button"
+                            id="clearMediaBtn"
+                            class="btn-secondary d-none">
+                        Remove selected file
+                    </button>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="history.back()">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="btn-primary">
+                        Create Artist Page
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <div class="right-column"></div>
+</div>
 
 <script>
     const mediaInput = document.getElementById("avatar");
@@ -67,8 +102,7 @@
         mediaInput.value = "";
         clearBtn.classList.add("d-none");
     });
-
 </script>
+
 </body>
 </html>
-

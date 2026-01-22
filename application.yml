@@ -1,0 +1,23 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+okta:
+  oauth2:
+    issuer: ${OKTA_AUTH_ISSUER}
+    client-id: ${OKTA_AUTH_CLIENT_ID}
+    client-secret: ${OKTA_AUTH_CLIENT_SECRET}
+  cloudinary:
+    cloud-name: ${CLOUDINARY_CLOUD_NAME}
+    api-key: ${CLOUDINARY_API_KEY}
+    api-secret: ${CLOUDINARY_API_SECRET}
+
+spotify:
+  client-id: ${SPOTIFY_CLIENT_ID}
+  client-secret: ${SPOTIFY_CLIENT_SECRET}
+  authorize-url: ${SPOTIFY_AUTHORIZE_URL}
+  token-url: ${SPOTIFY_TOKEN_URL}
+  api-base-url: ${SPOTIFY_API_BASE_URL}
+  redirect-uri: ${SPOTIFY_REDIRECT_URL}
+
+server:
+  port: ${PORT:8080}

@@ -3,9 +3,9 @@ spring:
     import: optional:file:.env[.properties]
 okta:
   oauth2:
-    issuer: ${AUTH_ISSUER}
-    client-id: ${AUTH_CLIENT_ID}
-    client-secret: ${AUTH_CLIENT_SECRET}
+    issuer: ${OKTA_AUTH_ISSUER}
+    client-id: ${OKTA_AUTH_CLIENT_ID}
+    client-secret: ${OKTA_AUTH_CLIENT_SECRET}
   cloudinary:
     cloud-name: ${CLOUDINARY_CLOUD_NAME}
     api-key: ${CLOUDINARY_API_KEY}

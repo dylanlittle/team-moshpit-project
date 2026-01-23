@@ -13,6 +13,25 @@ spring:
         provider:
           okta:
             issuer-uri: ${AUTH_ISSUER}
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    baseline-on-migrate: true
+    clean-disabled: true
+
 okta:
   oauth2:
     issuer: ${AUTH_ISSUER}

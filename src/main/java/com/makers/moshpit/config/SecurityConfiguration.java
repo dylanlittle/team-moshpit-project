@@ -33,13 +33,20 @@ public class SecurityConfiguration {
                         .requestMatchers("/", "/images/**").permitAll()
                         .anyRequest().authenticated()
                 )
+//                .oauth2Login(oauth2 -> oauth2
+//                        .successHandler(new AuthenticationSuccessHandler() {
+//                        @Override
+//                        public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+//                            response.sendRedirect("/users/after-login");
+//                        }
+//                    })
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler(new AuthenticationSuccessHandler() {
-                        @Override
-                        public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                            response.sendRedirect("/users/after-login");
-                        }
-                    })
+                        .successHandler((request, response, authentication) -> {
+                            // Lambda-friendly: Set cookie or header instead of redirect
+                            response.setStatus(HttpServletResponse.SC_FOUND);
+                            response.setHeader("Location", "/users/after-login");
+                            response.getWriter().flush();
+                        })
                 )
                 .logout(logout -> logout
                         .addLogoutHandler(logoutHandler()));

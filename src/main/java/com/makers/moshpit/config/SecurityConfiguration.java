@@ -30,26 +30,26 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/images/**").permitAll()
+                        .requestMatchers("/", "/images/**",  "/users/after-login").permitAll()
                         .anyRequest().authenticated()
                 )
-//                .oauth2Login(oauth2 -> oauth2
-//                        .successHandler(new AuthenticationSuccessHandler() {
-//                        @Override
-//                        public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-//                            response.sendRedirect("/users/after-login");
-//                        }
-//                    })
-                .oauth2Login(oauth2 -> oauth2
-                        .successHandler((request, response, authentication) -> {
-                            // Lambda-friendly: Set cookie or header instead of redirect
-                            response.setStatus(HttpServletResponse.SC_FOUND);
-                            response.setHeader("Location", "/users/after-login");
-                            response.getWriter().flush();
-                        })
-                )
+               .oauth2Login(oauth2 -> oauth2
+                       .loginPage("/oauth2/authorization/okta")
+                       .successHandler(authenticationSuccessHandler())  // ← Extract to @Bean
+               )
                 .logout(logout -> logout
-                        .addLogoutHandler(logoutHandler()));
+                        .addLogoutHandler(logoutHandler())
+                        .logoutSuccessUrl("/")  // ← ADD THIS
+                );
+//                       .successHandler(new AuthenticationSuccessHandler() {
+//                       @Override
+//                       public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+//                           response.sendRedirect("/users/after-login");
+//                       }
+//                   })
+//                )
+//                .logout(logout -> logout
+//                        .addLogoutHandler(logoutHandler()));
         return http.build();
     }
 
@@ -63,4 +63,12 @@ public class SecurityConfiguration {
             }
         };
     }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return (request, response, authentication) -> {
+            response.sendRedirect("/users/after-login");
+        };
+    }
 }
+

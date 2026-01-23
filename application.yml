@@ -1,6 +1,18 @@
 spring:
   config:
     import: optional:file:.env[.properties]
+  security:
+    oauth2:
+      client:
+        registration:
+          okta:
+            client-id: ${AUTH_CLIENT_ID}
+            client-secret: ${AUTH_CLIENT_SECRET}
+            scope: openid, profile, email
+            redirect-uri: "{baseUrl}/login/oauth2/code/okta"
+        provider:
+          okta:
+            issuer-uri: ${AUTH_ISSUER}
 okta:
   oauth2:
     issuer: ${AUTH_ISSUER}
@@ -17,7 +29,8 @@ spotify:
   authorize-url: ${SPOTIFY_AUTHORIZE_URL}
   token-url: ${SPOTIFY_TOKEN_URL}
   api-base-url: ${SPOTIFY_API_BASE_URL}
-  redirect-uri: ${SPOTIFY_REDIRECT_URL}
+  redirect-uri: ${SPOTIFY_REDIRECT_URI}
 
 server:
   port: ${PORT:8080}
+

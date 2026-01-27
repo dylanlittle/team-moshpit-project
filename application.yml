@@ -18,10 +18,7 @@ spring:
   config:
     activate:
       on-profile: prod
-  datasource:
-    url: ${DATASOURCE_URL}
-    username: ${DATASOURCE_USERNAME}
-    password: ${DATASOURCE_PASSWORD}
+
   jpa:
     properties:
       hibernate:

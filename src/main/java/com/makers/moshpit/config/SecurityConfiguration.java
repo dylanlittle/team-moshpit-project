@@ -20,9 +20,9 @@ import java.io.IOException;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    @Value("${okta.oauth2.issuer}")
+    @Value("${OKTA_OAUTH2_ISSUER}")
     private String issuer;
-    @Value("${okta.oauth2.client-id}")
+    @Value("${OKTA_OAUTH2_CLIENT_ID}")
     private String clientId;
 
     @Bean

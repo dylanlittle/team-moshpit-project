@@ -1,34 +1,6 @@
 spring:
   config:
     import: optional:file:.env[.properties]
-  security:
-    oauth2:
-      client:
-        registration:
-          okta:
-            client-id: ${AUTH_CLIENT_ID}
-            client-secret: ${AUTH_CLIENT_SECRET}
-            scope: openid, profile, email
-            redirect-uri: "{baseUrl}/login/oauth2/code/okta"
-        provider:
-          okta:
-            issuer-uri: ${AUTH_ISSUER}
----
-spring:
-  config:
-    activate:
-      on-profile: prod
-
-  jpa:
-    properties:
-      hibernate:
-        temp:
-          use_jdbc_metadata_defaults: false
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-  flyway:
-    baseline-on-migrate: true
-    clean-disabled: true
-
 okta:
   oauth2:
     issuer: ${AUTH_ISSUER}
@@ -45,8 +17,60 @@ spotify:
   authorize-url: ${SPOTIFY_AUTHORIZE_URL}
   token-url: ${SPOTIFY_TOKEN_URL}
   api-base-url: ${SPOTIFY_API_BASE_URL}
-  redirect-uri: ${SPOTIFY_REDIRECT_URI}
+  redirect-uri: ${SPOTIFY_REDIRECT_URL}
 
 server:
   port: ${PORT:8080}
 
+#spring:
+#  config:
+#    import: optional:file:.env[.properties]
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          okta:
+#            client-id: ${AUTH_CLIENT_ID}
+#            client-secret: ${AUTH_CLIENT_SECRET}
+#            scope: openid, profile, email
+#            redirect-uri: "{baseUrl}/login/oauth2/code/okta"
+#        provider:
+#          okta:
+#            issuer-uri: ${AUTH_ISSUER}
+#---
+#spring:
+#  config:
+#    activate:
+#      on-profile: prod
+#
+#  jpa:
+#    properties:
+#      hibernate:
+#        temp:
+#          use_jdbc_metadata_defaults: false
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#  flyway:
+#    baseline-on-migrate: true
+#    clean-disabled: true
+#
+#okta:
+#  oauth2:
+#    issuer: ${AUTH_ISSUER}
+#    client-id: ${AUTH_CLIENT_ID}
+#    client-secret: ${AUTH_CLIENT_SECRET}
+#  cloudinary:
+#    cloud-name: ${CLOUDINARY_CLOUD_NAME}
+#    api-key: ${CLOUDINARY_API_KEY}
+#    api-secret: ${CLOUDINARY_API_SECRET}
+#
+#spotify:
+#  client-id: ${SPOTIFY_CLIENT_ID}
+#  client-secret: ${SPOTIFY_CLIENT_SECRET}
+#  authorize-url: ${SPOTIFY_AUTHORIZE_URL}
+#  token-url: ${SPOTIFY_TOKEN_URL}
+#  api-base-url: ${SPOTIFY_API_BASE_URL}
+#  redirect-uri: ${SPOTIFY_REDIRECT_URI}
+#
+#server:
+#  port: ${PORT:8080}
+#

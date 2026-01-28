@@ -104,7 +104,7 @@ public class UsersController {
                                           @RequestParam(value = "image", required = false)MultipartFile imageFile) {
 
         if (result.hasErrors()) {
-            return "/users/create_profile/";
+            return "/users/create_profile";
         }
         User currentUser = authService.getCurrentUser();
         currentUser.setUsername(newUser.getUsername());
